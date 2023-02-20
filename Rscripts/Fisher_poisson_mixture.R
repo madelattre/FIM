@@ -1,30 +1,72 @@
-### Numerical study of the statistical properties of two estimators of the Fisher Information matrix in a Poisson mixture model 
+### "Computing an empirical Fisher information matrix estimate in latent variable
+### models through stochastic approximation."
+### ---------------------------------------------------------------------------
+
+### Numerical study in a Poisson mixture model : statistical properties of 
+### two estimators of the Fisher Information matrix 
 ### (section 4.1 of the article)
 
+## Source useful libraries ----------------------------------------------------
+## 
 rm(list=ls())
 
 library(ggplot2)
 library(cowplot)
-library(devtools)
-library(RColorBrewer)
+library(flexxmix)
 
+## Defining R functions for MCMC estimation of the Fisher Information matrix, 
+## computing Iobs and Isco in the Poisson mixture model -----------------------
 
-## Function for Fisher Information matrix estimation in Poisson mixture models
+## Monte-Carlo estimation of the true Fisher information matrix
 
-pm_fisher_estimation <- function(y, n, lambda, alpha) {
+pm_fisher_mcmc <- function(lambda,alpha,nMC){
+  # lambda : vector of Poisson parameter values (as many values as mixture
+  # components)
+  # alpha  : vector of mixture weights (one less value than components in the
+  # mixture, the last weight is deduced from the first)
+  # nMC    : 
+
+  z <- rep(0,nMC) # latent variable
+  y <- rep(0,nMC) # observed variable
   
+  t <- cumsum(c(alpha,1-sum(alpha)))
+  
+  # data simulation
+  for (i in 1:nMC){
+    u    <- runif(1)
+    z[i] <- 1+sum(u>t)
+    y[i] <- rpois(1,lambda[z[i]])
+  }
+  
+  # very large sample based estimation of the FIM
+  MCMC_FIM <-  pm_fisher_estimation(y, lambda, alpha)
+  MCMC_FIM$Iobs
+  MCMC_FIM$Isco
+  MCMC_FIM <- (MCMC_FIM$Isco+MCMC_FIM$Iobs)/2
+  
+  return(MCMC_FIM)
+}
+
+
+
+## Function for Fisher Information matrix estimation, based on Isco and Iobs, in
+##  Poisson mixture models
+
+pm_fisher_estimation <- function(y, lambda, alpha) {
   # y      : vector of observations
-  # n      : sample size
   # lambda : vector of mean Poisson parameters for each component of the mixture
-  # alpha  : vector of mixture proportions, excluding the proportion of the last mixture component
+  # alpha  : vector of mixture proportions, excluding the proportion of the last
+  #  mixture component
   
-  K <- length(lambda)
+  K <- length(lambda) # number of components of the mixture
+  n <- length(y)      # sample size
   
   deriv1ind  <- matrix(0,2*K-1,n) 
   deriv2     <- matrix(0,2*K-1,2*K-1) 
   covderiv   <- matrix(0,2*K-1,2*K-1)
   
-  ## computation of conditional expectation of the first derivatives of the complete data log-likelihood
+  ## computation of conditional expectation of the first derivatives of the 
+  ## complete data log-likelihood
   
   denom <- 0
   for (k in 1:(K-1)){
@@ -40,7 +82,8 @@ pm_fisher_estimation <- function(y, n, lambda, alpha) {
   deriv1ind[K,] <- exp(-lambda[K])*lambda[K]^y*(1-sum(alpha))/denom * (y/lambda[K]-1)
   
 
-  ## computation of conditional expectation of the second derivatives of the complete data log-likelihood
+  ## computation of conditional expectation of the second derivatives of the 
+  ## complete data log-likelihood
   
   
   for (k in 1:(K-1)){
@@ -58,7 +101,8 @@ pm_fisher_estimation <- function(y, n, lambda, alpha) {
   
   deriv2[K,K]<-sum(exp(-lambda[K])*lambda[K]^y*(1-sum(alpha))/denom * (-y/lambda[K]^2))
   
-  ## computation of the conditional covariance matrix of the first derivatives of the complete data log-likelihood
+  ## computation of the conditional covariance matrix of the first derivatives of 
+  ## the complete data log-likelihood
   
   
   for (k in 1:(K-2)){
@@ -77,7 +121,8 @@ pm_fisher_estimation <- function(y, n, lambda, alpha) {
   }
   
   covderiv[K-1,K-1] <- sum(exp(-lambda[K-1])*lambda[K-1]^y*alpha[K-1]/denom*(-1+y/lambda[K-1])^2) 
-  covderiv[2*K-1,2*K-1] <- sum(exp(-lambda[K-1])*lambda[K-1]^y*alpha[K-1]/denom/alpha[K-1]^2+exp(-lambda[K])*lambda[K]^y*(1-sum(alpha))/denom/(1-sum(alpha))^2) 
+  covderiv[2*K-1,2*K-1] <- sum(exp(-lambda[K-1])*lambda[K-1]^y*alpha[K-1]/denom/alpha[K-1]^2+
+                                 exp(-lambda[K])*lambda[K]^y*(1-sum(alpha))/denom/(1-sum(alpha))^2) 
   covderiv[K-1,2*K-1] <- sum(exp(-lambda[K-1])*lambda[K-1]^y*alpha[K-1]/denom/alpha[K-1]*(-1+y/lambda[K-1])) 
   covderiv[2*K-1,K-1] <- covderiv[K-1,2*K-1]
   
@@ -86,7 +131,7 @@ pm_fisher_estimation <- function(y, n, lambda, alpha) {
   
   covderiv[K,K] <- sum(exp(-lambda[K])*lambda[K]^y*(1-sum(alpha))/denom*(-1+y/lambda[K])^2) 
   
-  
+  ## computation of Isco and Iobs
   Isco <- deriv1ind%*%t(deriv1ind)/n
   Iobs <- deriv1ind%*%t(deriv1ind)/n - deriv2/n - covderiv/n
   
@@ -97,18 +142,20 @@ pm_fisher_estimation <- function(y, n, lambda, alpha) {
 }
 
 
-## Numerical experiment
+## Numerical experiment -------------------------------------------------------
 
-# number of replicates
-nbsim <- 500
 
-# parameter values
-alpha <- c(0.3,0.5) # mixture weights of the first K-1 components 
-lambda <- c(2,5,9)  # parameter values of the K Poisson distribution of the mixture
+nbsim  <- 500        # number of replicates
+nMC    <- 100000000  # sample size for Monte-Carlo estimation of the FIM
+alpha  <- c(0.3,0.5) # mixture weights of the first K-1 components 
+lambda <- c(2,5,9)   # parameter values of the K Poisson distribution of the mixture
+n      <- 500        # sample size
 
-# sample size
-n <- 500
+## MCMC estimation of the FIM
 
+fisher.mcmc <- pm_fisher_mcmc(lambda,alpha,nMC)
+
+## Computation of Isco and Iobs based on nbsim similated samples
 
 resIobs <- array(NA,dim=c(5,5,nbsim))
 resIsco <- array(NA,dim=c(5,5,nbsim))
@@ -126,30 +173,13 @@ for (j in 1:nbsim){
     y[i] <- rpois(1,lambda[z[i]])
   }
   
-  res <- pm_fisher_estimation(y, n, lambda, alpha)
+  res <- pm_fisher_estimation(y, lambda, alpha)
   resIobs[,,j] <- res$Iobs
   resIsco[,,j] <- res$Isco
+  
+
 }
 
-## Monte-Carlo estimation of the true Fisher information matrix based on a large sample
-
-nMC <- 100000000
-
-z <- rep(0,nMC) # latent variable
-y <- rep(0,nMC) # observed variable
-
-t <- cumsum(c(alpha,1-sum(alpha)))
-
-for (i in 1:nMC){
-  u    <- runif(1)
-  z[i] <- 1+sum(u>t)
-  y[i] <- rpois(1,lambda[z[i]])
-}
-
-trueFIM <-  pm_fisher_estimation(y, nMC, lambda, alpha)
-trueFIM$Iobs
-trueFIM$Isco
-trueFIM <- (trueFIM$Isco+trueFIM$Iobs)/2
 
 
 DataResPoissonMixture <- data.frame(EstF11=c(sqrt(n)*(resIsco[1,1,]-trueFIM[1,1]),sqrt(n)*(resIobs[1,1,]-trueFIM[1,1])),
