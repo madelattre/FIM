@@ -3,7 +3,8 @@
 ### ---------------------------------------------------------------------------
 
 
-### Numerical study in a linear mixed effects model : statistical properties of two estimators of the Fisher Information matrix 
+### Numerical study in a linear mixed effects model : statistical properties of 
+### two estimators of the Fisher Information matrix 
 ### (section 4.1 of the article)
 
 rm(list=ls())
