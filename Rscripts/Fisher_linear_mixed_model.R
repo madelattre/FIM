@@ -1,3 +1,8 @@
+### "Computing an empirical Fisher information matrix estimate in latent variable
+### models through stochastic approximation."
+### ---------------------------------------------------------------------------
+
+
 ### Numerical study in a linear mixed effects model : statistical properties of two estimators of the Fisher Information matrix 
 ### (section 4.1 of the article)
 
@@ -7,13 +12,12 @@ rm(list=ls())
 
 library(ggplot2)
 library(cowplot)
-#library(devtools)
-#library(RColorBrewer)
+library(lme4)
 
 ## Defining R functions for computing the exact Fisher Information matrix, Iobs 
 ## and Isco in the linear mixed effects model ---------------------------------
 
-## Here it is assumed that all individuals have the same number of observations.
+## It is assumed that all individuals have the same number of observations.
 
 ## Exact Fisher Information matrix
 
@@ -89,37 +93,38 @@ Isco.LMM <- function(datamat,beta,sigma2,eta2){
   return(Isco)
 }
 
+## Numerical experiments ------------------------------------------------------
 
-## number of replicates
-nsim <- 500
-
-## sample size
-# number of individuals
-n <- 100
-# number of observations per individual
-j <- 12
+nsim <- 1000 # number of replicates
+n    <- 500 # number of individuals, either 20 or 100 or 500
+j    <- 12 # number of observations per individual
 
 ## parameter values
-
-beta <- 3
+beta   <- 3
 sigma2 <- 5 
-eta2 <- 2
+eta2   <- 2
+theta.true <- matrix(c(beta,eta2,sigma2),ncol=1)
 
 ## computation of the exact FIM
 
 fisher <- Fisher.LMM(beta,sigma2,eta2,j)
 
-
-## Estimating the FIM when knowing the true parameter values ------------------
-
-## definition of the objects to store the estimation of the Fisher Information matrix 
+## definition of the objects to store the estimation of the Fisher Information
+## matrix 
 
 resIobs.theta.true <- array(NA,dim=c(3,3,nsim))
 resIsco.theta.true <- array(NA,dim=c(3,3,nsim))
 resIobs.theta.est <- array(NA,dim=c(3,3,nsim))
 resIsco.theta.est <- array(NA,dim=c(3,3,nsim))
 
+## counters for the estimation of the coverage rates
+coverage.iobs.theta.est <- 0
+coverage.isco.theta.est <- 0
 
+coverage.iobs.theta.true <- 0
+coverage.isco.theta.true <- 0
+
+coverage.true.fisher <- 0
 
 
 ## loop executing the nsim replicates of the experiment
@@ -127,15 +132,13 @@ resIsco.theta.est <- array(NA,dim=c(3,3,nsim))
 for (k in 1:nsim){
     
   ## data simulation
-  random <- rnorm(n,0,sqrt(eta2))
-  residual <- rnorm(n*j,0,sqrt(sigma2))
+  random    <- rnorm(n,0,sqrt(eta2))
+  residual  <- rnorm(n*j,0,sqrt(sigma2))
   randompop <- rep(random,j)
-  id <- rep(seq(1,n),j)
-  obs <- beta+randompop+residual
-  datamat<-matrix(obs,n,j)
-  
-  
-  
+  id        <- rep(seq(1,n),j)
+  obs       <- beta+randompop+residual
+  datamat   <- matrix(obs,n,j)
+   
   ## computation of the FIM estimators when knowing the true parameter values --
   
   resIobs.theta.true[,,k] <- Iobs.LMM(datamat,beta,sigma2,eta2)
@@ -149,14 +152,73 @@ for (k in 1:nsim){
   
   ## Estimation of the FIM
 
-  resIobs.theta.est[,,k] <- Iobs.LMM(datamat,est.mle@beta,variances[2,'vcov'],variances[1,'vcov'])
-  resIsco.theta.est[,,k] <- Iobs.LMM(datamat,est.mle@beta,variances[2,'vcov'],variances[1,'vcov'])
+  resIobs.theta.est[,,k] <- Iobs.LMM(datamat,est.mle@beta,variances[2,'vcov'],
+                                     variances[1,'vcov'])
+  resIsco.theta.est[,,k] <- Isco.LMM(datamat,est.mle@beta,variances[2,'vcov'],
+                                     variances[1,'vcov'])
   
-  ## Coverages
-  ## TBA
+  ## Coverage rates of confidence ellipsoids ...
+  theta.est <- matrix(c(est.mle@beta,variances[1,'vcov'],variances[2,'vcov']),ncol=1)
+  unit.vect <- matrix(rep(1,length(theta.est)),ncol=1)
+  
+  ## ... based on the true Fisher information matrix
+  
+  conf.inf.fisher.true <- theta.est -
+    1.96/sqrt(n)*solve(chol(fisher))%*%unit.vect
+  conf.sup.fisher.true <- theta.est +
+    1.96/sqrt(n)*solve(chol(fisher))%*%unit.vect
+  
+  coverage.true.fisher <- coverage.true.fisher +
+    (theta.true<=conf.sup.fisher.true)*(theta.true>=conf.inf.fisher.true)
+  
+  
+  ## ... based on Isco computed in the MLE value of the parameters
+  conf.inf.isco.theta.est <- theta.est -
+    1.96/sqrt(n)*solve(chol(resIsco.theta.est[,,k]))%*%unit.vect
+  conf.sup.isco.theta.est <- theta.est +
+    1.96/sqrt(n)*solve(chol(resIsco.theta.est[,,k]))%*%unit.vect
+  
+  coverage.isco.theta.est <- coverage.isco.theta.est +
+    (theta.true<=conf.sup.isco.theta.est)*(theta.true>=conf.inf.isco.theta.est)
+  
+  ## ... based on Isco computed in the true parameter values
+  conf.inf.isco.theta.true <- theta.est -
+    1.96/sqrt(n)*solve(chol(resIsco.theta.true[,,k]))%*%unit.vect
+  conf.sup.isco.theta.true <- theta.est +
+    1.96/sqrt(n)*solve(chol(resIsco.theta.true[,,k]))%*%unit.vect
+  
+  coverage.isco.theta.true <- coverage.isco.theta.true +
+    (theta.true<=conf.sup.isco.theta.true)*(theta.true>=conf.inf.isco.theta.true)
+  
+  ## ... based on Iobs computed in the MLE value of the parameters
+  conf.inf.iobs.theta.est <- theta.est -
+    1.96/sqrt(n)*solve(chol(resIobs.theta.est[,,k]))%*%unit.vect
+  conf.sup.iobs.theta.est <- theta.est +
+    1.96/sqrt(n)*solve(chol(resIobs.theta.est[,,k]))%*%unit.vect
+  
+  coverage.iobs.theta.est <- coverage.iobs.theta.est +
+    (theta.true<=conf.sup.iobs.theta.est)*(theta.true>=conf.inf.iobs.theta.est)
+  
+  ## ... based on Iobs computed in the true parameter values
+  conf.inf.iobs.theta.true <- theta.est -
+    1.96/sqrt(n)*solve(chol(resIobs.theta.true[,,k]))%*%unit.vect
+  conf.sup.iobs.theta.true <- theta.est +
+    1.96/sqrt(n)*solve(chol(resIobs.theta.true[,,k]))%*%unit.vect
+  
+  coverage.iobs.theta.true <- coverage.iobs.theta.true +
+    (theta.true<=conf.sup.iobs.theta.true)*(theta.true>=conf.inf.iobs.theta.true)
+  
 }
 
-## TITLE TBA
+## Print the coverage rates
+coverage.isco.theta.true/nsim*100
+coverage.isco.theta.est/nsim*100
+coverage.iobs.theta.true/nsim*100
+coverage.iobs.theta.est/nsim*100
+coverage.true.fisher/nsim*100
+
+## Graphical representation of the empirical densisities of the components of 
+## the FIM estimators
 
 DataRes <- data.frame(EstF11=c(sqrt(n)*(resIsco.theta.true[1,1,]-fisher[1,1]),
                                sqrt(n)*(resIobs.theta.true[1,1,]-fisher[1,1])),
