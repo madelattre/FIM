@@ -13,6 +13,7 @@ rm(list=ls())
 library(ggplot2)
 library(cowplot)
 library(lme4)
+library(tidyverse)
 
 ## Defining R functions for computing the exact Fisher Information matrix, Iobs 
 ## and Isco in the linear mixed effects model ---------------------------------
@@ -241,8 +242,7 @@ for (n in seq.n){
 }
 
 
-## Graphical representation of the empirical densisities of the components of 
-## the FIM estimators
+## Graphical representation of the bias of the FIM estimators as a function of n
 
 DataRes <- data.frame(EstF11=EstF11, EstF22=EstF22, EstF33=EstF33,
                       EstF12=EstF12, EstF13=EstF13, EstF23=EstF23,
@@ -250,7 +250,6 @@ DataRes <- data.frame(EstF11=EstF11, EstF22=EstF22, EstF33=EstF33,
                                    length(seq.n)),
                       n=rep(seq.n,each=nsim*2)
                       )
-
 
 bias11 <- ggplot(aes(y = EstF11, x = as.factor(n), fill = Estimate), data = DataRes) + 
   geom_boxplot() + xlab("n") + ylab("Bias") + ggtitle(bquote('('~beta~','~beta~')')) +
@@ -280,9 +279,12 @@ bias23 <- ggplot(aes(y = EstF23, x = as.factor(n), fill = Estimate), data = Data
 plot_grid(bias11, bias22, bias33, bias12, bias13, bias23,
           ncol = 3, nrow = 2)
 
+## Graphical representation of the empirical densities of the components of 
+## the FIM estimators
 
-## TO DO: normaliser les valeurs par sqrt(n)
-F22 <- ggplot(DataRes, aes(EstF22, fill=Estimate)) + 
+DataRes.n <- DataRes %>% filter(n==500)
+
+F22 <- ggplot(filter(DataRes.n), aes(sqrt(n)*EstF22, fill=Estimate)) + 
   geom_density(bw=0.3,alpha=0.6) + 
   scale_fill_manual(values = c("#984EA3",'#E69F00')) + 
   xlab("") +
@@ -292,7 +294,7 @@ F22 <- ggplot(DataRes, aes(EstF22, fill=Estimate)) +
   ggtitle(bquote('('~eta^2~','~eta^2~')')) +
   theme(legend.position = c(0,0.9), plot.title = element_text(size=20,face="bold"))
 
-F33 <- ggplot(DataRes, aes(EstF33, fill=Estimate)) + 
+F33 <- ggplot(DataRes.n, aes(sqrt(n)*EstF33, fill=Estimate)) + 
   geom_density(bw=0.3,alpha=0.6) + 
   scale_fill_manual(values = c("#984EA3",'#E69F00')) + 
   xlab("") +
@@ -303,7 +305,7 @@ F33 <- ggplot(DataRes, aes(EstF33, fill=Estimate)) +
   theme(legend.position = "none", plot.title = element_text(size=20,face="bold"))
 
 
-F12 <- ggplot(DataRes, aes(EstF12, fill=Estimate)) + 
+F12 <- ggplot(DataRes.n, aes(sqrt(n)*EstF12, fill=Estimate)) + 
   geom_density(bw=0.3,alpha=0.6) + 
   scale_fill_manual(values = c("#984EA3",'#E69F00')) + 
   xlab("") +
