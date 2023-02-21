@@ -210,13 +210,13 @@ for (n in seq.n){
       (theta.true<=conf.sup.iobs.theta.est)*(theta.true>=conf.inf.iobs.theta.est)
     
     ## ... based on Iobs computed in the true parameter values
-    # conf.inf.iobs.theta.true <- theta.est -
-    #   1.96/sqrt(n)*solve(chol(resIobs.theta.true[,,k]))%*%unit.vect
-    # conf.sup.iobs.theta.true <- theta.est +
-    #   1.96/sqrt(n)*solve(chol(resIobs.theta.true[,,k]))%*%unit.vect
-    # 
-    # coverage.iobs.theta.true <- coverage.iobs.theta.true +
-    #   (theta.true<=conf.sup.iobs.theta.true)*(theta.true>=conf.inf.iobs.theta.true)
+    conf.inf.iobs.theta.true <- theta.est -
+      1.96/sqrt(n)*solve(chol(resIobs.theta.true[,,k]))%*%unit.vect
+    conf.sup.iobs.theta.true <- theta.est +
+      1.96/sqrt(n)*solve(chol(resIobs.theta.true[,,k]))%*%unit.vect
+
+    coverage.iobs.theta.true <- coverage.iobs.theta.true +
+      (theta.true<=conf.sup.iobs.theta.true)*(theta.true>=conf.inf.iobs.theta.true)
     
   }
   
