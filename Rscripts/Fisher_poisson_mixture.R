@@ -12,55 +12,98 @@ rm(list=ls())
 
 library(ggplot2)
 library(cowplot)
-library(flexmix)
+#library(flexmix)
 
 ## Defining R functions for MCMC estimation of the Fisher Information matrix, 
 ## computing Iobs and Isco in the Poisson mixture model -----------------------
 
 
-em.poisson.mixture <- function(y,lambda.init,alpha.init,nbiter){
+em.poisson.mixture <- function(y,lambda.init,alpha.init,nbiter,nrep){
   # y : vector of observations
   # lambda.init : initial values for the Poisson parameters (in ascending order)
   # alpha.init  : initial values for weights of the (K-1) components of the mixture
   # nbiter : number of iterations of the algorithm
   
+  # nrep: TBA
   
   K <- length(lambda.init)
   n <- length(y)
-  lambda.est <- matrix(NA,K,nbiter)
-  alpha.est <- matrix(NA,K-1,nbiter)
   
-  lambda.est[,1] <- lambda.init
-  alpha.est[,1] <- alpha.init
+  best <- -Inf
+  lambda.final <- lambda.init
+  alpha.final <- alpha.init
   
-  prob <- matrix(NA,n,K-1) # posterior probabilities 
-  for (l in 2:nbiter){
+  for (rep in 1:nrep){ # nrep LOOP
     
-    denom <- 0
-    for (k in 1:(K-1)){
-      denom <- denom + exp(-lambda.est[k,l-1])*lambda.est[k,l-1]^y*alpha.est[k,l-1]
+    lambda.est <- matrix(NA,K,nbiter)
+    alpha.est <- matrix(NA,K-1,nbiter)
+    
+    lambda.est[,1] <- lambda.init*runif(3,0.5,1.5)
+    alpha.init.1 <- min(alpha.init[1]*runif(1,0.5,1.5),1)
+    alpha.init.2 <- min(min(alpha.init[2]*runif(1,0.5,1.5),1),1-alpha.init.1-0.01)
+    alpha.est[,1] <- c(alpha.init.1,alpha.init.2)
+    
+    prob <- matrix(NA,n,K-1) # posterior probabilities 
+    
+    for (l in 2:nbiter){
+      
+      denom <- 0
+      for (k in 1:(K-1)){
+        denom <- denom + exp(-lambda.est[k,l-1])*lambda.est[k,l-1]^y*alpha.est[k,l-1]
+      }
+      denom <- denom + exp(-lambda.est[K,l-1])*lambda.est[K,l-1]^y*(1-sum(alpha.est[,l-1]))
+      
+      ## E-step
+      for (k in 1:(K-1)){
+        prob[,k] <- exp(-lambda.est[k,l-1])*lambda.est[k,l-1]^y*alpha.est[k,l-1]/denom
+      }
+      
+      ## M-step
+      
+      for (k in 1:(K-1)){
+        lambda.est[k,l] <- sum(y*prob[,k])/sum(prob[,k])
+        alpha.est[k,l] <- sum(prob[,k])/n
+      }
+      
+      lambda.est[K,l] <- sum(y*(1-rowSums(prob)))/sum(1-rowSums(prob))
     }
-    denom <- denom + exp(-lambda.est[K,l-1])*lambda.est[K,l-1]^y*(1-sum(alpha.est[,l-1]))
     
-    ## E-step
-    for (k in 1:(K-1)){
-      prob[,k] <- exp(-lambda.est[k,l-1])*lambda.est[k,l-1]^y*alpha.est[k,l-1]/denom
+    LL <- LL.poisson.mixture(y,lambda.est[,nbiter],alpha.est[,nbiter])
+    
+    if (LL>best){
+      lambda.final <- lambda.est[,nbiter]
+      alpha.final <- alpha.est[,nbiter]
+      best <- LL
     }
     
-    ## M-step
-    
-    for (k in 1:(K-1)){
-      lambda.est[k,l] <- sum(y*prob[,k])/sum(prob[,k])
-      alpha.est[k,l] <- sum(prob[,k])/n
-    }
-    
-    lambda.est[K,l] <- sum(y*(1-rowSums(prob)))/sum(1-rowSums(prob))
-  }
+  } # nrep LOOP
   
-  est <- list(lambda.est,alpha.est) 
+  alpha.final <- c(alpha.final,1-sum(alpha.final))
+  
+  est <- list(lambda.final,alpha.final)
+  
+  
+  ## TO DO: régler le problème des estimations trop proches entre deux états
+  
   return(est)
 }
 
+LL.poisson.mixture <- function(y,lambda,alpha){
+  # y:
+  # lambda:
+  # alpha:
+  
+  K <- length(lambda)
+  
+  l <- matrix(NA,K,n)
+  for (k in 1:(K-1)){
+    l[k,] <- alpha[k]*dpois(y,lambda[k])
+  }
+  l[K,] <- (1-sum(alpha))*dpois(y,lambda[K])
+  LL <- sum(log(colSums(l)))
+  
+  return(LL)
+}
 ## Monte-Carlo estimation of the true Fisher information matrix
 
 pm_fisher_mcmc <- function(lambda,alpha,nMC){
@@ -170,7 +213,7 @@ pm_fisher_estimation <- function(y, lambda, alpha) {
   covderiv[K-1,2*K-1] <- sum(exp(-lambda[K-1])*lambda[K-1]^y/denom*(-1+y/lambda[K-1])) 
   covderiv[2*K-1,K-1] <- covderiv[K-1,2*K-1]
   
-  covderiv[K,2*K-1] <- sum(exp(-lambda[K])*lambda[K]^y/denom*(-1+y/lambda[K])*(-1)/(1-sum(alpha))) 
+  covderiv[K,2*K-1] <- sum(exp(-lambda[K])*lambda[K]^y/denom*(-1+y/lambda[K])*(-1)) 
   covderiv[2*K-1,K] <- covderiv[K,2*K-1]
   
   covderiv[K,K] <- sum(exp(-lambda[K])*lambda[K]^y*(1-sum(alpha))/denom*(-1+y/lambda[K])^2) 
@@ -189,7 +232,7 @@ pm_fisher_estimation <- function(y, lambda, alpha) {
 ## Numerical experiment -------------------------------------------------------
 
 
-nbsim  <- 500        # number of replicates
+nbsim  <- 500       # number of replicates
 nMC    <- 100000000  # sample size for Monte-Carlo estimation of the FIM
 alpha  <- c(0.3,0.5) # mixture weights of the first K-1 components 
 lambda <- c(2,5,9)   # parameter values of the K Poisson distribution of the mixture
@@ -227,16 +270,17 @@ failure.cov.Isco.theta.est <- 0
 ## TBA
 
 failed <- 0
-det.Iobs.theta.true <- 0
-det.Iobs.theta.est <- 0
-det.Isco.theta.true <- 0
-det.Isco.theta.est <- 0
+det.Iobs.theta.true <- rep(0,nbsim)
+det.Iobs.theta.est <- rep(0,nbsim)
+det.Isco.theta.true <- rep(0,nbsim)
+det.Isco.theta.est <- rep(0,nbsim)
 
 nbiterem <- 1000
 
 j <- 1
 
 while (j <= nbsim){
+## Remplacer par une boucle for puisque failed n'est plus incrémenté
   
   ## Data simulation
   
@@ -251,6 +295,9 @@ while (j <= nbsim){
     y[i] <- rpois(1,lambda[z[i]])
   }
   
+  # em.est <- em.poisson.mixture(y,lambda*runif(3,0.5,1.5),alpha*runif(2,0.5,1.5),nbiterem)
+  # em.est[[1]][,nbiterem]
+  # em.est[[2]][,nbiterem]
   ## Computation of Isco and Iobs in the true parameter value
   
   res.true.theta <- pm_fisher_estimation(y, lambda, alpha)
@@ -266,13 +313,13 @@ while (j <= nbsim){
   #                                  nrep=10))
   
   
-  em.est <- em.poisson.mixture(y,lambda*runif(3,0.75,1.25),alpha*runif(2,0.75,1.25),nbiterem)
+  em.est <- em.poisson.mixture(y,lambda.init = lambda,alpha.init = alpha, nbiter = nbiterem,nrep=50)
   #if ((length(parameters(em.est))==3) & (sum(diff(parameters(em.est))>0.1)==2)){
     ## Both conditions are to avoid identifiability issues
-    est.lambda[,j] <- em.est[[1]][,nbiterem]#parameters(em.est)
+    est.lambda[,j] <- em.est[[1]]#parameters(em.est)
     ord <- order(est.lambda[,j]) ## Fix label switching issues
     est.lambda[,j] <- est.lambda[ord,j]
-    est.alpha[,j] <- em.est[[2]][ord[-3],nbiterem]
+    est.alpha[,j] <- em.est[[2]][ord[-3]]
     
     ### Estimation of the FIM
     
@@ -285,23 +332,25 @@ while (j <= nbsim){
     theta.est <- matrix(c(est.lambda[,j],est.alpha[,j]),ncol=1)
     unit.vect <- matrix(rep(1,length(theta.est)),ncol=1)
     
-    ## ... based on the true Fisher information matrix
-    
-    conf.inf.fisher.true <- theta.est -
-      1.96/sqrt(n)*inv.sqrt.fisher.mcmc%*%unit.vect
-    conf.sup.fisher.true <- theta.est +
-      1.96/sqrt(n)*inv.sqrt.fisher.mcmc%*%unit.vect
-    
-    coverage.true.fisher <- coverage.true.fisher +
-      (theta.true<=conf.sup.fisher.true)*(theta.true>=conf.inf.fisher.true)
-    
+    # ## ... based on the true Fisher information matrix
+    # 
+    # conf.inf.fisher.true <- theta.est -
+    #   1.96/sqrt(n)*inv.sqrt.fisher.mcmc%*%unit.vect
+    # conf.sup.fisher.true <- theta.est +
+    #   1.96/sqrt(n)*inv.sqrt.fisher.mcmc%*%unit.vect
+    # 
+    # coverage.true.fisher <- coverage.true.fisher +
+    #   (theta.true<=conf.sup.fisher.true)*(theta.true>=conf.inf.fisher.true)
+    # 
     
     ## ... based on Isco computed in the MLE value of the parameters
     
     #tryCatch(
     #  {
-    if (det(Isco.theta.est[,,j])>10^(-9)){
-      chol.Isco.t.e <- chol(Isco.theta.est[,,j],p=1)
+    
+    if (min(eigen(Isco.theta.est[,,j])$values)>0){
+    #if (det(Isco.theta.est[,,j])>10^(-15)){
+      chol.Isco.t.e <- chol(Isco.theta.est[,,j])
       conf.inf.isco.theta.est <- theta.est -
         1.96/sqrt(n)*solve(chol.Isco.t.e)%*%unit.vect
       conf.sup.isco.theta.est <- theta.est +
@@ -309,8 +358,11 @@ while (j <= nbsim){
       
       coverage.isco.theta.est <- coverage.isco.theta.est +
         (theta.true<=conf.sup.isco.theta.est)*(theta.true>=conf.inf.isco.theta.est)
+    # } else{
+    #   
+    # }
     } else{
-      det.Isco.theta.est <- det.Isco.theta.est+1
+      det.Isco.theta.est[j] <- 1
     }
     #},
     #finally = {
@@ -320,8 +372,9 @@ while (j <= nbsim){
     
     ## ... based on Isco computed in the true parameter values
     
-    if (det(Isco.true.theta[,,j])>10^(-9)){
-      chol.Isco.t.t <- chol(Isco.true.theta[,,j],p=1)
+    if (min(eigen(Isco.true.theta[,,j])$values)>0){
+    #if (det(Isco.true.theta[,,j])>10^(-15)){
+      chol.Isco.t.t <- chol(Isco.true.theta[,,j])
       conf.inf.isco.theta.true <- theta.est -
         1.96/sqrt(n)*solve(chol.Isco.t.t)%*%unit.vect
       conf.sup.isco.theta.true <- theta.est +
@@ -329,13 +382,17 @@ while (j <= nbsim){
       
       coverage.isco.theta.true <- coverage.isco.theta.true +
         (theta.true<=conf.sup.isco.theta.true)*(theta.true>=conf.inf.isco.theta.true)
+    # } else{
+    #   det.Isco.theta.true[j] <- 1
+    # }
     } else{
-      det.Isco.theta.true <- det.Isco.theta.true+1
-    }
+      det.Isco.theta.true[j] <- 1
+}
     ## ... based on Iobs computed in the MLE value of the parameters
     
-    if (det(Iobs.theta.est[,,j])>10^(-9)){
-      chol.Iobs.t.e <- chol(Iobs.theta.est[,,j],p=1)
+    if (min(eigen(Iobs.theta.est[,,j])$values)>0){
+   # if (det(Iobs.theta.est[,,j])>10^(-15)){
+      chol.Iobs.t.e <- chol(Iobs.theta.est[,,j])
       conf.inf.iobs.theta.est <- theta.est -
         1.96/sqrt(n)*solve(chol.Iobs.t.e)%*%unit.vect
       conf.sup.iobs.theta.est <- theta.est +
@@ -343,13 +400,17 @@ while (j <= nbsim){
       
       coverage.iobs.theta.est <- coverage.iobs.theta.est +
         (theta.true<=conf.sup.iobs.theta.est)*(theta.true>=conf.inf.iobs.theta.est)
+    # } else{
+    #   det.Iobs.theta.est[j] <- 1
+    # }
     } else{
-      det.Iobs.theta.est <- det.Iobs.theta.est+1
+      det.Iobs.theta.est[j] <- 1
     }
     ## ... based on Iobs computed in the true parameter values
     
-    if (det(Iobs.true.theta[,,j])>10^(-9)){
-      chol.Iobs.t.t <- chol(Iobs.true.theta[,,j],p=1)
+    if (min(eigen(Iobs.true.theta[,,j])$values)>0){
+    #if (det(Iobs.true.theta[,,j])>10^(-15)){
+      chol.Iobs.t.t <- chol(Iobs.true.theta[,,j])
       conf.inf.iobs.theta.true <- theta.est -
         1.96/sqrt(n)*solve(chol.Iobs.t.t)%*%unit.vect
       conf.sup.iobs.theta.true <- theta.est +
@@ -357,8 +418,11 @@ while (j <= nbsim){
       
       coverage.iobs.theta.true <- coverage.iobs.theta.true +
         (theta.true<=conf.sup.iobs.theta.true)*(theta.true>=conf.inf.iobs.theta.true)
+    # } else{
+    #   det.Iobs.theta.true[j] <- 1
+    # }
     } else{
-      det.Iobs.theta.true <- det.Iobs.theta.true+1
+      det.Iobs.theta.true[j] <- 1
     }
     
     j <- j+1
