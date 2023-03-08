@@ -3,7 +3,8 @@
 ### ---------------------------------------------------------------------------
 
 
-### Numerical study in a linear mixed effects model : statistical properties of two estimators of the Fisher Information matrix 
+### Numerical study in a linear mixed effects model : statistical properties of 
+### two estimators of the Fisher Information matrix 
 ### (section 4.1 of the article)
 
 rm(list=ls())
@@ -209,13 +210,13 @@ for (n in seq.n){
       (theta.true<=conf.sup.iobs.theta.est)*(theta.true>=conf.inf.iobs.theta.est)
     
     ## ... based on Iobs computed in the true parameter values
-    # conf.inf.iobs.theta.true <- theta.est -
-    #   1.96/sqrt(n)*solve(chol(resIobs.theta.true[,,k]))%*%unit.vect
-    # conf.sup.iobs.theta.true <- theta.est +
-    #   1.96/sqrt(n)*solve(chol(resIobs.theta.true[,,k]))%*%unit.vect
-    # 
-    # coverage.iobs.theta.true <- coverage.iobs.theta.true +
-    #   (theta.true<=conf.sup.iobs.theta.true)*(theta.true>=conf.inf.iobs.theta.true)
+    conf.inf.iobs.theta.true <- theta.est -
+      1.96/sqrt(n)*solve(chol(resIobs.theta.true[,,k]))%*%unit.vect
+    conf.sup.iobs.theta.true <- theta.est +
+      1.96/sqrt(n)*solve(chol(resIobs.theta.true[,,k]))%*%unit.vect
+
+    coverage.iobs.theta.true <- coverage.iobs.theta.true +
+      (theta.true<=conf.sup.iobs.theta.true)*(theta.true>=conf.inf.iobs.theta.true)
     
   }
   
