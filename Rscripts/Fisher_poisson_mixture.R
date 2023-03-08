@@ -19,137 +19,88 @@ library(cowplot)
 
 ## EM algorithm for parameter estimation
 
-em.poisson.mixture <- function(y,lambda.init,alpha.init,nbiter,nrep){
+em.poisson.mixture <- function(y,K,nbiter=100){
   # y : vector of observations
-  # lambda.init : initial values for the Poisson parameters (in ascending order)
-  # alpha.init  : initial values for weights of the (K-1) components of the mixture
+  # K : number of components of the mixture
   # nbiter : number of iterations of the algorithm
   
-  # nrep: TBA
-  # MD => lambda.init: why in ascending order?
-  
-  K <- length(lambda.init)
   n <- length(y)
   
-  best <- -Inf
-  lambda.final <- lambda.init
-  alpha.final <- alpha.init
+  # initialization using kmeans
   
-  for (rep in 1:nrep){ # nrep LOOP
+  km   <- kmeans(y,centers=K)
+  init.alpha <- c(km$size[1]/sum(km$size), km$size[2]/sum(km$size), km$size[3]/sum(km$size))
+  init.lambda <- c(km$centers[1], km$centers[2], km$centers[3])
+  ord <- order(init.lambda)
+  init.lambda <- init.lambda[ord]
+  init.alpha <- init.alpha[ord][-K]
+  
+  lambda.est     <- matrix(NA,K,nbiter)
+  alpha.est      <- matrix(NA,K-1,nbiter)
+  lambda.est[,1] <- init.lambda
+  alpha.est[,1]  <- init.alpha    
+  
+  prob <- matrix(NA,n,K-1) # posterior probabilities 
+  
+  for (l in 2:nbiter){
     
-    lambda.est <- matrix(NA,K,nbiter)
-    alpha.est <- matrix(NA,K-1,nbiter)
+    denom <- 0
+    for (k in 1:(K-1)){
+      denom <- denom + 
+        exp(-lambda.est[k,l-1])*lambda.est[k,l-1]^y*alpha.est[k,l-1]
+    }
+    denom <- denom + 
+      exp(-lambda.est[K,l-1])*lambda.est[K,l-1]^y*(1-sum(alpha.est[,l-1]))
     
-    
-    # Initialization
-    lambda.est[,1] <- lambda.init*c(runif(1,0.5,1.5),runif(1,0.75,1.25),runif(1,0.8,1.2))
-    alpha.init.1 <- min(alpha.init[1]*runif(1,0.5,1.5),1)
-    alpha.init.2 <- min(min(alpha.init[2]*runif(1,0.5,1.5),1),1-alpha.init.1-0.01)
-    alpha.est[,1] <- c(alpha.init.1,alpha.init.2)
-    
-    prob <- matrix(NA,n,K-1) # posterior probabilities 
-    
-    for (l in 2:nbiter){
-      
-      denom <- 0
-      for (k in 1:(K-1)){
-        denom <- denom + exp(-lambda.est[k,l-1])*lambda.est[k,l-1]^y*alpha.est[k,l-1]
-      }
-      denom <- denom + exp(-lambda.est[K,l-1])*lambda.est[K,l-1]^y*(1-sum(alpha.est[,l-1]))
-      
-      ## E-step
-      for (k in 1:(K-1)){
-        prob[,k] <- exp(-lambda.est[k,l-1])*lambda.est[k,l-1]^y*alpha.est[k,l-1]/denom
-      }
-      
-      ## M-step
-      
-      for (k in 1:(K-1)){
-        lambda.est[k,l] <- sum(y*prob[,k])/sum(prob[,k])
-        alpha.est[k,l] <- sum(prob[,k])/n
-      }
-      
-      lambda.est[K,l] <- sum(y*(1-rowSums(prob)))/sum(1-rowSums(prob))
+    ## E-step
+    for (k in 1:(K-1)){
+      prob[,k] <- exp(-lambda.est[k,l-1])*lambda.est[k,l-1]^y*alpha.est[k,l-1]/denom
     }
     
-    LL <- LL.poisson.mixture(y,lambda.est[,nbiter],alpha.est[,nbiter])
+    ## M-step
     
-    if ((LL>best)&(sum(diff(lambda.est[,nbiter])>0.5)==(K-1))){
-      # Avoid situations where two states are too similar
-      lambda.final <- lambda.est[,nbiter]
-      alpha.final <- alpha.est[,nbiter]
-      best <- LL
+    for (k in 1:(K-1)){
+      lambda.est[k,l] <- sum(y*prob[,k])/sum(prob[,k])
+      alpha.est[k,l] <- sum(prob[,k])/n
     }
     
-  } # nrep LOOP
+    lambda.est[K,l] <- sum(y*(1-rowSums(prob)))/sum(1-rowSums(prob))
+  }
   
-  alpha.final <- c(alpha.final,1-sum(alpha.final))
-  
-  est <- list(lambda.final,alpha.final)
+  est <- list(lambda.est[,nbiter],alpha.est[,nbiter])
   
   return(est)
 }
 
+## Simulation of observations according to a mixture of Poisson distributions
 
-## Computation of the log-likelihood
-
-LL.poisson.mixture <- function(y,lambda,alpha){
-  # y : vector of observations
-  # lambda : values for the Poisson parameters (in ascending order)
-  # alpha  : values for weights of the (K-1) components of the mixture
+data.sim <- function(n,lambda,alpha){
+  # n      : number of observations to be simulated
+  # lambda : vector of K Poisson parameters in ascending order
+  # alpha  : vector of mixture proportions (first K-1 components)
   
-  K <- length(lambda)
-  
-  l <- matrix(NA,K,n)
-  for (k in 1:(K-1)){
-    l[k,] <- alpha[k]*dpois(y,lambda[k])
-  }
-  l[K,] <- (1-sum(alpha))*dpois(y,lambda[K])
-  LL <- sum(log(colSums(l)))
-  
-  return(LL)
-}
-
-## Monte-Carlo estimation of the true Fisher information matrix
-
-pm_fisher_mcmc <- function(lambda,alpha,nMC){
-  # lambda : vector of Poisson parameter values (as many values as mixture
-  # components)
-  # alpha  : vector of mixture weights (one less value than components in the
-  # mixture, the last weight is deduced from the first)
-  # nMC    : size of the Monte-Carlo sample
-  
-  z <- rep(0,nMC) # latent variable
-  y <- rep(0,nMC) # observed variable
+  z <- rep(0,n) # latent variable
+  y <- rep(0,n) # observed variable
   
   t <- cumsum(c(alpha,1-sum(alpha)))
   
-  # data simulation
-  for (i in 1:nMC){
+  for (i in 1:n){
     u    <- runif(1)
     z[i] <- 1+sum(u>t)
     y[i] <- rpois(1,lambda[z[i]])
   }
   
-  # very large sample based estimation of the FIM
-  MCMC_FIM <-  pm_fisher_estimation(y, lambda, alpha)
-  MCMC_FIM$Iobs
-  MCMC_FIM$Isco
-  MCMC_FIM <- (MCMC_FIM$Isco+MCMC_FIM$Iobs)/2
-  
-  # MD => n'utiliser que Isco qui est forcément défini positif?
-  return(MCMC_FIM)
+  return(y)
 }
 
-
-
-## Function for Fisher Information matrix estimation, based on Isco and Iobs
+## Function for Fisher Information matrix estimation, 
+## computing Isco and Iobs
 
 pm_fisher_estimation <- function(y, lambda, alpha) {
   # y      : vector of observations
-  # lambda : vector of mean Poisson parameters for each component of the mixture
-  # alpha  : vector of mixture proportions, excluding the proportion of the last
-  #  mixture component
+  # lambda : vector of K Poisson parameters for each component of the mixture
+  #         (in ascending order)
+  # alpha  : vector of (K-1) mixture proportions
   
   K <- length(lambda) # number of components of the mixture
   n <- length(y)      # sample size
@@ -236,72 +187,111 @@ pm_fisher_estimation <- function(y, lambda, alpha) {
 }
 
 
+## Monte-Carlo estimation of the true Fisher information matrix
+
+pm_fisher_mcmc <- function(lambda,alpha,nMC){
+  # lambda : vector of K Poisson parameter values (in ascending order)
+  # alpha  : vector of K-1 mixture weights (one less value than components in the
+  # mixture, the last weight is deduced from the first)
+  # nMC    : size of the Monte-Carlo sample
+  
+  z <- rep(0,nMC) # latent variable
+  y <- rep(0,nMC) # observed variable
+  
+  t <- cumsum(c(alpha,1-sum(alpha)))
+  
+  # data simulation
+  y <- data.sim(nMC,lambda,alpha)
+  
+  # very large sample based estimation of the FIM
+  MCMC_FIM <-  pm_fisher_estimation(y, lambda, alpha)
+  MCMC_FIM$Iobs
+  MCMC_FIM$Isco
+  MCMC_FIM <- (MCMC_FIM$Isco+MCMC_FIM$Iobs)/2
+  
+  return(MCMC_FIM)
+}
+
+
+## Intermediate function for calculating empirical coverage rates and checking 
+## the positive definiteness of Fisher estimates
+
+coverage <- function(theta.true,theta.est,FIM,rate,n){
+  # theta.true: vector of true parameter values in the following order : K 
+  # Poisson parameters in ascending order, K-1 first mixture proportions
+  # theta.est: vector of estimated parameter values in the following order : K 
+  # Poisson parameters in ascending order, K-1 first mixture proportions
+  # FIM: Fisher Information matrix or its estimate
+  # rate: coverage rate
+  # n: sample size
+  
+  DP <- 1
+  
+  quantile <- qnorm((1+rate)/2)
+  
+  conf.inf <- theta.est - quantile/sqrt(n)*sqrt(diag(solve(FIM)))
+  conf.sup <- theta.est + quantile/sqrt(n)*sqrt(diag(solve(FIM)))
+  
+  coverage <- (theta.true<=conf.sup)*(theta.true>=conf.inf)
+  
+  if (sum((eigen(FIM)$values)<=0)>0){
+    DP <- 0
+  }
+  
+  res <- list(coverage=coverage,DP=DP)
+  
+  return(res)
+  
+}
+
+
+
 ## Numerical experiment -------------------------------------------------------
 
 
-nbsim  <- 500       # number of replicates
-nMC    <- 100000000  # sample size for Monte-Carlo estimation of the FIM
-alpha  <- c(0.1,0.6) # mixture weights of the first K-1 components 
-lambda <- c(1,4,9)   # parameter values of the K Poisson distribution of the mixture
-n      <- 2000#500        # sample size
+nbsim  <- 1000       # number of replicates
+nMC    <- 1000000    # sample size for Monte-Carlo estimation of the FIM
+alpha  <- c(0.3,0.5) # mixture weights of the first K-1 components 
+lambda <- c(2,5,9)   # parameter values of the K Poisson distribution of the mixture
+n      <- 500        # sample size
+
+rate <- 0.95
 
 theta.true <- matrix(c(lambda,alpha),ncol=1)
 
 ## MCMC estimation of the FIM
+fisher.mcmc <- pm_fisher_mcmc(lambda,alpha,nMC)
 
-#fisher.mcmc <- pm_fisher_mcmc(lambda,alpha,nMC)
-inv.sqrt.fisher.mcmc <- solve(chol(fisher.mcmc))
-
-## Computation of Isco and Iobs based on nbsim simulated samples
-
+## Objects for storing results
+### Estimation of the FIM while knowing the true parameter values or while
+### estimating the parameter values
 Iobs.true.theta <- array(NA,dim=c(5,5,nbsim))
 Isco.true.theta <- array(NA,dim=c(5,5,nbsim))
-Iobs.theta.est <- array(NA,dim=c(5,5,nbsim))
-Isco.theta.est <- array(NA,dim=c(5,5,nbsim))  
-
+Iobs.theta.est  <- array(NA,dim=c(5,5,nbsim))
+Isco.theta.est  <- array(NA,dim=c(5,5,nbsim))  
+### Parameter estimates
 est.lambda <- matrix(NA,3,nbsim)
-est.alpha <- matrix(NA,2,nbsim)
-init.lambda <- matrix(NA,3,nbsim)
-init.alpha <- matrix(NA,2,nbsim)
+est.alpha  <- matrix(NA,2,nbsim)
+### To derive the empirical coverage rate
+coverage.fisher.mcmc <- matrix(0,nbsim,5)
+coverage.iobstrue    <- matrix(0,nbsim,5)
+coverage.iobsest     <- matrix(0,nbsim,5)
+coverage.iscotrue    <- matrix(0,nbsim,5)
+coverage.iscoest     <- matrix(0,nbsim,5)
+### Positive definiteness of the FIM estimates
+DP.iobstrue <- rep(0,nbsim)
+DP.iobsest  <- rep(0,nbsim)
+DP.iscotrue <- rep(0,nbsim)
+DP.iscoest  <- rep(0,nbsim)
 
-## counters for the estimation of the coverage rates
-coverage.iobs.theta.est <- matrix(0,5,nbsim)
-coverage.isco.theta.est <- matrix(0,5,nbsim)
-
-coverage.iobs.theta.true <- matrix(0,5,nbsim)
-coverage.isco.theta.true <- matrix(0,5,nbsim)
-
-coverage.true.fisher <- matrix(0,5,nbsim)
-
-failure.cov.Isco.theta.est <- 0
-
-## TBA
-
-failed <- 0
-det.Iobs.theta.true <- rep(0,nbsim)
-det.Iobs.theta.est <- rep(0,nbsim)
-det.Isco.theta.true <- rep(0,nbsim)
-det.Isco.theta.est <- rep(0,nbsim)
-
-nbiterem <- 500
 
 
 for (j in 1:nbsim){
   
   ## Data simulation
   
-  z <- rep(0,n) # latent variable
-  y <- rep(0,n) # observed variable
+  y <- data.sim(n,lambda,alpha)
   
-  t <- cumsum(c(alpha,1-sum(alpha)))
-  
-  for (i in 1:n){
-    u    <- runif(1)
-    z[i] <- 1+sum(u>t)
-    y[i] <- rpois(1,lambda[z[i]])
-  }
-  
-
   ## Computation of Isco and Iobs in the true parameter value
   
   res.true.theta <- pm_fisher_estimation(y, lambda, alpha)
@@ -310,156 +300,109 @@ for (j in 1:nbsim){
   
   ## Computation of Isco and Iobs in the MLE value of the parameter
   
-  ### Maximum likelihood estimation
-  
-  
-  em.est <- em.poisson.mixture(y,lambda.init = lambda,alpha.init = alpha, nbiter = nbiterem,nrep=1)
-  
+  em.est <- em.poisson.mixture(y,3)
   est.lambda[,j] <- em.est[[1]]
-  ord <- order(est.lambda[,j]) ## Fix label switching issues
-  est.lambda[,j] <- est.lambda[ord,j]
-  est.alpha[,j] <- em.est[[2]][ord[-3]]
-  
-  init.lambda[,j] <- em.est[[3]][ord]
-  init.alpha[,j] <- em.est[[4]][ord[-3]]
-  
-  ### Estimation of the FIM
+  est.alpha[,j] <- em.est[[2]]#[ord[-3]]
   
   res.theta.est <- pm_fisher_estimation(y, est.lambda[,j], est.alpha[,j])
   Iobs.theta.est[,,j] <- res.theta.est$Iobs
   Isco.theta.est[,,j] <- res.theta.est$Isco
   
   
-  ## Coverage rates of confidence ellipsoids ...
-  theta.est <- matrix(c(est.lambda[,j],est.alpha[,j]),ncol=1)
-  unit.vect <- matrix(rep(1,length(theta.est)),ncol=1)
-  
-  # ## ... based on the true Fisher information matrix
-  # 
-  # conf.inf.fisher.true <- theta.est -
-  #   1.96/sqrt(n)*inv.sqrt.fisher.mcmc%*%unit.vect
-  # conf.sup.fisher.true <- theta.est +
-  #   1.96/sqrt(n)*inv.sqrt.fisher.mcmc%*%unit.vect
-  # 
-  # coverage.true.fisher[,j] <- (theta.true<=conf.sup.fisher.true)*(theta.true>=conf.inf.fisher.true)
-  
-  
-  ## ... based on Isco computed in the MLE value of the parameters
-
-  
-  if (min(eigen(Isco.theta.est[,,j])$values)>0){
-    #Check if the estimated matrix is definite positive
-    # MD => INUTILE
-    chol.Isco.t.e <- chol(Isco.theta.est[,,j])
-    conf.inf.isco.theta.est <- theta.est -
-      1.96/sqrt(n)*solve(chol.Isco.t.e)%*%unit.vect
-    conf.sup.isco.theta.est <- theta.est +
-      1.96/sqrt(n)*solve(chol.Isco.t.e)%*%unit.vect
+  if (n>=500){
+    ## Coverage rates and positive definiteness of the FIM estimates
     
-    coverage.isco.theta.est[,j] <- 
-      (theta.true<=conf.sup.isco.theta.est)*(theta.true>=conf.inf.isco.theta.est)
-  } else{
-    det.Isco.theta.est[j] <- 1
-  }
-  
-  
-  ## ... based on Isco computed in the true parameter values
-  
-  if (min(eigen(Isco.true.theta[,,j])$values)>0){
-    #Check if the estimated matrix is definite positive
-    # MD => INUTILE
-    chol.Isco.t.t <- chol(Isco.true.theta[,,j])
-    conf.inf.isco.theta.true <- theta.est -
-      1.96/sqrt(n)*solve(chol.Isco.t.t)%*%unit.vect
-    conf.sup.isco.theta.true <- theta.est +
-      1.96/sqrt(n)*solve(chol.Isco.t.t)%*%unit.vect
+    cov0 <- coverage(theta.true,c(est.lambda[,j],est.alpha[,j]),fisher.mcmc,rate,n)
+    coverage.fisher.mcmc[j,] <- cov0$coverage
     
-    coverage.isco.theta.true[,j] <- 
-      (theta.true<=conf.sup.isco.theta.true)*(theta.true>=conf.inf.isco.theta.true)
-  } else{
-    det.Isco.theta.true[j] <- 1
-  }
-  
-  ## ... based on Iobs computed in the MLE value of the parameters
-  
-  if (min(eigen(Iobs.theta.est[,,j])$values)>0){
-    #Check if the estimated matrix is definite positive
-    chol.Iobs.t.e <- chol(Iobs.theta.est[,,j])
-    conf.inf.iobs.theta.est <- theta.est -
-      1.96/sqrt(n)*solve(chol.Iobs.t.e)%*%unit.vect
-    conf.sup.iobs.theta.est <- theta.est +
-      1.96/sqrt(n)*solve(chol.Iobs.t.e)%*%unit.vect
+    cov1 <- coverage(theta.true,c(est.lambda[,j],est.alpha[,j]),
+                     Isco.true.theta[,,j],rate,n)
+    coverage.iscotrue[j,] <- cov1$coverage
+    DP.iscotrue[j] <- cov1$DP
     
-    coverage.iobs.theta.est[,j] <- 
-      (theta.true<=conf.sup.iobs.theta.est)*(theta.true>=conf.inf.iobs.theta.est)
-  } else{
-    det.Iobs.theta.est[j] <- 1
-  }
-  
-  ## ... based on Iobs computed in the true parameter values
-  
-  if (min(eigen(Iobs.true.theta[,,j])$values)>0){
-    #Check if the estimated matrix is definite positive
-    chol.Iobs.t.t <- chol(Iobs.true.theta[,,j])
-    conf.inf.iobs.theta.true <- theta.est -
-      1.96/sqrt(n)*solve(chol.Iobs.t.t)%*%unit.vect
-    conf.sup.iobs.theta.true <- theta.est +
-      1.96/sqrt(n)*solve(chol.Iobs.t.t)%*%unit.vect
+    cov2 <- coverage(theta.true,c(est.lambda[,j],est.alpha[,j]),
+                     Isco.theta.est[,,j],rate,n)
+    coverage.iscoest[j,] <- cov2$coverage
+    DP.iscoest[j] <- cov2$DP
     
-    coverage.iobs.theta.true[,j] <- 
-      (theta.true<=conf.sup.iobs.theta.true)*(theta.true>=conf.inf.iobs.theta.true)
-  } else{
-    det.Iobs.theta.true[j] <- 1
+    cov3 <- coverage(theta.true,c(est.lambda[,j],est.alpha[,j]),
+                     Iobs.true.theta[,,j],rate,n)
+    coverage.iobstrue[j,] <- cov3$coverage
+    DP.iobstrue[j] <- cov3$DP
+    
+    cov4 <- coverage(theta.true,c(est.lambda[,j],est.alpha[,j]),
+                     Iobs.theta.est[,,j],rate,n)
+    coverage.iobsest[j,] <- cov4$coverage
+    DP.iobsest[j] <- cov4$DP
   }
-  
 }
 
+### Computation of the empirical covering rates
+colMeans(coverage.fisher.mcmc)
+colMeans(coverage.iscotrue)
+colMeans(coverage.iscoest)
+colMeans(coverage.iobstrue[which(DP.iobstrue==1),])
+colMeans(coverage.iobsest[which(DP.iobsest==1),])
+
+## Graphical representation of the empirical distribution of the FIM estimates
+
+DataRes <- data.frame(EstF11=c(sqrt(n)*(Isco.true.theta[1,1,]-fisher.mcmc[1,1]),
+                               sqrt(n)*(Iobs.true.theta[1,1,]-fisher.mcmc[1,1])),
+                      EstF22=c(sqrt(n)*(Isco.true.theta[2,2,]-fisher.mcmc[2,2]),
+                               sqrt(n)*(Iobs.true.theta[2,2,]-fisher.mcmc[2,2])),
+                      EstF33=c(sqrt(n)*(Isco.true.theta[3,3,]-fisher.mcmc[3,3]),
+                               sqrt(n)*(Iobs.true.theta[3,3,]-fisher.mcmc[3,3])),
+                      EstF44=c(sqrt(n)*(Isco.true.theta[4,4,]-fisher.mcmc[4,4]),
+                               sqrt(n)*(Iobs.true.theta[4,4,]-fisher.mcmc[4,4])),
+                      EstF55=c(sqrt(n)*(Isco.true.theta[5,5,]-fisher.mcmc[5,5]),
+                               sqrt(n)*(Iobs.true.theta[5,5,]-fisher.mcmc[5,5])),
+                      EstF12=c(sqrt(n)*(Isco.true.theta[1,2,]-fisher.mcmc[1,2]),
+                               sqrt(n)*(Iobs.true.theta[1,2,]-fisher.mcmc[1,2])),
+                      EstF13=c(sqrt(n)*(Isco.true.theta[1,3,]-fisher.mcmc[1,3]),
+                               sqrt(n)*(Iobs.true.theta[1,3,]-fisher.mcmc[1,3])),
+                      EstF23=c(sqrt(n)*(Isco.true.theta[2,3,]-fisher.mcmc[2,3]),
+                               sqrt(n)*(Iobs.true.theta[2,3,]-fisher.mcmc[2,3])),
+                      EstF35=c(sqrt(n)*(Isco.true.theta[3,5,]-fisher.mcmc[3,5]),
+                               sqrt(n)*(Iobs.true.theta[3,5,]-fisher.mcmc[3,5])),
+                      EstF34=c(sqrt(n)*(Isco.true.theta[3,4,]-fisher.mcmc[3,4]),
+                               sqrt(n)*(Iobs.true.theta[3,4,]-fisher.mcmc[3,4])),
+                      EstF25=c(sqrt(n)*(Isco.true.theta[2,5,]-fisher.mcmc[2,5]),
+                               sqrt(n)*(Iobs.true.theta[2,5,]-fisher.mcmc[2,5])),
+                      EstF24=c(sqrt(n)*(Isco.true.theta[2,4,]-fisher.mcmc[2,4]),
+                               sqrt(n)*(Iobs.true.theta[2,4,]-fisher.mcmc[2,4])),
+                      EstF15=c(sqrt(n)*(Isco.true.theta[1,5,]-fisher.mcmc[1,5]),
+                               sqrt(n)*(Iobs.true.theta[1,5,]-fisher.mcmc[1,5])),
+                      EstF14=c(sqrt(n)*(Isco.true.theta[1,4,]-fisher.mcmc[1,4]),
+                               sqrt(n)*(Iobs.true.theta[1,4,]-fisher.mcmc[1,4])),
+                      Estimate=c(rep('I N,sco',nbsim),rep('I N,obs',nbsim)))
 
 
-# DataResPoissonMixture <- data.frame(EstF11=c(sqrt(n)*(resIsco[1,1,]-trueFIM[1,1]),sqrt(n)*(resIobs[1,1,]-trueFIM[1,1])),
-#                                     EstF22=c(sqrt(n)*(resIsco[2,2,]-trueFIM[2,2]),sqrt(n)*(resIobs[2,2,]-trueFIM[2,2])),
-#                                     EstF33=c(sqrt(n)*(resIsco[3,3,]-trueFIM[3,3]),sqrt(n)*(resIobs[3,3,]-trueFIM[3,3])),
-#                                     EstF44=c(sqrt(n)*(resIsco[4,4,]-trueFIM[4,4]),sqrt(n)*(resIobs[4,4,]-trueFIM[4,4])),
-#                                     EstF55=c(sqrt(n)*(resIsco[5,5,]-trueFIM[5,5]),sqrt(n)*(resIobs[5,5,]-trueFIM[5,5])),
-#                                     EstF12=c(sqrt(n)*(resIsco[1,2,]-trueFIM[1,2]),sqrt(n)*(resIobs[1,2,]-trueFIM[1,2])),
-#                                     EstF13=c(sqrt(n)*(resIsco[1,3,]-trueFIM[1,3]),sqrt(n)*(resIobs[1,3,]-trueFIM[1,3])),
-#                                     EstF23=c(sqrt(n)*(resIsco[2,3,]-trueFIM[2,3]),sqrt(n)*(resIobs[2,3,]-trueFIM[2,3])),
-#                                     EstF35=c(sqrt(n)*(resIsco[3,5,]-trueFIM[3,5]),sqrt(n)*(resIobs[3,5,]-trueFIM[3,5])),
-#                                     EstF34=c(sqrt(n)*(resIsco[3,4,]-trueFIM[3,4]),sqrt(n)*(resIobs[3,4,]-trueFIM[3,4])),
-#                                     EstF25=c(sqrt(n)*(resIsco[2,5,]-trueFIM[2,5]),sqrt(n)*(resIobs[2,5,]-trueFIM[2,5])),
-#                                     EstF24=c(sqrt(n)*(resIsco[2,4,]-trueFIM[2,4]),sqrt(n)*(resIobs[2,4,]-trueFIM[2,4])),
-#                                     EstF15=c(sqrt(n)*(resIsco[1,5,]-trueFIM[1,5]),sqrt(n)*(resIobs[1,5,]-trueFIM[1,5])),
-#                                     EstF14=c(sqrt(n)*(resIsco[1,4,]-trueFIM[1,4]),sqrt(n)*(resIobs[1,4,]-trueFIM[1,4])),
-#                                     Estimate=c(rep('I N,sco',500),rep('I N,obs',500)))
-# 
-# 
-# F11 <- ggplot(DataRes, aes(EstF11, color=Estimate)) +
-#   geom_density(alpha=.6) +
-#   scale_fill_manual(values = c("#984EA3",'#E69F00')) +
-#   xlab("") +
-#   ylab("") +
-#   xlim(-1,1) +
-#   ggtitle(bquote('('~lambda[1]~','~ lambda[1]~')')) +
-#   theme(legend.position = c(-0.05, 0.95), plot.title = element_text(size=20,face="bold"))
-# #theme(legend.position = "none", plot.title = element_text(size=20,face="bold"))
-# 
-# F22 <- ggplot(DataRes, aes(EstF22, color=Estimate)) +
-#   geom_density(alpha=.6) +
-#   scale_fill_manual(values = c("#984EA3",'#E69F00'))  +
-#   xlab("") +
-#   ylab("") +
-#   xlim(-0.5,0.5) +
-#   ggtitle(bquote('('~lambda[2]~','~ lambda[2]~')')) +
-#   theme(legend.position = "none", plot.title = element_text(size=20,face="bold"))
-# 
-# F25 <- ggplot(DataRes, aes(EstF25, color=Estimate)) +
-#   geom_density(alpha=.6) +
-#   scale_fill_manual(values = c("#984EA3",'#E69F00')) +
-#   xlab("") +
-#   ylab("") +
-#   xlim(-1.5,1.5) +
-#   ggtitle(bquote('('~lambda[2]~','~ alpha[2]~')')) +
-#   theme(legend.position = "none", plot.title = element_text(size=20,face="bold"))
-# 
-# 
-# plot_grid(F11, F22, F25, ncol = 3, nrow = 1)
+F11 <- ggplot(DataRes, aes(EstF11, color=Estimate)) +
+  geom_density(bw=0.2,alpha=0.6) +
+  scale_fill_manual(values = c("#984EA3",'#E69F00')) +
+  xlab("") +
+  ylab("") +
+  xlim(-1,1) +
+  ggtitle(bquote('('~lambda[1]~','~ lambda[1]~')')) +
+  theme(legend.position = c(-0.05, 0.95), plot.title = element_text(size=20,face="bold"))
+
+F22 <- ggplot(DataRes, aes(EstF22, color=Estimate)) +
+  geom_density(bw=0.2,alpha=0.6) +
+  scale_fill_manual(values = c("#984EA3",'#E69F00'))  +
+  xlab("") +
+  ylab("") +
+  xlim(-0.75,0.75) +
+  ggtitle(bquote('('~lambda[2]~','~ lambda[2]~')')) +
+  theme(legend.position = "none", plot.title = element_text(size=20,face="bold"))
+
+F25 <- ggplot(DataRes, aes(EstF25, color=Estimate)) +
+  geom_density(bw=0.2,alpha=0.6) +
+  scale_fill_manual(values = c("#984EA3",'#E69F00')) +
+  xlab("") +
+  ylab("") +
+  xlim(-1.5,1.5) +
+  ggtitle(bquote('('~lambda[2]~','~ alpha[2]~')')) +
+  theme(legend.position = "none", plot.title = element_text(size=20,face="bold"))
+
+
+plot_grid(F11, F22, F25, ncol = 3, nrow = 1)
