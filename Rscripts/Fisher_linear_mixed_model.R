@@ -111,34 +111,37 @@ theta.true <- matrix(c(beta,eta2,sigma2),ncol=1)
 
 fisher <- Fisher.LMM(beta,sigma2,eta2,j)
 
-## definition of the objects to store the estimation of the Fisher Information
-## matrix 
 
-resIobs.theta.true <- array(NA,dim=c(3,3,nsim))
-resIsco.theta.true <- array(NA,dim=c(3,3,nsim))
-resIobs.theta.est <- array(NA,dim=c(3,3,nsim))
-resIsco.theta.est <- array(NA,dim=c(3,3,nsim))
-
-EstF11 <- c()
-EstF22 <- c()
-EstF33 <- c()
-EstF12 <- c()
-EstF13 <- c()
-EstF23 <- c()
-
-## counters for the estimation of the coverage rates
-coverage.iobs.theta.est <- 0
-coverage.isco.theta.est <- 0
-
-coverage.iobs.theta.true <- 0
-coverage.isco.theta.true <- 0
-
-coverage.true.fisher <- 0
-
+rate <- 0.95 # expected coverage rate
 
 ## loop executing the nsim replicates of the experiment
 
 for (n in seq.n){
+  
+  ## definition of the objects to store the estimation of the Fisher Information
+  ## matrix 
+  
+  resIobs.theta.true <- array(NA,dim=c(3,3,nsim))
+  resIsco.theta.true <- array(NA,dim=c(3,3,nsim))
+  resIobs.theta.est <- array(NA,dim=c(3,3,nsim))
+  resIsco.theta.est <- array(NA,dim=c(3,3,nsim))
+  
+  EstF11 <- c()
+  EstF22 <- c()
+  EstF33 <- c()
+  EstF12 <- c()
+  EstF13 <- c()
+  EstF23 <- c()
+  
+  ## counters for the estimation of the coverage rates
+  coverage.iobs.theta.est <- 0
+  coverage.isco.theta.est <- 0
+  
+  coverage.iobs.theta.true <- 0
+  coverage.isco.theta.true <- 0
+  
+  coverage.true.fisher <- 0
+  
   for (k in 1:nsim){
     
     ## data simulation
@@ -173,54 +176,68 @@ for (n in seq.n){
     
     ## ... based on the true Fisher information matrix
     
-    conf.inf.fisher.true <- theta.est -
-      1.96/sqrt(n)*sqrt(diag(solve(fisher)))
-    conf.sup.fisher.true <- theta.est +
-      1.96/sqrt(n)*sqrt(diag(solve(fisher)))
+    #conf.inf.fisher.true <- theta.est -
+    #  1.96/sqrt(n)*sqrt(diag(solve(fisher)))
+    #conf.sup.fisher.true <- theta.est +
+    #  1.96/sqrt(n)*sqrt(diag(solve(fisher)))
     
-    coverage.true.fisher <- coverage.true.fisher +
-      (theta.true<=conf.sup.fisher.true)*(theta.true>=conf.inf.fisher.true)
-    
+    #coverage.true.fisher <- coverage.true.fisher +
+    #  (theta.true<=conf.sup.fisher.true)*(theta.true>=conf.inf.fisher.true)
+    coverage.true.fisher <- coverage.true.fisher + 
+      (n*t(as.matrix(theta.true-theta.est))%*%fisher%*%as.matrix(theta.true-theta.est)
+       <= qchisq(rate,3))
     
     ## ... based on Isco computed in the MLE value of the parameters
-    conf.inf.isco.theta.est <- theta.est -
-      1.96/sqrt(n)*sqrt(diag(solve(resIsco.theta.est[,,k])))
-    conf.sup.isco.theta.est <- theta.est +
-      1.96/sqrt(n)*sqrt(diag(solve(resIsco.theta.est[,,k])))
-    
+    # conf.inf.isco.theta.est <- theta.est -
+    #   1.96/sqrt(n)*sqrt(diag(solve(resIsco.theta.est[,,k])))
+    # conf.sup.isco.theta.est <- theta.est +
+    #   1.96/sqrt(n)*sqrt(diag(solve(resIsco.theta.est[,,k])))
+    # 
+    # coverage.isco.theta.est <- coverage.isco.theta.est +
+    #   (theta.true<=conf.sup.isco.theta.est)*(theta.true>=conf.inf.isco.theta.est)
     coverage.isco.theta.est <- coverage.isco.theta.est +
-      (theta.true<=conf.sup.isco.theta.est)*(theta.true>=conf.inf.isco.theta.est)
-    
+      (n*t(as.matrix(theta.true-theta.est))%*%resIsco.theta.est[,,k]%*%as.matrix(theta.true-theta.est)
+       <= qchisq(rate,3))
+  
     ## ... based on Isco computed in the true parameter values
-    conf.inf.isco.theta.true <- theta.est -
-      1.96/sqrt(n)*sqrt(diag(solve(resIsco.theta.true[,,k])))
-    conf.sup.isco.theta.true <- theta.est +
-      1.96/sqrt(n)*sqrt(diag(solve(resIsco.theta.true[,,k])))
-    
+    # conf.inf.isco.theta.true <- theta.est -
+    #   1.96/sqrt(n)*sqrt(diag(solve(resIsco.theta.true[,,k])))
+    # conf.sup.isco.theta.true <- theta.est +
+    #   1.96/sqrt(n)*sqrt(diag(solve(resIsco.theta.true[,,k])))
+    # 
+    # coverage.isco.theta.true <- coverage.isco.theta.true +
+    #   (theta.true<=conf.sup.isco.theta.true)*(theta.true>=conf.inf.isco.theta.true)
     coverage.isco.theta.true <- coverage.isco.theta.true +
-      (theta.true<=conf.sup.isco.theta.true)*(theta.true>=conf.inf.isco.theta.true)
+      (n*t(as.matrix(theta.true-theta.est))%*%resIsco.theta.true[,,k]%*%as.matrix(theta.true-theta.est)
+       <= qchisq(rate,3))
     
     ## ... based on Iobs computed in the MLE value of the parameters
-    conf.inf.iobs.theta.est <- theta.est -
-      1.96/sqrt(n)*sqrt(diag(solve(resIobs.theta.est[,,k])))
-    conf.sup.iobs.theta.est <- theta.est +
-      1.96/sqrt(n)*sqrt(diag(solve(resIobs.theta.est[,,k])))
-    
+    # conf.inf.iobs.theta.est <- theta.est -
+    #   1.96/sqrt(n)*sqrt(diag(solve(resIobs.theta.est[,,k])))
+    # conf.sup.iobs.theta.est <- theta.est +
+    #   1.96/sqrt(n)*sqrt(diag(solve(resIobs.theta.est[,,k])))
+    # 
+    # coverage.iobs.theta.est <- coverage.iobs.theta.est +
+    #   (theta.true<=conf.sup.iobs.theta.est)*(theta.true>=conf.inf.iobs.theta.est)
     coverage.iobs.theta.est <- coverage.iobs.theta.est +
-      (theta.true<=conf.sup.iobs.theta.est)*(theta.true>=conf.inf.iobs.theta.est)
+      (n*t(as.matrix(theta.true-theta.est))%*%resIobs.theta.est[,,k]%*%as.matrix(theta.true-theta.est)
+       <= qchisq(rate,3))
     
     ## ... based on Iobs computed in the true parameter values
-    conf.inf.iobs.theta.true <- theta.est -
-      1.96/sqrt(n)*sqrt(diag(solve(resIobs.theta.true[,,k])))
-    conf.sup.iobs.theta.true <- theta.est +
-      1.96/sqrt(n)*sqrt(diag(solve(resIobs.theta.true[,,k])))
-
+    # conf.inf.iobs.theta.true <- theta.est -
+    #   1.96/sqrt(n)*sqrt(diag(solve(resIobs.theta.true[,,k])))
+    # conf.sup.iobs.theta.true <- theta.est +
+    #   1.96/sqrt(n)*sqrt(diag(solve(resIobs.theta.true[,,k])))
+    # 
+    # coverage.iobs.theta.true <- coverage.iobs.theta.true +
+    #   (theta.true<=conf.sup.iobs.theta.true)*(theta.true>=conf.inf.iobs.theta.true)
     coverage.iobs.theta.true <- coverage.iobs.theta.true +
-      (theta.true<=conf.sup.iobs.theta.true)*(theta.true>=conf.inf.iobs.theta.true)
-    
+    (n*t(as.matrix(theta.true-theta.est))%*%resIobs.theta.true[,,k]%*%as.matrix(theta.true-theta.est)
+      <= qchisq(rate,3))  
   }
   
-  ## Print the coverage rates
+  ## Print the coverage rates 
+  ## MD, cat ou print de ce qu'on conserve
   coverage.isco.theta.true/nsim*100
   coverage.isco.theta.est/nsim*100
   coverage.iobs.theta.true/nsim*100
