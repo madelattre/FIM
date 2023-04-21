@@ -16,6 +16,9 @@ citation:
 github: https://github.com/computorg/template-computo-quarto
 bibliography: references.bib
 repo: "template-computo-quarto"
+execute:
+  warning: false
+  message: false
 ---
 
 [![build status](https://github.com/computorg/{{< meta repo >}}/workflows/build/badge.svg)](https://github.com/computorg/{{< meta repo >}})
@@ -27,7 +30,6 @@ repo: "template-computo-quarto"
 ```{r}
 #| label: loadlibrary
 #| echo: false
-#| message: false
 library(dplyr)
 library(flextable)
 library(magrittr)
@@ -35,6 +37,7 @@ library(ggplot2)
 library(cowplot)
 library(RColorBrewer)
 library(devtools)
+library(lme4)
 ```
 
 
@@ -267,124 +270,29 @@ Second we consider the following Poisson mixture model where the distribution of
 $y_i|z_i=k  \sim  \mathcal{P}(\lambda_k)$ with $(z_i=k)  =  \alpha_k$ and $\sum_{k=1}^{K} \alpha_k  = 1.$
 The model parameters are $\theta=(\lambda_1,\ldots,\lambda_K,\alpha_1,\ldots,\alpha_{K-1})$. For the simulation study, we consider a mixture of $K=3$ components, and the following values for the parameters $\lambda_1=2$, $\lambda_2=5$, $\lambda_3=9$, $\alpha_1=0.3$ and $\alpha_2=0.5$.
 
-### Results
 
-For each model, we generate $M=500$ datasets for different  sample sizes $n \in \left\{20,100,500 \right\}$. We do not aim at estimating the model parameters. We assume them to be known, and in the following we denote by $\theta^{\star}$ the true parameter value. For each value of $n$ and for each $1 \leq m \leq M$, we derive $I_{n,sco}^{(m)}(\theta^{\star})$ and $I_{n,obs}^{(m)}(\theta^{\star})$. We compute the empirical bias and the root mean squared deviation of each component $(\ell,\ell')$ of the estimated matrix as:
-$$
-\frac{1}{M} \sum\limits_{m=1}^{M} I_{n,sco,\ell,\ell'}^{(m)}(\theta^\star) - I_{\ell,\ell'}(\theta^\star)  \; \; \;  \mathrm{and} \; \; \; \sqrt{\frac{1}{M} \sum\limits_{m=1}^{M} \left(I_{n,sco,\ell,\ell'}^{(m)}(\theta^\star) - I_{\ell,\ell'}(\theta^\star)\right)^2}.
-$$
-
-In the previous quantities, $I(\theta^\star)$ is explicit in the linear mixed effects model and approximated by a Monte-Carlo estimation based on a large sample size in the Poisson mixture model. The results are presented in @tbl-IscoLMM and @tbl-IobsLMM for the linear mixed effects model and in @tbl-IscoMixt and @tbl-IobsMixt for the mixture model. We observe that whatever the model and whatever the components of $I_{n,sco}(\theta^{\star})$ and $I_{n,obs}(\theta^{\star})$, the bias is very small even for small values of $n$. Note that in this particular model the second derivatives with respect to parameter $\beta$ is deterministic, which explains why the bias and the dispersion of the estimations $I_{n,obs}(\theta^{\star})$ are zero for every value of $n$. The bias and the standard deviation decrease as $n$ increases overall, which illustrates the consistency of both M-estimators. The distributions of the normalized estimations $\sqrt{n} \left(I_{n,sco}^{(m)}(\theta^\star) - I(\theta^\star)\right)$ and $\sqrt{n} \left(I_{n,obs}^{(m)}(\theta^\star) - I(\theta^\star)\right)$ are also represented when $n=500$ for some components of the matrices in @fig-simuLMM (linear mixed effects model) and @fig-simuPoissonMixture (Poisson mixture model). The empirical distributions have the shape of Gaussian distributions and illustrate the asymptotic normality of the two estimators. The numerical results highlight that neither $I_{n,sco}(\theta^{\star})$ nor $I_{n,obs}(\theta^{\star})$ is systematically better than the other one in terms of bias and asymptotic covariance matrix. In the same model, different behaviours can be observed depending on the components of the parameter vector.
-
+For each model, we generate $M=500$ datasets for different  sample sizes $n \in \left\{20,100,500 \right\}$. We do not aim at estimating the model parameters. We assume them to be known, and in the following we denote by $\theta^{\star}$ the true parameter value. For each value of $n$ and for each $1 \leq m \leq M$, we derive $I_{n,sco}^{(m)}(\theta^{\star})$ and $I_{n,obs}^{(m)}(\theta^{\star})$. 
 
 ```{r}
-#| label: simuLMM
-#| warning: false
+#| label: simuLMM-functions
+#| eval: false
 #| echo: false
-
-## Numerical study in the linear mixed effects model
-## This script performs the experiment for a single value of n (n=500). Several values of n are used to generate the results tables @tbl-IscoLMM and @tbl-IobsLMM
-
-nsim <- 500 # number of replicates
-n <- 500 # number of individuals, in c(20,100,500)
-j <- 12 # number of observations per individual
-
-beta <- 3
-sigma2 <- 5 
-eta2 <- 2
-
-resIobs <- array(NA,dim=c(3,3,nsim))
-resIsco <- array(NA,dim=c(3,3,nsim))
-
-## computation of the exact Fisher Information matrix
-crochet <- 2*j*eta2/(sigma2+eta2*j)^2/sigma2^3+4/ (sigma2+eta2*j)^2/sigma2^2 +2/(sigma2+eta2*j)^3/sigma2
-alpha <- n*j*(eta2+sigma2)/sigma2^3 -eta2*n/2*j*(j*eta2+sigma2)*crochet-n*(j-1)/2/sigma2^2 - n/2/(sigma2+eta2*j)^2
-fisher <- cbind(c(n*j/(sigma2+eta2*j),0,0),c(0,n*j^2/2/(sigma2+eta2*j)^2,n*j/2/(sigma2+eta2*j)^2), c(0,n*j/2/(sigma2+eta2*j)^2,alpha))
-fisher <- fisher/n
-
-## loop executing the nsim replicates of the experiment
-for (k in 1:nsim){
-  # data simulation
-  random <- rnorm(n,0,sqrt(eta2))
-  residual <- rnorm(n*j,0,sqrt(sigma2))
-  randompop <- rep(random,j)
-  obs <- beta+randompop+residual
-  datamat<-matrix(obs,n,j)
-  # computation of observed FIM
-  Iobs <- matrix(0,3,3)
-  Iobs[1,1] <- n*j/(sigma2+eta2*j)
-  Iobs[2,1] <- j/(sigma2+eta2*j)^2*sum(obs-beta)
-  Iobs[1,2] <- Iobs[2,1]
-  Iobs[2,2] <- j/(sigma2+eta2*j)^3*sum(apply(datamat-beta,1,sum)^2)-n*j^2/2/(sigma2+eta2*j)^2
-  Iobs[3,1] <- 1/(sigma2+eta2*j)^2*sum(obs-beta)
-  Iobs[1,3] <- Iobs[3,1]
-  Iobs[2,3] <- 1/(sigma2+eta2*j)^3*sum(apply(datamat-beta,1,sum)^2)-n*j/2/(sigma2+eta2*j)^2
-  Iobs[3,2] <- Iobs[2,3]
-  Iobs[3,3] <- 1/(sigma2)^3*sum((obs-beta)^2)-eta2*sum(apply(datamat-beta,1,sum)^2)*(j*eta2/(sigma2+eta2*j)^2/sigma2^3+2/ (sigma2+eta2*j)^2/sigma2^2 +1/(sigma2+eta2*j)^3/sigma2 ) -n*(j-1)/2/sigma2^2 - n/2/(sigma2+eta2*j)^2
-  Iobs <- Iobs/n
-  # computation of the FIM estimator based on the score
-  derivative <- matrix(0,3,n)
-  derivative[1,] <- apply(datamat-beta,1,sum)/(sigma2+eta2*j)
-  derivative[2,] <- apply(datamat-beta,1,sum)^2/2/(sigma2+eta2*j)^2-j/2/(sigma2+eta2*j)
-  derivative[3,] <- apply((datamat-beta)^2,1,sum)/2/sigma2^2 - apply(datamat-beta,1,sum)^2 *eta2*(j*eta2+2*sigma2)/2/sigma2^2/(sigma2+eta2*j)^2 -1/2/(sigma2+eta2*j)-(j-1)/2/sigma2
-  Isco <- derivative%*%t(derivative)/n
-  
-  resIobs[,,k] <- Iobs
-  resIsco[,,k] <- Isco
-}
-
-DataResLMM <- data.frame(EstF11=c(sqrt(n)*(resIsco[1,1,]-fisher[1,1]),sqrt(n)*(resIobs[1,1,]-fisher[1,1])),
-                         EstF22=c(sqrt(n)*(resIsco[2,2,]-fisher[2,2]),sqrt(n)*(resIobs[2,2,]-fisher[2,2])),
-                         EstF33=c(sqrt(n)*(resIsco[3,3,]-fisher[3,3]),sqrt(n)*(resIobs[3,3,]-fisher[3,3])),
-                         EstF12=c(sqrt(n)*(resIsco[1,2,]-fisher[1,2]),sqrt(n)*(resIobs[1,2,]-fisher[1,2])),
-                         EstF13=c(sqrt(n)*(resIsco[1,3,]-fisher[1,3]),sqrt(n)*(resIobs[1,3,]-fisher[1,3])),
-                         EstF23=c(sqrt(n)*(resIsco[2,3,]-fisher[2,3]),sqrt(n)*(resIobs[2,3,]-fisher[2,3])),
-                         Estimate=c(rep('I n,sco',nsim),rep('I n,obs',nsim)))
+source('functions/Fisher_LMM.R')
+source('functions/Isco_LMM.R')
+source('functions/Iobs_LMM.R')
 ```
 
 ```{r}
-#| label: fig-simuLMM
-#| warning: false
-#| echo: false
-#| fig-cap: Linear mixed effects model. Kernel density estimates of the normalized values of some components of the estimated Fisher information matrix based on the score (I n,sco) and of the observed Fisher information matrix (I n,obs) computed from the 500 simulated datasets with n=500.
-
-F22 <- ggplot(DataResLMM, aes(EstF22, fill=Estimate)) + 
-  geom_density(alpha=.6) + 
-  scale_fill_manual(values = c("#984EA3",'#E69F00')) + 
-  xlab("") +
-  ylab("") +
-  xlim(-1.5,1.5) +
-  ylim(0,2) +
-  ggtitle(bquote('('~eta^2~','~eta^2~')')) +
-  theme(legend.position = c(0,0.9), plot.title = element_text(size=20,face="bold"))
-
-F33 <- ggplot(DataResLMM, aes(EstF33, fill=Estimate)) + 
-  geom_density(alpha=.6) + 
-  scale_fill_manual(values = c("#984EA3",'#E69F00')) + 
-  xlab("") +
-  ylab("") +
-  xlim(-1.5,1.5) +
-  ylim(0,2) +
-  ggtitle(bquote('('~sigma^2~','~ sigma^2~')')) +
-  theme(legend.position = "none", plot.title = element_text(size=20,face="bold"))
-
-
-F12 <- ggplot(DataResLMM, aes(EstF12, fill=Estimate)) + 
-  geom_density(alpha=.6) + 
-  scale_fill_manual(values = c("#984EA3",'#E69F00')) + 
-  xlab("") +
-  ylab("") +
-  xlim(-1.5,1.5) +
-  ylim(0,2) +
-  ggtitle(bquote('('~beta~','~ eta^2~')')) +
-  theme(legend.position = "none", plot.title = element_text(size=20,face="bold"))
-
-plot_grid(F22, F33, F12, ncol = 3, nrow = 1)
+#| label: simuLMM-FIM-sco-obs
+#| echo: true
+#| eval: false
+#| message: false
+#| file: scripts/simuLMM-estimFIM.R
 ```
 
 ```{r}
 #| label: simuPoissonMixture-functions
-#| eval: true
+#| eval: false
 #| echo: false
 source('functions/sim_poisson_mixture.R')
 source('functions/em_poisson_mixture.R')
@@ -405,109 +313,75 @@ source('functions/fisher_estimation_poisson_mixture.R')
 #| file: scripts/simuPoissonMixture-estimFIM.R
 ```
 
+
+### Results
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+We compute the empirical bias and the root mean squared deviation of each component $(\ell,\ell')$ of the estimated matrix as:
+$$
+\frac{1}{M} \sum\limits_{m=1}^{M} I_{n,sco,\ell,\ell'}^{(m)}(\theta^\star) - I_{\ell,\ell'}(\theta^\star)  \; \; \;  \mathrm{and} \; \; \; \sqrt{\frac{1}{M} \sum\limits_{m=1}^{M} \left(I_{n,sco,\ell,\ell'}^{(m)}(\theta^\star) - I_{\ell,\ell'}(\theta^\star)\right)^2}.
+$$
+
+In the previous quantities, $I(\theta^\star)$ is explicit in the linear mixed effects model and approximated by a Monte-Carlo estimation based on a large sample size in the Poisson mixture model. The results are presented in @tbl-IscoLMM and @tbl-IobsLMM for the linear mixed effects model and in @tbl-IscoMixt and @tbl-IobsMixt for the mixture model. We observe that whatever the model and whatever the components of $I_{n,sco}(\theta^{\star})$ and $I_{n,obs}(\theta^{\star})$, the bias is very small even for small values of $n$. Note that in this particular model the second derivatives with respect to parameter $\beta$ is deterministic, which explains why the bias and the dispersion of the estimations $I_{n,obs}(\theta^{\star})$ are zero for every value of $n$. The bias and the standard deviation decrease as $n$ increases overall, which illustrates the consistency of both M-estimators. The distributions of the normalized estimations $\sqrt{n} \left(I_{n,sco}^{(m)}(\theta^\star) - I(\theta^\star)\right)$ and $\sqrt{n} \left(I_{n,obs}^{(m)}(\theta^\star) - I(\theta^\star)\right)$ are also represented when $n=500$ for some components of the matrices in @fig-simuLMM (linear mixed effects model) and @fig-simuPoissonMixture (Poisson mixture model). The empirical distributions have the shape of Gaussian distributions and illustrate the asymptotic normality of the two estimators. The numerical results highlight that neither $I_{n,sco}(\theta^{\star})$ nor $I_{n,obs}(\theta^{\star})$ is systematically better than the other one in terms of bias and asymptotic covariance matrix. In the same model, different behaviours can be observed depending on the components of the parameter vector.
+
+
 ```{r}
-#| label: simuPoissonMixture-resPlots
+#| label: fig-simuLMM
 #| echo: false
 #| eval: true
+#| fig-cap: Linear mixed effects model. Kernel density estimates of the normalized values of some components of the estimated Fisher information matrix based on the score (I n,sco) and of the observed Fisher information matrix (I n,obs) computed in the true parameter values from the 500 simulated datasets with n=500.
+#| file: scripts/simuLMM-resPlots.R
+```
+
+
+```{r}
+#| label: fig-simuPoissonMixture
+#| echo: false
+#| eval: true
+#| fig-cap: Poisson mixture model. Kernel density estimates of the normalized values of some components of the estimated Fisher information matrix based on the score (I n,sco) and of the observed Fisher information matrix (I n,obs) computed in the true parameter values from the 500 simulated datasets with n=500.
 #| file: scripts/simuPoissonMixture-resPlots.R
 ```
 
 
-<!-- ```{r} -->
-<!-- #| label: tbl-IscoLMM -->
-<!-- #| tbl-cap: Linear mixed effects model. Empirical bias and squared deviation to the Fisher Information matrix of the estimator based on the score for different values of n. -->
-<!-- #| echo: false -->
-<!-- #| warning: false -->
-<!-- #| message: false -->
+```{r}
+#| label: tbl-BiasMM
+#| tbl-cap: Linear mixed effects model. ...
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+#| file: scripts/tableBiasLMM.R
+```
 
-<!-- load("Rfiles/simusLin_n20.Rdata") -->
-<!-- biasIscoLMM20 <- apply(res$Isco,c(1,2),mean) - res$fisher -->
-<!-- sdIscoLMM20 <- apply(res$Isco,c(1,2),sd) -->
-
-
-<!-- load("Rfiles/simusLin_n100.Rdata") -->
-<!-- biasIscoLMM100 <- apply(res$Isco,c(1,2),mean) - res$fisher -->
-<!-- sdIscoLMM100 <- apply(res$Isco,c(1,2),sd) -->
-
-<!-- load("Rfiles/simusLin_n500.Rdata") -->
-<!-- biasIscoLMM500 <- apply(res$Isco,c(1,2),mean) - res$fisher -->
-<!-- sdIscoLMM500 <- apply(res$Isco,c(1,2),sd) -->
-
-<!-- dataIscoLMM <- cbind(component = c(1,2,3,4,5,6), -->
-<!--                      m20 = c(diag(biasIscoLMM20),biasIscoLMM20[upper.tri(biasIscoLMM20)]), -->
-<!--                      s20 = c(diag(sdIscoLMM20),sdIscoLMM20[upper.tri(sdIscoLMM20)]), -->
-<!--                      m100 = c(diag(biasIscoLMM100),biasIscoLMM100[upper.tri(biasIscoLMM100)]), -->
-<!--                      s100 = c(diag(sdIscoLMM100),sdIscoLMM100[upper.tri(sdIscoLMM100)]), -->
-<!--                      m500 = c(diag(biasIscoLMM500),biasIscoLMM500[upper.tri(biasIscoLMM500)]), -->
-<!--                      s500 = c(diag(sdIscoLMM500),sdIscoLMM500[upper.tri(sdIscoLMM500)])) -->
-
-<!-- dataIscoLMM <- as.data.frame(dataIscoLMM) -->
-<!-- dataIscoLMM$component <-factor(dataIscoLMM$component, levels=c(1,2,3,4,5,6), -->
-<!--                                labels=c("1"='(β,β)', -->
-<!--                                         "2"='(η2,η2)', -->
-<!--                                         "3"='(σ2,σ2)', -->
-<!--                                         "4"='(β,η2)', -->
-<!--                                         "5"='(β,σ2)', -->
-<!--                                         "6"='(η2,σ2)')) -->
-<!-- dataIscoLMM <- flextable(dataIscoLMM, cwidth=1.2)  -->
-<!-- dataIscoLMM <- add_header_row( -->
-<!--   x = dataIscoLMM, values = c("", "n=20", "n=100", "n=500"), -->
-<!--   colwidths = c(1, 2, 2, 2)) -->
-<!-- dataIscoLMM <- set_header_labels(dataIscoLMM, m20="mean", s20="sd", m100="mean", s100="sd", m500="mean", s500="sd", component="") -->
-<!-- dataIscoLMM <- align(dataIscoLMM, part = "all", align = "center") -->
-<!-- dataIscoLMM -->
-<!-- ``` -->
-
-<!-- ```{r} -->
-<!-- #| label: tbl-IobsLMM -->
-<!-- #| tbl-cap: Linear mixed effects model. Empirical bias and squared deviation to the Fisher Information matrix of the observed Fisher Information matrix for different values of n. -->
-<!-- #| echo: false -->
-<!-- #| warning: false -->
-<!-- #| message: false -->
-
-<!-- load("Rfiles/simusLin_n20.Rdata") -->
-<!-- biasIobsLMM20 <- apply(res$Iobs,c(1,2),mean) - res$fisher -->
-<!-- sdIobsLMM20 <- apply(res$Iobs,c(1,2),sd) -->
-
-
-<!-- load("Rfiles/simusLin_n100.Rdata") -->
-<!-- biasIobsLMM100 <- apply(res$Iobs,c(1,2),mean) - res$fisher -->
-<!-- sdIobsLMM100 <- apply(res$Iobs,c(1,2),sd) -->
-
-<!-- load("Rfiles/simusLin_n500.Rdata") -->
-<!-- biasIobsLMM500 <- apply(res$Iobs,c(1,2),mean) - res$fisher -->
-<!-- sdIobsLMM500 <- apply(res$Iobs,c(1,2),sd) -->
-
-<!-- dataIobsLMM <- cbind(component = c(1,2,3,4,5,6), -->
-<!--                      m20 = c(diag(biasIobsLMM20),biasIobsLMM20[upper.tri(biasIobsLMM20)]), -->
-<!--                      s20 = c(diag(sdIobsLMM20),sdIobsLMM20[upper.tri(sdIobsLMM20)]), -->
-<!--                      m100 = c(diag(biasIobsLMM100),biasIobsLMM100[upper.tri(biasIobsLMM100)]), -->
-<!--                      s100 = c(diag(sdIobsLMM100),sdIobsLMM100[upper.tri(sdIobsLMM100)]), -->
-<!--                      m500 = c(diag(biasIobsLMM500),biasIobsLMM500[upper.tri(biasIobsLMM500)]), -->
-<!--                      s500 = c(diag(sdIobsLMM500),sdIobsLMM500[upper.tri(sdIobsLMM500)])) -->
-
-<!-- dataIobsLMM <- as.data.frame(dataIobsLMM) -->
-<!-- dataIobsLMM$component <-factor(dataIobsLMM$component, levels=c(1,2,3,4,5,6), -->
-<!--                                labels=c("1"='(β,β)', -->
-<!--                                         "2"='(η2,η2)', -->
-<!--                                         "3"='(σ2,σ2)', -->
-<!--                                         "4"='(β,η2)', -->
-<!--                                         "5"='(β,σ2)', -->
-<!--                                         "6"='(η2,σ2)')) -->
-<!-- dataIobsLMM <- flextable(dataIobsLMM, cwidth=1.2)  -->
-<!-- dataIobsLMM <- add_header_row( -->
-<!--   x = dataIobsLMM, values = c("", "n=20", "n=100", "n=500"), -->
-<!--   colwidths = c(1, 2, 2, 2)) -->
-<!-- dataIobsLMM <- set_header_labels(dataIobsLMM, m20="mean", s20="sd", m100="mean", s100="sd", m500="mean", s500="sd", component="") -->
-<!-- dataIobsLMM <- align(dataIobsLMM, part = "all", align = "center") -->
-<!-- dataIobsLMM -->
-<!-- ``` -->
+```{r}
+#| label: tbl-SdLMM
+#| tbl-cap: Linear mixed effects model. ...
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+#| file: scripts/tableSdLMM.R
+```
 
 
 ```{r}
 #| label: tbl-BiasMixt
-#| tbl-cap: Poisson mixture model. Empirical bias to the Fisher Information matrix of Isco and Iobs for different values of n.
-#| echo: true
+#| tbl-cap: Poisson mixture model. Empirical bias to the Fisher Information matrix of Isco and Iobs computed in the true parameter values for different values of n.
+#| echo: false
 #| warning: false
 #| message: false
 #| file: scripts/tableBiasPoissonMixture.R
@@ -515,8 +389,8 @@ source('functions/fisher_estimation_poisson_mixture.R')
 
 ```{r}
 #| label: tbl-SdMixt
-#| tbl-cap: Poisson mixture model. Empirical squared deviation to the Fisher Information matrix of Isco and Iobs for different values of n.
-#| echo: true
+#| tbl-cap: Poisson mixture model. Empirical squared deviation to the Fisher Information matrix of Isco and Iobs computed in the true parameter values for different values of n.
+#| echo: false
 #| warning: false
 #| message: false
 #| file: scripts/tableSdPoissonMixture.R
@@ -1932,12 +1806,34 @@ is bounded away from zero for $\theta$ in any compact subset of $\Theta$.
 
 ## R functions
 
+### R function for exact computation of the Fisher information matrix in the linear mixed effects model
+
+```{r}
+#| eval: true
+#| file: functions/Fisher_LMM.R
+#| label: LMM-exactFIM-function-show
+```
+
+### R functions for Fisher information matrix extimation in the linear mixed effects model
+
+```{r}
+#| eval: true
+#| file: functions/Isco_LMM.R
+#| label: LMM-Isco-function-show
+```
+
+```{r}
+#| eval: true
+#| file: functions/Iobs_LMM.R
+#| label: LMM-Iobs-function-show
+```
+
 ### R function for Fisher information matrix estimation in the Poisson mixture model
 
 
 ```{r}
 #| eval: true
 #| file: functions/fisher_estimation_poisson_mixture.R
-#| label: simuPoissonMixture-functions-show
+#| label: simuPoissonMixture-function-show
 ```
 
