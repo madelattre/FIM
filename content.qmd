@@ -384,399 +384,145 @@ plot_grid(F22, F33, F12, ncol = 3, nrow = 1)
 
 ```{r}
 #| label: simuPoissonMixture-functions
+#| eval: true
 #| echo: false
-
-## Numerical study in the Poisson mixture model
-## R function for Fisher Information matrix estimation 
-
-pm_fisher_estimation <- function(y, n, lambda, alpha) {
-  
-  # y      : vector of observations
-  # n      : sample size
-  # lambda : vector of mean Poisson parameters for each component of the mixture
-  # alpha  : vector of mixture proportions, excluding the proportion of the last mixture component
-  
-  K <- length(lambda)
-  
-  deriv1ind  <- matrix(0,2*K-1,n) 
-  deriv2     <- matrix(0,2*K-1,2*K-1) 
-  covderiv   <- matrix(0,2*K-1,2*K-1)
-  
-  ## computation of conditional expectation of the first derivatives of the complete data log-likelihood
-  
-  denom <- 0
-  for (k in 1:(K-1)){
-    denom <- denom + exp(-lambda[k])*lambda[k]^y*alpha[k]
-  }
-  denom <- denom + exp(-lambda[K])*lambda[K]^y*(1-sum(alpha))
-  
-  for (k in 1:(K-1)){
-    deriv1ind[k,]   <- exp(-lambda[k])*lambda[k]^y*alpha[k]/denom * (y/lambda[k]-1)
-    deriv1ind[K+k,] <- exp(-lambda[k])*lambda[k]^y*alpha[k]/denom/alpha[k] + 
-      exp(-lambda[K])*lambda[K]^y*(1-sum(alpha))/denom*(-1/(1-sum(alpha)))
-  }
-  deriv1ind[K,] <- exp(-lambda[K])*lambda[K]^y*(1-sum(alpha))/denom * (y/lambda[K]-1)
-  
-  
-  ## computation of conditional expectation of the second derivatives of the complete data log-likelihood
-  
-  
-  for (k in 1:(K-1)){
-    deriv2[k,k]     <- sum(exp(-lambda[k])*lambda[k]^y*alpha[k]/denom * (-y/lambda[k]^2))
-    deriv2[K+k,K+k] <- sum(-exp(-lambda[k])*lambda[k]^y*alpha[k]/denom/alpha[k]^2 
-                           + exp(-lambda[K])*lambda[K]^y*(1-sum(alpha))/denom*(-1/(1-sum(alpha))^2))
-  }
-  
-  for (k in 1:(K-2)){
-    for (l in (k+1):(K-1)){
-      deriv2[K+k,K+l] <- sum(exp(-lambda[K])*lambda[K]^y*(1-sum(alpha))/denom*(-1/(1-sum(alpha))^2))
-      deriv2[K+l,K+k] <- deriv2[K+k,K+l] 
-    }
-  }
-  
-  deriv2[K,K]<-sum(exp(-lambda[K])*lambda[K]^y*(1-sum(alpha))/denom * (-y/lambda[K]^2))
-  
-  ## computation of the conditional covariance matrix of the first derivatives of the complete data log-likelihood
-  
-  
-  for (k in 1:(K-2)){
-    covderiv[k,k] <- sum(exp(-lambda[k])*lambda[k]^y*alpha[k]/denom*(-1+y/lambda[k])^2) 
-    covderiv[k+K,k+K] <- sum(exp(-lambda[k])*lambda[k]^y*alpha[k]/denom/alpha[k]^2
-                             +exp(-lambda[K])*lambda[K]^y*(1-sum(alpha))/denom/(1-sum(alpha))^2) 
-    for (l in (k+1):(K-1)){
-      covderiv[k+K,l+K] <- sum(exp(-lambda[K])*lambda[K]^y*(1-sum(alpha))/denom/(1-sum(alpha))^2) 
-      covderiv[l+K,k+K] <- covderiv[k+K,l+K]
-    } 
-    covderiv[k,K+k] <- sum(exp(-lambda[k])*lambda[k]^y*alpha[k]/denom/alpha[k]*(-1+y/lambda[k])) 
-    covderiv[k+K,k] <- covderiv[k,K+k]
-    
-    covderiv[K,K+k] <- sum(exp(-lambda[K])*lambda[K]^y*(1-sum(alpha))/denom*(-1+y/lambda[K])*(-1)/(1-sum(alpha))) 
-    covderiv[K+k,K] <- covderiv[K,K+k]
-  }
-  
-  covderiv[K-1,K-1] <- sum(exp(-lambda[K-1])*lambda[K-1]^y*alpha[K-1]/denom*(-1+y/lambda[K-1])^2) 
-  covderiv[2*K-1,2*K-1] <- sum(exp(-lambda[K-1])*lambda[K-1]^y*alpha[K-1]/denom/alpha[K-1]^2+exp(-lambda[K])*lambda[K]^y*(1-sum(alpha))/denom/(1-sum(alpha))^2) 
-  covderiv[K-1,2*K-1] <- sum(exp(-lambda[K-1])*lambda[K-1]^y*alpha[K-1]/denom/alpha[K-1]*(-1+y/lambda[K-1])) 
-  covderiv[2*K-1,K-1] <- covderiv[K-1,2*K-1]
-  
-  covderiv[K,2*K-1] <- sum(exp(-lambda[K])*lambda[K]^y*(1-sum(alpha))/denom*(-1+y/lambda[K])*(-1)/(1-sum(alpha))) 
-  covderiv[2*K-1,K] <- covderiv[K,2*K-1]
-  
-  covderiv[K,K] <- sum(exp(-lambda[K])*lambda[K]^y*(1-sum(alpha))/denom*(-1+y/lambda[K])^2) 
-  
-  
-  Isco <- deriv1ind%*%t(deriv1ind)/n
-  Iobs <- deriv1ind%*%t(deriv1ind)/n - deriv2/n - covderiv/n
-  
-  
-  res <- list(Isco = Isco, Iobs = Iobs)
-  
-  return(res)
-}
-
+source('functions/sim_poisson_mixture.R')
+source('functions/em_poisson_mixture.R')
+source('functions/fisher_estimation_poisson_mixture.R')
 ```
 
 
 ```{r}
 #| label: simuPoissonMixture-exactFIM-MCMC
 #| eval: false
-#| echo: false
-
-## Numerical study in the Poisson mixture model
-## Monte-Carlo estimation of the true Fisher information matrix based on a large sample
-## Note to the reviewers : This part of the numerical experiment requires a lot of computing time and is therefore not executed directly. Reducing nMC allows us to get back to more reasonable computation times but degrades the quality of the estimation of the FIM by Monte-Carlo. The result of the Monte-Carlo approximation of the FIM obtained with nMC=10^8 is stored in the file PoissonMixtureTrueFIM.Rdata which is loaded in the following chunks.
-
-nMC <- 100000000
-
-z <- rep(0,nMC) # latent variable
-y <- rep(0,nMC) # observed variable
-
-t <- cumsum(c(alpha,1-sum(alpha)))
-
-for (i in 1:nMC){
-  u    <- runif(1)
-  z[i] <- 1+sum(u>t)
-  y[i] <- rpois(1,lambda[z[i]])
-}
-
-trueFIM <-  pm_fisher_estimation(y, nMC, lambda, alpha)
-trueFIM$Iobs
-trueFIM$Isco
-trueFIM <- (trueFIM$Isco+trueFIM$Iobs)/2
-save(trueFIM,file='Rfiles/PoissonMixtureTrueFIM.Rdata')
+#| file: scripts/simuPoissonMixture-exactFIM-MCMC.R
 ```
 
 ```{r}
 #| label: simuPoissonMixture-FIM-sco-obs
-#| echo: false
-
-## Numerical study in the Poisson mixture model 
-## This script performs the experiment for a single value of n (n=500). Several values of n are used to generate the results tables @tbl-IscoMixt and @tbl-IobsMixt
-
-nbsim <- 500 # number of replicates
-
-alpha <- c(0.3,0.5) # mixture weights of the first K-1 components 
-lambda <- c(2,5,9)  # parameter values of the K Poisson distribution of the mixture
-
-n <- 500 # sample size, in c(20,100,500)
-
-resIobs <- array(NA,dim=c(5,5,nbsim))
-resIsco <- array(NA,dim=c(5,5,nbsim))
-
-for (j in 1:nbsim){
-  
-  z <- rep(0,n) # latent variable
-  y <- rep(0,n) # observed variable
-  
-  t <- cumsum(c(alpha,1-sum(alpha)))
-  
-  for (i in 1:n){
-    u    <- runif(1)
-    z[i] <- 1+sum(u>t)
-    y[i] <- rpois(1,lambda[z[i]])
-  }
-  
-  res <- pm_fisher_estimation(y, n, lambda, alpha)
-  resIobs[,,j] <- res$Iobs
-  resIsco[,,j] <- res$Isco
-}
-
-load('Rfiles/PoissonMixtureTrueFIM.Rdata')
-DataResPoissonMixture <- data.frame(EstF11=c(sqrt(n)*(resIsco[1,1,]-trueFIM[1,1]),sqrt(n)*(resIobs[1,1,]-trueFIM[1,1])),
-                                    EstF22=c(sqrt(n)*(resIsco[2,2,]-trueFIM[2,2]),sqrt(n)*(resIobs[2,2,]-trueFIM[2,2])),
-                                    EstF33=c(sqrt(n)*(resIsco[3,3,]-trueFIM[3,3]),sqrt(n)*(resIobs[3,3,]-trueFIM[3,3])),
-                                    EstF44=c(sqrt(n)*(resIsco[4,4,]-trueFIM[4,4]),sqrt(n)*(resIobs[4,4,]-trueFIM[4,4])),
-                                    EstF55=c(sqrt(n)*(resIsco[5,5,]-trueFIM[5,5]),sqrt(n)*(resIobs[5,5,]-trueFIM[5,5])),
-                                    EstF12=c(sqrt(n)*(resIsco[1,2,]-trueFIM[1,2]),sqrt(n)*(resIobs[1,2,]-trueFIM[1,2])),
-                                    EstF13=c(sqrt(n)*(resIsco[1,3,]-trueFIM[1,3]),sqrt(n)*(resIobs[1,3,]-trueFIM[1,3])),
-                                    EstF23=c(sqrt(n)*(resIsco[2,3,]-trueFIM[2,3]),sqrt(n)*(resIobs[2,3,]-trueFIM[2,3])),
-                                    EstF35=c(sqrt(n)*(resIsco[3,5,]-trueFIM[3,5]),sqrt(n)*(resIobs[3,5,]-trueFIM[3,5])),
-                                    EstF34=c(sqrt(n)*(resIsco[3,4,]-trueFIM[3,4]),sqrt(n)*(resIobs[3,4,]-trueFIM[3,4])),
-                                    EstF25=c(sqrt(n)*(resIsco[2,5,]-trueFIM[2,5]),sqrt(n)*(resIobs[2,5,]-trueFIM[2,5])),
-                                    EstF24=c(sqrt(n)*(resIsco[2,4,]-trueFIM[2,4]),sqrt(n)*(resIobs[2,4,]-trueFIM[2,4])),
-                                    EstF15=c(sqrt(n)*(resIsco[1,5,]-trueFIM[1,5]),sqrt(n)*(resIobs[1,5,]-trueFIM[1,5])),
-                                    EstF14=c(sqrt(n)*(resIsco[1,4,]-trueFIM[1,4]),sqrt(n)*(resIobs[1,4,]-trueFIM[1,4])),
-                                    Estimate=c(rep('I n,sco',nbsim),rep('I n,obs',nbsim)))
+#| echo: true
+#| eval: false
+#| file: scripts/simuPoissonMixture-estimFIM.R
 ```
 
 ```{r}
-#| label: fig-simuPoissonMixture
-#| warning : false
+#| label: simuPoissonMixture-resPlots
 #| echo: false
-#| fig-cap: Poisson mixture model. Kernel density estimates of the normalized values of some components of the estimated Fisher information matrix based on the score (I n,sco) and of the observed Fisher information matrix (I n,obs) computed from the 500 simulated datasets with n=500.
-
-
-F11 <- ggplot(DataResPoissonMixture, aes(EstF11, fill=Estimate)) +
-  geom_density(alpha=.6) +
-  scale_fill_manual(values = c("#984EA3",'#E69F00')) +
-  xlab("") +
-  ylab("") +
-  xlim(-1,1) +
-  ggtitle(bquote('('~lambda[1]~','~ lambda[1]~')')) +
-  theme(legend.position = c(-0.05, 0.95), plot.title = element_text(size=20,face="bold"))
-
-F22 <- ggplot(DataResPoissonMixture, aes(EstF22, fill=Estimate)) +
-  geom_density(alpha=.6) +
-  scale_fill_manual(values = c("#984EA3",'#E69F00'))  + 
-  xlab("") +
-  ylab("") +
-  xlim(-0.5,0.5) +
-  ggtitle(bquote('('~lambda[2]~','~ lambda[2]~')')) +
-  theme(legend.position = "none", plot.title = element_text(size=20,face="bold"))
-
-F25 <- ggplot(DataResPoissonMixture, aes(EstF25, fill=Estimate)) +
-  geom_density(alpha=.6) +
-  scale_fill_manual(values = c("#984EA3",'#E69F00')) +
-  xlab("") +
-  ylab("") +
-  xlim(-1.5,1.5) +
-  ggtitle(bquote('('~lambda[2]~','~ alpha[2]~')')) +
-  theme(legend.position = "none", plot.title = element_text(size=20,face="bold"))
-
-plot_grid(F11, F22, F25, ncol = 3, nrow = 1)
+#| eval: true
+#| file: scripts/simuPoissonMixture-resPlots.R
 ```
 
 
+<!-- ```{r} -->
+<!-- #| label: tbl-IscoLMM -->
+<!-- #| tbl-cap: Linear mixed effects model. Empirical bias and squared deviation to the Fisher Information matrix of the estimator based on the score for different values of n. -->
+<!-- #| echo: false -->
+<!-- #| warning: false -->
+<!-- #| message: false -->
+
+<!-- load("Rfiles/simusLin_n20.Rdata") -->
+<!-- biasIscoLMM20 <- apply(res$Isco,c(1,2),mean) - res$fisher -->
+<!-- sdIscoLMM20 <- apply(res$Isco,c(1,2),sd) -->
+
+
+<!-- load("Rfiles/simusLin_n100.Rdata") -->
+<!-- biasIscoLMM100 <- apply(res$Isco,c(1,2),mean) - res$fisher -->
+<!-- sdIscoLMM100 <- apply(res$Isco,c(1,2),sd) -->
+
+<!-- load("Rfiles/simusLin_n500.Rdata") -->
+<!-- biasIscoLMM500 <- apply(res$Isco,c(1,2),mean) - res$fisher -->
+<!-- sdIscoLMM500 <- apply(res$Isco,c(1,2),sd) -->
+
+<!-- dataIscoLMM <- cbind(component = c(1,2,3,4,5,6), -->
+<!--                      m20 = c(diag(biasIscoLMM20),biasIscoLMM20[upper.tri(biasIscoLMM20)]), -->
+<!--                      s20 = c(diag(sdIscoLMM20),sdIscoLMM20[upper.tri(sdIscoLMM20)]), -->
+<!--                      m100 = c(diag(biasIscoLMM100),biasIscoLMM100[upper.tri(biasIscoLMM100)]), -->
+<!--                      s100 = c(diag(sdIscoLMM100),sdIscoLMM100[upper.tri(sdIscoLMM100)]), -->
+<!--                      m500 = c(diag(biasIscoLMM500),biasIscoLMM500[upper.tri(biasIscoLMM500)]), -->
+<!--                      s500 = c(diag(sdIscoLMM500),sdIscoLMM500[upper.tri(sdIscoLMM500)])) -->
+
+<!-- dataIscoLMM <- as.data.frame(dataIscoLMM) -->
+<!-- dataIscoLMM$component <-factor(dataIscoLMM$component, levels=c(1,2,3,4,5,6), -->
+<!--                                labels=c("1"='(β,β)', -->
+<!--                                         "2"='(η2,η2)', -->
+<!--                                         "3"='(σ2,σ2)', -->
+<!--                                         "4"='(β,η2)', -->
+<!--                                         "5"='(β,σ2)', -->
+<!--                                         "6"='(η2,σ2)')) -->
+<!-- dataIscoLMM <- flextable(dataIscoLMM, cwidth=1.2)  -->
+<!-- dataIscoLMM <- add_header_row( -->
+<!--   x = dataIscoLMM, values = c("", "n=20", "n=100", "n=500"), -->
+<!--   colwidths = c(1, 2, 2, 2)) -->
+<!-- dataIscoLMM <- set_header_labels(dataIscoLMM, m20="mean", s20="sd", m100="mean", s100="sd", m500="mean", s500="sd", component="") -->
+<!-- dataIscoLMM <- align(dataIscoLMM, part = "all", align = "center") -->
+<!-- dataIscoLMM -->
+<!-- ``` -->
+
+<!-- ```{r} -->
+<!-- #| label: tbl-IobsLMM -->
+<!-- #| tbl-cap: Linear mixed effects model. Empirical bias and squared deviation to the Fisher Information matrix of the observed Fisher Information matrix for different values of n. -->
+<!-- #| echo: false -->
+<!-- #| warning: false -->
+<!-- #| message: false -->
+
+<!-- load("Rfiles/simusLin_n20.Rdata") -->
+<!-- biasIobsLMM20 <- apply(res$Iobs,c(1,2),mean) - res$fisher -->
+<!-- sdIobsLMM20 <- apply(res$Iobs,c(1,2),sd) -->
+
+
+<!-- load("Rfiles/simusLin_n100.Rdata") -->
+<!-- biasIobsLMM100 <- apply(res$Iobs,c(1,2),mean) - res$fisher -->
+<!-- sdIobsLMM100 <- apply(res$Iobs,c(1,2),sd) -->
+
+<!-- load("Rfiles/simusLin_n500.Rdata") -->
+<!-- biasIobsLMM500 <- apply(res$Iobs,c(1,2),mean) - res$fisher -->
+<!-- sdIobsLMM500 <- apply(res$Iobs,c(1,2),sd) -->
+
+<!-- dataIobsLMM <- cbind(component = c(1,2,3,4,5,6), -->
+<!--                      m20 = c(diag(biasIobsLMM20),biasIobsLMM20[upper.tri(biasIobsLMM20)]), -->
+<!--                      s20 = c(diag(sdIobsLMM20),sdIobsLMM20[upper.tri(sdIobsLMM20)]), -->
+<!--                      m100 = c(diag(biasIobsLMM100),biasIobsLMM100[upper.tri(biasIobsLMM100)]), -->
+<!--                      s100 = c(diag(sdIobsLMM100),sdIobsLMM100[upper.tri(sdIobsLMM100)]), -->
+<!--                      m500 = c(diag(biasIobsLMM500),biasIobsLMM500[upper.tri(biasIobsLMM500)]), -->
+<!--                      s500 = c(diag(sdIobsLMM500),sdIobsLMM500[upper.tri(sdIobsLMM500)])) -->
+
+<!-- dataIobsLMM <- as.data.frame(dataIobsLMM) -->
+<!-- dataIobsLMM$component <-factor(dataIobsLMM$component, levels=c(1,2,3,4,5,6), -->
+<!--                                labels=c("1"='(β,β)', -->
+<!--                                         "2"='(η2,η2)', -->
+<!--                                         "3"='(σ2,σ2)', -->
+<!--                                         "4"='(β,η2)', -->
+<!--                                         "5"='(β,σ2)', -->
+<!--                                         "6"='(η2,σ2)')) -->
+<!-- dataIobsLMM <- flextable(dataIobsLMM, cwidth=1.2)  -->
+<!-- dataIobsLMM <- add_header_row( -->
+<!--   x = dataIobsLMM, values = c("", "n=20", "n=100", "n=500"), -->
+<!--   colwidths = c(1, 2, 2, 2)) -->
+<!-- dataIobsLMM <- set_header_labels(dataIobsLMM, m20="mean", s20="sd", m100="mean", s100="sd", m500="mean", s500="sd", component="") -->
+<!-- dataIobsLMM <- align(dataIobsLMM, part = "all", align = "center") -->
+<!-- dataIobsLMM -->
+<!-- ``` -->
+
+
 ```{r}
-#| label: tbl-IscoLMM
-#| tbl-cap: Linear mixed effects model. Empirical bias and squared deviation to the Fisher Information matrix of the estimator based on the score for different values of n.
-#| echo: false
+#| label: tbl-BiasMixt
+#| tbl-cap: Poisson mixture model. Empirical bias to the Fisher Information matrix of Isco and Iobs for different values of n.
+#| echo: true
 #| warning: false
 #| message: false
-
-load("Rfiles/simusLin_n20.Rdata")
-biasIscoLMM20 <- apply(res$Isco,c(1,2),mean) - res$fisher
-sdIscoLMM20 <- apply(res$Isco,c(1,2),sd)
-
-
-load("Rfiles/simusLin_n100.Rdata")
-biasIscoLMM100 <- apply(res$Isco,c(1,2),mean) - res$fisher
-sdIscoLMM100 <- apply(res$Isco,c(1,2),sd)
-
-load("Rfiles/simusLin_n500.Rdata")
-biasIscoLMM500 <- apply(res$Isco,c(1,2),mean) - res$fisher
-sdIscoLMM500 <- apply(res$Isco,c(1,2),sd)
-
-dataIscoLMM <- cbind(component = c(1,2,3,4,5,6),
-                     m20 = c(diag(biasIscoLMM20),biasIscoLMM20[upper.tri(biasIscoLMM20)]),
-                     s20 = c(diag(sdIscoLMM20),sdIscoLMM20[upper.tri(sdIscoLMM20)]),
-                     m100 = c(diag(biasIscoLMM100),biasIscoLMM100[upper.tri(biasIscoLMM100)]),
-                     s100 = c(diag(sdIscoLMM100),sdIscoLMM100[upper.tri(sdIscoLMM100)]),
-                     m500 = c(diag(biasIscoLMM500),biasIscoLMM500[upper.tri(biasIscoLMM500)]),
-                     s500 = c(diag(sdIscoLMM500),sdIscoLMM500[upper.tri(sdIscoLMM500)]))
-
-dataIscoLMM <- as.data.frame(dataIscoLMM)
-dataIscoLMM$component <-factor(dataIscoLMM$component, levels=c(1,2,3,4,5,6),
-                               labels=c("1"='(β,β)',
-                                        "2"='(η2,η2)',
-                                        "3"='(σ2,σ2)',
-                                        "4"='(β,η2)',
-                                        "5"='(β,σ2)',
-                                        "6"='(η2,σ2)'))
-dataIscoLMM <- flextable(dataIscoLMM, cwidth=1.2) 
-dataIscoLMM <- add_header_row(
-  x = dataIscoLMM, values = c("", "n=20", "n=100", "n=500"),
-  colwidths = c(1, 2, 2, 2))
-dataIscoLMM <- set_header_labels(dataIscoLMM, m20="mean", s20="sd", m100="mean", s100="sd", m500="mean", s500="sd", component="")
-dataIscoLMM <- align(dataIscoLMM, part = "all", align = "center")
-dataIscoLMM
+#| file: scripts/tableBiasPoissonMixture.R
 ```
 
 ```{r}
-#| label: tbl-IobsLMM
-#| tbl-cap: Linear mixed effects model. Empirical bias and squared deviation to the Fisher Information matrix of the observed Fisher Information matrix for different values of n.
-#| echo: false
+#| label: tbl-SdMixt
+#| tbl-cap: Poisson mixture model. Empirical squared deviation to the Fisher Information matrix of Isco and Iobs for different values of n.
+#| echo: true
 #| warning: false
 #| message: false
-
-load("Rfiles/simusLin_n20.Rdata")
-biasIobsLMM20 <- apply(res$Iobs,c(1,2),mean) - res$fisher
-sdIobsLMM20 <- apply(res$Iobs,c(1,2),sd)
-
-
-load("Rfiles/simusLin_n100.Rdata")
-biasIobsLMM100 <- apply(res$Iobs,c(1,2),mean) - res$fisher
-sdIobsLMM100 <- apply(res$Iobs,c(1,2),sd)
-
-load("Rfiles/simusLin_n500.Rdata")
-biasIobsLMM500 <- apply(res$Iobs,c(1,2),mean) - res$fisher
-sdIobsLMM500 <- apply(res$Iobs,c(1,2),sd)
-
-dataIobsLMM <- cbind(component = c(1,2,3,4,5,6),
-                     m20 = c(diag(biasIobsLMM20),biasIobsLMM20[upper.tri(biasIobsLMM20)]),
-                     s20 = c(diag(sdIobsLMM20),sdIobsLMM20[upper.tri(sdIobsLMM20)]),
-                     m100 = c(diag(biasIobsLMM100),biasIobsLMM100[upper.tri(biasIobsLMM100)]),
-                     s100 = c(diag(sdIobsLMM100),sdIobsLMM100[upper.tri(sdIobsLMM100)]),
-                     m500 = c(diag(biasIobsLMM500),biasIobsLMM500[upper.tri(biasIobsLMM500)]),
-                     s500 = c(diag(sdIobsLMM500),sdIobsLMM500[upper.tri(sdIobsLMM500)]))
-
-dataIobsLMM <- as.data.frame(dataIobsLMM)
-dataIobsLMM$component <-factor(dataIobsLMM$component, levels=c(1,2,3,4,5,6),
-                               labels=c("1"='(β,β)',
-                                        "2"='(η2,η2)',
-                                        "3"='(σ2,σ2)',
-                                        "4"='(β,η2)',
-                                        "5"='(β,σ2)',
-                                        "6"='(η2,σ2)'))
-dataIobsLMM <- flextable(dataIobsLMM, cwidth=1.2) 
-dataIobsLMM <- add_header_row(
-  x = dataIobsLMM, values = c("", "n=20", "n=100", "n=500"),
-  colwidths = c(1, 2, 2, 2))
-dataIobsLMM <- set_header_labels(dataIobsLMM, m20="mean", s20="sd", m100="mean", s100="sd", m500="mean", s500="sd", component="")
-dataIobsLMM <- align(dataIobsLMM, part = "all", align = "center")
-dataIobsLMM
+#| file: scripts/tableSdPoissonMixture.R
 ```
 
 
-```{r}
-#| label: tbl-IscoMixt
-#| tbl-cap: Poisson mixture model. Empirical bias and squared deviation to the Fisher Information matrix of the estimator based on the score for different values of n.
-#| echo: false
-#| warning: false
-#| message: false
-
-load("Rfiles/simusMixt_n20.Rdata")
-biasIscoMixt20 <- apply(ResSim$Isco,c(1,2),mean) - trueFIM
-sdIscoMixt20 <- apply(ResSim$Isco,c(1,2),sd)
-
-
-load("Rfiles/simusMixt_n100.Rdata")
-biasIscoMixt100 <- apply(ResSim$Isco,c(1,2),mean) - trueFIM
-sdIscoMixt100 <- apply(ResSim$Isco,c(1,2),sd)
-
-load("Rfiles/simusMixt_n500.Rdata")
-biasIscoMixt500 <- apply(ResSim$Isco,c(1,2),mean) - trueFIM
-sdIscoMixt500 <- apply(ResSim$Isco,c(1,2),sd)
-
-dataIscoMixt <- cbind(component = c(1,2,3,4,5,6),
-                      m20 = c(diag(biasIscoMixt20)[2:5],biasIscoMixt20[2,3],biasIscoMixt20[3,5]),
-                      s20 = c(diag(sdIscoMixt20)[2:5],sdIscoMixt20[2,3],sdIscoMixt20[3,5]),
-                      m100 = c(diag(biasIscoMixt100)[2:5],biasIscoMixt100[2,3],biasIscoMixt100[3,5]),
-                      s100 = c(diag(sdIscoMixt100)[2:5],sdIscoMixt100[2,3],sdIscoMixt100[3,5]),
-                      m500 = c(diag(biasIscoMixt500)[2:5],biasIscoMixt500[2,3],biasIscoMixt500[3,5]),
-                      s500 = c(diag(sdIscoMixt500)[2:5],sdIscoMixt500[2,3],sdIscoMixt500[3,5]))
-
-dataIscoMixt <- as.data.frame(dataIscoMixt)
-dataIscoMixt$component <-factor(dataIscoMixt$component, levels=c(1,2,3,4,5,6),
-                                labels=c("1"='(λ2,λ2)',
-                                         "2"='(λ3,λ3)',
-                                         "3"='(α1,α1)',
-                                         "4"='(α2,α2)',
-                                         "5"='(λ2,λ3)',
-                                         "6"='(λ3,α2)'))
-dataIscoMixt <- flextable(dataIscoMixt, cwidth=1.2) 
-dataIscoMixt <- add_header_row(
-  x = dataIscoMixt, values = c("", "n=20", "n=100", "n=500"),
-  colwidths = c(1, 2, 2, 2))
-dataIscoMixt <- set_header_labels(dataIscoMixt, m20="mean", s20="sd", m100="mean", s100="sd", m500="mean", s500="sd", component="")
-dataIscoMixt <- align(dataIscoMixt, part = "all", align = "center")
-dataIscoMixt
-```
-
-```{r}
-#| label: tbl-IobsMixt
-#| tbl-cap: Poisson mixture model. Empirical bias and squared deviation to the Fisher Information matrix of the observed Fisher Information matrix for different values of n.
-#| echo: false
-#| warning: false
-#| message: false
-
-load("Rfiles/simusMixt_n20.Rdata")
-biasIobsMixt20 <- apply(ResSim$Iobs,c(1,2),mean) - trueFIM
-sdIobsMixt20 <- apply(ResSim$Iobs,c(1,2),sd)
-
-
-load("Rfiles/simusMixt_n100.Rdata")
-biasIobsMixt100 <- apply(ResSim$Iobs,c(1,2),mean) - trueFIM
-sdIobsMixt100 <- apply(ResSim$Iobs,c(1,2),sd)
-
-load("Rfiles/simusMixt_n500.Rdata")
-biasIobsMixt500 <- apply(ResSim$Iobs,c(1,2),mean) - trueFIM
-sdIobsMixt500 <- apply(ResSim$Iobs,c(1,2),sd)
-
-dataIobsMixt <- cbind(component = c(1,2,3,4,5,6),
-                      m20 = c(diag(biasIobsMixt20)[2:5],biasIobsMixt20[2,3],biasIobsMixt20[3,5]),
-                      s20 = c(diag(sdIobsMixt20)[2:5],sdIobsMixt20[2,3],sdIobsMixt20[3,5]),
-                      m100 = c(diag(biasIobsMixt100)[2:5],biasIobsMixt100[2,3],biasIobsMixt100[3,5]),
-                      s100 = c(diag(sdIobsMixt100)[2:5],sdIobsMixt100[2,3],sdIobsMixt100[3,5]),
-                      m500 = c(diag(biasIobsMixt500)[2:5],biasIobsMixt500[2,3],biasIobsMixt500[3,5]),
-                      s500 = c(diag(sdIobsMixt500)[2:5],sdIobsMixt500[2,3],sdIobsMixt500[3,5]))
-
-dataIobsMixt <- as.data.frame(dataIobsMixt)
-dataIobsMixt$component <-factor(dataIobsMixt$component, levels=c(1,2,3,4,5,6),
-                                labels=c("1"='(λ2,λ2)',
-                                         "2"='(λ3,λ3)',
-                                         "3"='(α1,α1)',
-                                         "4"='(α2,α2)',
-                                         "5"='(λ2,λ3)',
-                                         "6"='(λ3,α2)'))
-dataIobsMixt <- flextable(dataIobsMixt, cwidth=1.2) 
-dataIobsMixt <- add_header_row(
-  x = dataIobsMixt, values = c("", "n=20", "n=100", "n=500"),
-  colwidths = c(1, 2, 2, 2))
-dataIobsMixt <- set_header_labels(dataIobsMixt, m20="mean", s20="sd", m100="mean", s100="sd", m500="mean", s500="sd", component="")
-dataIobsMixt <- align(dataIobsMixt, part = "all", align = "center")
-dataIobsMixt
-```
 ## Asymptotic properties of the stochastic approximation algorithm {#sec-SimusNLMM}
 
 ### In curved exponential family model
@@ -2183,4 +1929,15 @@ $\sum_{k=1}^\infty \gamma_k = \infty$ and  $\sum_{k=1}^\infty \gamma_k^2 < \inft
 
 - **(LOC3)** The minimum eigenvalue of the covariance matrix $R(\theta)=\mathrm{E}_\theta((S(Z)-\bar{s}(\theta))(S(Z)-\bar{s}(\theta))^t)$
 is bounded away from zero for $\theta$ in any compact subset of $\Theta$.
+
+## R functions
+
+### R function for Fisher information matrix estimation in the Poisson mixture model
+
+
+```{r}
+#| eval: true
+#| file: functions/fisher_estimation_poisson_mixture.R
+#| label: simuPoissonMixture-functions-show
+```
 

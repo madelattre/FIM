@@ -1,4 +1,4 @@
-## EM algorithm for parameter estimation
+## EM algorithm for parameter estimation in Poisson mixture models
 
 em_poisson_mixture <- function(y,K,nbiter=100){
   # y : vector of observations
