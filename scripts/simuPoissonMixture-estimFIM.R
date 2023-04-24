@@ -1,6 +1,6 @@
-### Numerical study of the statistical properties of the two estimators of the 
-### Fisher Information matrix in the Poisson mixture model 
-### ---------------------------------------------------------------------------
+## 2- R script for the studying the asymptotic properties of Iobs and Isco in the 
+## Poisson mixture model
+## -----------------------------------------------------------------------------
 
 nbsim  <- 500           # number of replicates
 alpha  <- c(0.3,0.5)    # mixture weights of the first K-1 components 
@@ -9,8 +9,8 @@ seq.n  <- c(20,100,500) # sample size
 
 Iobs.theta.est  <- array(NA,dim=c(5,5,nbsim))
 Isco.theta.est  <- array(NA,dim=c(5,5,nbsim))  
-est.lambda <- matrix(NA,3,nbsim)
-est.alpha  <- matrix(NA,2,nbsim)
+est.lambda      <- matrix(NA,3,nbsim)
+est.alpha       <- matrix(NA,2,nbsim)
 
 for (n in seq.n){
   for (j in 1:nbsim){

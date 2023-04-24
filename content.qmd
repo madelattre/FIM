@@ -62,7 +62,7 @@ When this expression can not be analytically evaluated, people are interested in
 Considering this expression, one can derive a first moment estimator of the Fisher information matrix based on a $n$-sample $(y_1, \ldots, y_{n})$ of observations:
 $$
 I_{n,sco}(\theta) = \frac{1}{n} \sum_{i=1}^n \partial_\theta \log g(y_i;\theta) (\partial_\theta \log g(y_i;\theta))^t.
-$$
+$$ {#eq-isco}
 This estimate is indeed equal to the mean of the Gram matrices of the scores. One can also derive a second estimate from @eq-fisher_der1 defined as
 $$
 I_{n,cov}(\theta) = \frac{1}{n} \sum_{i=1}^n \partial_\theta \log g(y_i;\theta) (\partial_\theta \log g(y_i;\theta))^t-\bar{s}\bar{s}^t,
@@ -77,7 +77,7 @@ $$ {#eq-fisher_der2}
 Considering this second expression, we can derive another moment estimator of  the Fisher information matrix based on a $n$-sample $(y_1, \ldots, y_{n})$ of observations, called the observed Fisher information matrix defined as:
 $$
 I_{n,obs}(\theta) = - \frac{1}{n} \sum_{i=1}^n \partial_\theta^2 \log g(y_i;\theta).
-$$
+$$ {#eq-iobs}
 
 ::: {.remark}
 We emphasize that the estimate $I_{n,sco}(\theta)$ is always positive definite, since it is a mean of Gram matrices, contrary to the others estimates $I_{n,obs}(\theta)$ and $I_{n,cov}(\theta)$.
@@ -264,14 +264,20 @@ In this section, we investigate both the properties of the estimators $I_{n,sco}
 ### Simulation settings
 
 First  we consider the following linear mixed effects model $y_{ij} = \beta + z_{i} + \varepsilon_{ij},$
-where $y_{ij} \in \mathbb{R}$ denotes the $j^{th}$ observation of individual $i$, $1\leq i \leq n$, $1\leq j \leq J$, $z_i \in \mathbb{R}$  the unobserved random effect of individual $i$ and $\varepsilon_{ij} \in \mathbb{R}$  the residual term. The random effects $(z_{i})$ are assumed independent and identically distributed such that $z_{i} \underset{i.i.d.}{\sim} \mathcal{N}(0,\eta^2)$, the residuals $(\varepsilon_{ij})$ are assumed independent and identically distributed such that $\varepsilon_{ij} \underset{i.i.d.}{\sim} \mathcal{N}(0,\sigma^2)$ and the sequences $(z_i)$ and $(\varepsilon_{ij})$ are assumed mutually independent. Here, the model parameters are given by $\theta = (\beta, \eta^2, \sigma^2)$. We set $\beta=3$, $\eta^2=2$, $\sigma^2=5$ and $J=12$.
+where $y_{ij} \in \mathbb{R}$ denotes the $j^{th}$ observation of individual $i$, $1\leq i \leq n$, $1\leq j \leq J$, $z_i \in \mathbb{R}$  the unobserved random effect of individual $i$ and $\varepsilon_{ij} \in \mathbb{R}$  the residual term. The random effects $(z_{i})$ are assumed independent and identically distributed such that $z_{i} \underset{i.i.d.}{\sim} \mathcal{N}(0,\eta^2)$, the residuals $(\varepsilon_{ij})$ are assumed independent and identically distributed such that $\varepsilon_{ij} \underset{i.i.d.}{\sim} \mathcal{N}(0,\sigma^2)$ and the sequences $(z_i)$ and $(\varepsilon_{ij})$ are assumed mutually independent. Here, the model parameters are $\theta = (\beta, \eta^2, \sigma^2)$. We set $\beta=3$, $\eta^2=2$, $\sigma^2=5$ and $J=12$.
 
-Second we consider the following Poisson mixture model where the distribution of each observation $y_i$ ($1\leq i \leq n$) depends on a state variable $z_i$ which is latent leading to
-$y_i|z_i=k  \sim  \mathcal{P}(\lambda_k)$ with $(z_i=k)  =  \alpha_k$ and $\sum_{k=1}^{K} \alpha_k  = 1.$
+Second we consider the following Poisson mixture model where the distribution of each observation $y_i$, $1\leq i \leq n$, depends on a state variable $z_i$ which is latent leading to
+$y_i|z_i=k  \sim  \mathcal{P}(\lambda_k)$ with $P(z_i=k)  =  \alpha_k$ and $\sum_{k=1}^{K} \alpha_k  = 1.$
 The model parameters are $\theta=(\lambda_1,\ldots,\lambda_K,\alpha_1,\ldots,\alpha_{K-1})$. For the simulation study, we consider a mixture of $K=3$ components, and the following values for the parameters $\lambda_1=2$, $\lambda_2=5$, $\lambda_3=9$, $\alpha_1=0.3$ and $\alpha_2=0.5$.
 
 
-For each model, we generate $M=500$ datasets for different  sample sizes $n \in \left\{20,100,500 \right\}$. We do not aim at estimating the model parameters. We assume them to be known, and in the following we denote by $\theta^{\star}$ the true parameter value. For each value of $n$ and for each $1 \leq m \leq M$, we derive $I_{n,sco}^{(m)}(\theta^{\star})$ and $I_{n,obs}^{(m)}(\theta^{\star})$. 
+For each model, we generate $M=500$ datasets for different sample sizes $n \in \left\{20,100,500 \right\}$. As a first step, we assume that the true parameter values, denoted by $\theta^{\star}$, are known in order to investigate the asymptotic properties of both $I_{n,sco}$ and $I_{n,obs}$. Hence, for each value of $n$ and for each $1 \leq m \leq M$, we derive $I_{n,sco}^{(m)}(\theta^{\star})$ and $I_{n,obs}^{(m)}(\theta^{\star})$. We then compute the empirical bias and the root mean squared deviation of each component $(\ell,\ell')$ of the estimated matrix as:
+$$
+\frac{1}{M} \sum\limits_{m=1}^{M} I_{n,sco,\ell,\ell'}^{(m)}(\theta^\star) - I_{\ell,\ell'}(\theta^\star)  \; \; \;  \mathrm{and} \; \; \; \sqrt{\frac{1}{M} \sum\limits_{m=1}^{M} \left(I_{n,sco,\ell,\ell'}^{(m)}(\theta^\star) - I_{\ell,\ell'}(\theta^\star)\right)^2}.
+$$
+
+In the previous quantities, $I(\theta^\star)$ is explicit in the linear mixed effects model and approximated by a Monte-Carlo estimation based on a large sample size in the Poisson mixture model. The estimators $I_{n,sco}$ and $I_{n,obs}$ can be computed explicitly in both models, by applying formula @eq-isco and @eq-iobs in the linear mixed-effects model, and by using formula @eq-vnmis and the Louis' formula in the Poisson mixture model. The results are presented in @tbl-BiasLMM and @tbl-SdLMM for the linear mixed effects model and in @tbl-BiasMixt and @tbl-SdMixt for the mixture model.
+In a second step, we use the linear mixed effects model to look at what happens when the parameter $\theta$ is unknown and the estimation of the Fisher information matrix requires to compute an estimate $\hat{\theta}_n$. We use the datasets simulated with $n=500$ and we compute the $M=500$ asymptotic confidence intervals of the three model parameters. We then deduce empirical coverage rates for the following nominal rates $1-\alpha \in \{0.90, 0.95, 0.99\}$ by using the diagonal terms of either the inversed $I_{n,sco}^{(m)}(\theta^{\star})$ (resp. $I_{n,obs}^{(m)}(\theta^{\star})$) or the inversed $I_{n,sco}^{(m)}(\hat{\theta}_n)$ (resp. $I_{n,obs}^{(m)}(\hat{\theta}_n)$). The results are depicted in @tbl-coverageLMM.
 
 ```{r}
 #| label: simuLMM-functions
@@ -316,27 +322,7 @@ source('functions/fisher_estimation_poisson_mixture.R')
 
 ### Results
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-We compute the empirical bias and the root mean squared deviation of each component $(\ell,\ell')$ of the estimated matrix as:
-$$
-\frac{1}{M} \sum\limits_{m=1}^{M} I_{n,sco,\ell,\ell'}^{(m)}(\theta^\star) - I_{\ell,\ell'}(\theta^\star)  \; \; \;  \mathrm{and} \; \; \; \sqrt{\frac{1}{M} \sum\limits_{m=1}^{M} \left(I_{n,sco,\ell,\ell'}^{(m)}(\theta^\star) - I_{\ell,\ell'}(\theta^\star)\right)^2}.
-$$
-
-In the previous quantities, $I(\theta^\star)$ is explicit in the linear mixed effects model and approximated by a Monte-Carlo estimation based on a large sample size in the Poisson mixture model. The results are presented in @tbl-IscoLMM and @tbl-IobsLMM for the linear mixed effects model and in @tbl-IscoMixt and @tbl-IobsMixt for the mixture model. We observe that whatever the model and whatever the components of $I_{n,sco}(\theta^{\star})$ and $I_{n,obs}(\theta^{\star})$, the bias is very small even for small values of $n$. Note that in this particular model the second derivatives with respect to parameter $\beta$ is deterministic, which explains why the bias and the dispersion of the estimations $I_{n,obs}(\theta^{\star})$ are zero for every value of $n$. The bias and the standard deviation decrease as $n$ increases overall, which illustrates the consistency of both M-estimators. The distributions of the normalized estimations $\sqrt{n} \left(I_{n,sco}^{(m)}(\theta^\star) - I(\theta^\star)\right)$ and $\sqrt{n} \left(I_{n,obs}^{(m)}(\theta^\star) - I(\theta^\star)\right)$ are also represented when $n=500$ for some components of the matrices in @fig-simuLMM (linear mixed effects model) and @fig-simuPoissonMixture (Poisson mixture model). The empirical distributions have the shape of Gaussian distributions and illustrate the asymptotic normality of the two estimators. The numerical results highlight that neither $I_{n,sco}(\theta^{\star})$ nor $I_{n,obs}(\theta^{\star})$ is systematically better than the other one in terms of bias and asymptotic covariance matrix. In the same model, different behaviours can be observed depending on the components of the parameter vector.
+From @tbl-BiasLMM, @tbl-SdLMM, @tbl-BiasMixt and @tbl-SdMixt, we observe that whatever the model and whatever the components of $I_{n,sco}(\theta^{\star})$ and $I_{n,obs}(\theta^{\star})$, the bias is very small even for small values of $n$. Note that in the linear mixed effects model the second derivative with respect to parameter $\beta$ is deterministic, which explains why the bias and the dispersion of the estimations $I_{n,obs}(\theta^{\star})$ are zero for every value of $n$. The bias and the standard deviation decrease as $n$ increases overall, which illustrates the consistency of both M-estimators. The distributions of the normalized estimations $\sqrt{n} \left(I_{n,sco}^{(m)}(\theta^\star) - I(\theta^\star)\right)$ and $\sqrt{n} \left(I_{n,obs}^{(m)}(\theta^\star) - I(\theta^\star)\right)$ are also represented when $n=500$ for some components of the matrices in @fig-simuLMM (linear mixed effects model) and @fig-simuPoissonMixture (Poisson mixture model). The empirical distributions have the shape of Gaussian distributions and illustrate the asymptotic normality of the two estimators. The numerical results highlight that neither $I_{n,sco}(\theta^{\star})$ nor $I_{n,obs}(\theta^{\star})$ is systematically better than the other one in terms of bias and asymptotic covariance matrix. In the same model, different behaviors can be observed depending on the components of the parameter vector.
 
 
 ```{r}
@@ -358,8 +344,8 @@ In the previous quantities, $I(\theta^\star)$ is explicit in the linear mixed ef
 
 
 ```{r}
-#| label: tbl-BiasMM
-#| tbl-cap: Linear mixed effects model. ...
+#| label: tbl-BiasLMM
+#| tbl-cap: Linear mixed effects model. Empirical bias to the Fisher Information matrix of Isco and Iobs computed in the true parameter values for different values of n.
 #| echo: false
 #| eval: true
 #| warning: false
@@ -369,7 +355,7 @@ In the previous quantities, $I(\theta^\star)$ is explicit in the linear mixed ef
 
 ```{r}
 #| label: tbl-SdLMM
-#| tbl-cap: Linear mixed effects model. ...
+#| tbl-cap: Linear mixed effects model. Empirical squared deviation to the Fisher Information matrix of Isco and Iobs computed in the true parameter values for different values of n.
 #| echo: false
 #| eval: true
 #| warning: false
@@ -396,6 +382,16 @@ In the previous quantities, $I(\theta^\star)$ is explicit in the linear mixed ef
 #| file: scripts/tableSdPoissonMixture.R
 ```
 
+@tbl-coverageLMM shows that the empirical coverage rates computed from $I_{n,sco}$ and $I_{n,obs}$ in the linear mixed effects model are close to the nominal values, which corroborates the relevance of both estimators. Moreover there is little difference between the results obtained when the estimate of the Fisher information matrix is computed in the true and in the estimated parameter value.
+
+```{r}
+#| label: tbl-coverageLMM
+#| tbl-cap: Linear mixed effects model. Comparison of the coverage rates computed from both estimates of the Fisher information matrix in either the true or the estimated parameter values with n=500.
+#| echo: false
+#| warning: false
+#| message: false
+#| file: scripts/simuLMM-coverage.R
+```
 
 ## Asymptotic properties of the stochastic approximation algorithm {#sec-SimusNLMM}
 

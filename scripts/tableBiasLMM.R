@@ -4,55 +4,73 @@ load("Rfiles/simusLMM.Rdata")
 DataRes.n20 <- DataRes %>% filter(n==20)
 DataRes.n20.Isco <- DataRes.n20 %>% filter(Estimate=="I n,sco")
 DataRes.n20.Iobs <- DataRes.n20 %>% filter(Estimate=="I n,obs")
-mIsco20 <- round(c(mean(sqrt(20)*DataRes.n20.Isco$EstF11.true),mean(sqrt(20)*DataRes.n20.Isco$EstF22.true),
-                   mean(sqrt(20)*DataRes.n20.Isco$EstF33.true),mean(sqrt(20)*DataRes.n20.Isco$EstF12.true),
-                   mean(sqrt(20)*DataRes.n20.Isco$EstF13.true),mean(sqrt(20)*DataRes.n20.Isco$EstF23.true)),5)
-mIobs20 <- round(c(mean(sqrt(20)*DataRes.n20.Iobs$EstF11.true),mean(sqrt(20)*DataRes.n20.Iobs$EstF22.true),
-                   mean(sqrt(20)*DataRes.n20.Iobs$EstF33.true),mean(sqrt(20)*DataRes.n20.Iobs$EstF12.true),
-                   mean(sqrt(20)*DataRes.n20.Iobs$EstF13.true),mean(sqrt(20)*DataRes.n20.Iobs$EstF23.true)),5)
+mIsco20 <- round(c(mean(DataRes.n20.Isco$EstF11.true)-fisher[1,1],
+                   mean(DataRes.n20.Isco$EstF22.true)-fisher[2,2],
+                   mean(DataRes.n20.Isco$EstF33.true)-fisher[3,3],
+                   mean(DataRes.n20.Isco$EstF12.true)-fisher[1,2],
+                   mean(DataRes.n20.Isco$EstF13.true)-fisher[1,3],
+                   mean(DataRes.n20.Isco$EstF23.true)-fisher[2,3]),5)
+mIobs20 <- round(c(mean(DataRes.n20.Iobs$EstF11.true)-fisher[1,1],
+                   mean(DataRes.n20.Iobs$EstF22.true)-fisher[2,2],
+                   mean(DataRes.n20.Iobs$EstF33.true)-fisher[3,3],
+                   mean(DataRes.n20.Iobs$EstF12.true)-fisher[1,2],
+                   mean(DataRes.n20.Iobs$EstF13.true)-fisher[1,3],
+                   mean(DataRes.n20.Iobs$EstF23.true)-fisher[2,3]),5)
 
-sIsco20 <- round(c(sd(sqrt(20)*DataRes.n20.Isco$EstF11.true),sd(sqrt(20)*DataRes.n20.Isco$EstF22.true),
-                   sd(sqrt(20)*DataRes.n20.Isco$EstF33.true),sd(sqrt(20)*DataRes.n20.Isco$EstF12.true),
-                   sd(sqrt(20)*DataRes.n20.Isco$EstF13.true),sd(sqrt(20)*DataRes.n20.Isco$EstF23.true)),5)
-sIobs20 <- round(c(sd(sqrt(20)*DataRes.n20.Iobs$EstF11.true),sd(sqrt(20)*DataRes.n20.Iobs$EstF22.true),
-                   sd(sqrt(20)*DataRes.n20.Iobs$EstF33.true),sd(sqrt(20)*DataRes.n20.Iobs$EstF12.true),
-                   sd(sqrt(20)*DataRes.n20.Iobs$EstF13.true),sd(sqrt(20)*DataRes.n20.Iobs$EstF23.true)),5)
+sIsco20 <- round(c(sd(DataRes.n20.Isco$EstF11.true),sd(DataRes.n20.Isco$EstF22.true),
+                   sd(DataRes.n20.Isco$EstF33.true),sd(DataRes.n20.Isco$EstF12.true),
+                   sd(DataRes.n20.Isco$EstF13.true),sd(DataRes.n20.Isco$EstF23.true)),5)
+sIobs20 <- round(c(sd(DataRes.n20.Iobs$EstF11.true),sd(DataRes.n20.Iobs$EstF22.true),
+                   sd(DataRes.n20.Iobs$EstF33.true),sd(DataRes.n20.Iobs$EstF12.true),
+                   sd(DataRes.n20.Iobs$EstF13.true),sd(DataRes.n20.Iobs$EstF23.true)),5)
 
 
 DataRes.n100 <- DataRes %>% filter(n==100)
 DataRes.n100.Isco <- DataRes.n100 %>% filter(Estimate=="I n,sco")
 DataRes.n100.Iobs <- DataRes.n100 %>% filter(Estimate=="I n,obs")
-mIsco100 <- round(c(mean(sqrt(100)*DataRes.n100.Isco$EstF11.true),mean(sqrt(100)*DataRes.n100.Isco$EstF22.true),
-                    mean(sqrt(100)*DataRes.n100.Isco$EstF33.true),mean(sqrt(100)*DataRes.n100.Isco$EstF12.true),
-                    mean(sqrt(100)*DataRes.n100.Isco$EstF13.true),mean(sqrt(100)*DataRes.n100.Isco$EstF23.true)),5)
-mIobs100 <- round(c(mean(sqrt(100)*DataRes.n100.Iobs$EstF11.true),mean(sqrt(100)*DataRes.n100.Iobs$EstF22.true),
-                    mean(sqrt(100)*DataRes.n100.Iobs$EstF33.true),mean(sqrt(100)*DataRes.n100.Iobs$EstF12.true),
-                    mean(sqrt(100)*DataRes.n100.Iobs$EstF13.true),mean(sqrt(100)*DataRes.n100.Iobs$EstF23.true)),5)
+mIsco100 <- round(c(mean(DataRes.n100.Isco$EstF11.true)-fisher[1,1],
+                    mean(DataRes.n100.Isco$EstF22.true)-fisher[2,2],
+                    mean(DataRes.n100.Isco$EstF33.true)-fisher[3,3],
+                    mean(DataRes.n100.Isco$EstF12.true)-fisher[1,2],
+                    mean(DataRes.n100.Isco$EstF13.true)-fisher[1,3],
+                    mean(DataRes.n100.Isco$EstF23.true)-fisher[2,3]),5)
+mIobs100 <- round(c(mean(DataRes.n100.Iobs$EstF11.true)-fisher[1,1],
+                    mean(DataRes.n100.Iobs$EstF22.true)-fisher[2,2],
+                    mean(DataRes.n100.Iobs$EstF33.true)-fisher[3,3],
+                    mean(DataRes.n100.Iobs$EstF12.true)-fisher[1,2],
+                    mean(DataRes.n100.Iobs$EstF13.true)-fisher[1,3],
+                    mean(DataRes.n100.Iobs$EstF23.true)-fisher[2,3]),5)
 
-sIsco100 <- round(c(sd(sqrt(100)*DataRes.n100.Isco$EstF11.true),sd(sqrt(100)*DataRes.n100.Isco$EstF22.true),
-                    sd(sqrt(100)*DataRes.n100.Isco$EstF33.true),sd(sqrt(100)*DataRes.n100.Isco$EstF12.true),
-                    sd(sqrt(100)*DataRes.n100.Isco$EstF13.true),sd(sqrt(100)*DataRes.n100.Isco$EstF23.true)),5)
-sIobs100 <- round(c(sd(sqrt(100)*DataRes.n100.Iobs$EstF11.true),sd(sqrt(100)*DataRes.n100.Iobs$EstF22.true),
-                    sd(sqrt(100)*DataRes.n100.Iobs$EstF33.true),sd(sqrt(100)*DataRes.n100.Iobs$EstF12.true),
-                    sd(sqrt(100)*DataRes.n100.Iobs$EstF13.true),sd(sqrt(100)*DataRes.n100.Iobs$EstF23.true)),5)
+sIsco100 <- round(c(sd(DataRes.n100.Isco$EstF11.true),sd(DataRes.n100.Isco$EstF22.true),
+                    sd(DataRes.n100.Isco$EstF33.true),sd(DataRes.n100.Isco$EstF12.true),
+                    sd(DataRes.n100.Isco$EstF13.true),sd(DataRes.n100.Isco$EstF23.true)),5)
+sIobs100 <- round(c(sd(DataRes.n100.Iobs$EstF11.true),sd(DataRes.n100.Iobs$EstF22.true),
+                    sd(DataRes.n100.Iobs$EstF33.true),sd(DataRes.n100.Iobs$EstF12.true),
+                    sd(DataRes.n100.Iobs$EstF13.true),sd(DataRes.n100.Iobs$EstF23.true)),5)
 
 DataRes.n500 <- DataRes %>% filter(n==500)
 DataRes.n500.Isco <- DataRes.n500 %>% filter(Estimate=="I n,sco")
 DataRes.n500.Iobs <- DataRes.n500 %>% filter(Estimate=="I n,obs")
 
-mIsco500 <- round(c(mean(sqrt(500)*DataRes.n500.Isco$EstF11.true),mean(sqrt(500)*DataRes.n500.Isco$EstF22.true),
-                    mean(sqrt(500)*DataRes.n500.Isco$EstF33.true),mean(sqrt(500)*DataRes.n500.Isco$EstF12.true),
-                    mean(sqrt(500)*DataRes.n500.Isco$EstF13.true),mean(sqrt(500)*DataRes.n500.Isco$EstF23.true)),5)
-mIobs500 <- round(c(mean(sqrt(500)*DataRes.n500.Iobs$EstF11.true),mean(sqrt(500)*DataRes.n500.Iobs$EstF22.true),
-                    mean(sqrt(500)*DataRes.n500.Iobs$EstF33.true),mean(sqrt(500)*DataRes.n500.Iobs$EstF12.true),
-                    mean(sqrt(500)*DataRes.n500.Iobs$EstF13.true),mean(sqrt(500)*DataRes.n500.Iobs$EstF23.true)),5)
+mIsco500 <- round(c(mean(DataRes.n500.Isco$EstF11.true)-fisher[1,1],
+                    mean(DataRes.n500.Isco$EstF22.true)-fisher[2,2],
+                    mean(DataRes.n500.Isco$EstF33.true)-fisher[3,3],
+                    mean(DataRes.n500.Isco$EstF12.true)-fisher[1,2],
+                    mean(DataRes.n500.Isco$EstF13.true)-fisher[1,3],
+                    mean(DataRes.n500.Isco$EstF23.true)-fisher[2,3]),5)
+mIobs500 <- round(c(mean(DataRes.n500.Iobs$EstF11.true)-fisher[1,1],
+                    mean(DataRes.n500.Iobs$EstF22.true)-fisher[2,2],
+                    mean(DataRes.n500.Iobs$EstF33.true)-fisher[3,3],
+                    mean(DataRes.n500.Iobs$EstF12.true)-fisher[1,2],
+                    mean(DataRes.n500.Iobs$EstF13.true)-fisher[1,3],
+                    mean(DataRes.n500.Iobs$EstF23.true)-fisher[2,3]),5)
 
-sIsco500 <- round(c(sd(sqrt(500)*DataRes.n500.Isco$EstF11.true),sd(sqrt(500)*DataRes.n500.Isco$EstF22.true),
-                    sd(sqrt(500)*DataRes.n500.Isco$EstF33.true),sd(sqrt(500)*DataRes.n500.Isco$EstF12.true),
-                    sd(sqrt(500)*DataRes.n500.Isco$EstF13.true),sd(sqrt(500)*DataRes.n500.Isco$EstF23.true)),5)
-sIobs500 <- round(c(sd(sqrt(500)*DataRes.n500.Iobs$EstF11.true),sd(sqrt(500)*DataRes.n500.Iobs$EstF22.true),
-                    sd(sqrt(500)*DataRes.n500.Iobs$EstF33.true),sd(sqrt(500)*DataRes.n500.Iobs$EstF12.true),
-                    sd(sqrt(500)*DataRes.n500.Iobs$EstF13.true),sd(sqrt(500)*DataRes.n500.Iobs$EstF23.true)),5)
+sIsco500 <- round(c(sd(DataRes.n500.Isco$EstF11.true),sd(DataRes.n500.Isco$EstF22.true),
+                    sd(DataRes.n500.Isco$EstF33.true),sd(DataRes.n500.Isco$EstF12.true),
+                    sd(DataRes.n500.Isco$EstF13.true),sd(DataRes.n500.Isco$EstF23.true)),5)
+sIobs500 <- round(c(sd(DataRes.n500.Iobs$EstF11.true),sd(DataRes.n500.Iobs$EstF22.true),
+                    sd(DataRes.n500.Iobs$EstF33.true),sd(DataRes.n500.Iobs$EstF12.true),
+                    sd(DataRes.n500.Iobs$EstF13.true),sd(DataRes.n500.Iobs$EstF23.true)),5)
 
 dataBiasLMM <- cbind(component = c(1,2,3,4,5,6),
                      mIsco20 = mIsco20,
