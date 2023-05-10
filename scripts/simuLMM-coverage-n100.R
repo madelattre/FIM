@@ -77,7 +77,7 @@ for (rate in seq.rate){
 
 dataCoverageLMM <- cbind(rate = rep(1-seq.rate,each=4),
                          fisher = rep(c('Isco','Isco','Iobs','Iobs'),3),
-                         theta = rep(c('true','est','true','est'),3),
+                         theta = rep(c('Known','Estimated','Known','Estimated'),3),
                          beta = c(coverage.isco.theta.true[1,1]/nsim,
                                   coverage.isco.theta.est[1,1]/nsim,
                                   coverage.iobs.theta.true[1,1]/nsim,
@@ -118,6 +118,7 @@ dataCoverageLMM <- cbind(rate = rep(1-seq.rate,each=4),
 dataCoverageLMM <- as.data.frame(dataCoverageLMM)
 dataCoverageLMM <- flextable(dataCoverageLMM, cwidth=1.2)
 dataCoverageLMM <- theme_box(dataCoverageLMM)
+dataCoverageLMM <- bold(dataCoverageLMM,j=1)
 dataCoverageLMM <- set_header_labels(
   x = dataCoverageLMM, values = c(rate="1-α", fisher="Fisher est.", theta="θ",
                                   beta="β", eta2="η2", sigma2="σ2"))

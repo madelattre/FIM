@@ -1,4 +1,4 @@
-## 1- R script for the studying the asymptotic properties of Iobs and Isco in the 
+## 1- R script for studying the asymptotic properties of Iobs and Isco in the 
 ## linear mixed effects model
 ## -----------------------------------------------------------------------------
 

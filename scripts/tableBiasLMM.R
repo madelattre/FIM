@@ -94,4 +94,5 @@ dataBiasLMM <- add_header_row(
   colwidths = c(1, 2, 2, 2))
 dataBiasLMM <- set_header_labels(dataBiasLMM, mIsco20="Isco", mIobs20="Iobs", mIsco100="Isco", mIobs100="Iobs", mIsco500="Isco", mIobs500="Iobs", component="")
 dataBiasLMM <- align(dataBiasLMM, part = "all", align = "center")
+dataBiasLMM <- bold(dataBiasLMM, j = c(2,4,6))
 dataBiasLMM

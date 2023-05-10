@@ -5,14 +5,14 @@ sigma2 <- 5
 eta2   <- 2
 theta.true <- c(beta,eta2,sigma2)
 
-DataRes.n500 <- DataRes %>% filter(n==100)
+DataRes.n500 <- DataRes %>% filter(n==500)
 DataRes.n500.Isco <- DataRes.n500 %>% filter(Estimate=="I n,sco")
 DataRes.n500.Iobs <- DataRes.n500 %>% filter(Estimate=="I n,obs")
 
 seq.rate <- c(0.01,0.05,0.10)
 
 nsim <- length(DataRes.n500.Iobs$beta.est)
-n <- 100
+n <- 500
 
 coverage.iobs.theta.est <- matrix(0,length(seq.rate),3)
 coverage.isco.theta.est <- matrix(0,length(seq.rate),3)
@@ -77,7 +77,7 @@ for (rate in seq.rate){
 
 dataCoverageLMM <- cbind(rate = rep(1-seq.rate,each=4),
                          fisher = rep(c('Isco','Isco','Iobs','Iobs'),3),
-                         theta = rep(c('true','est','true','est'),3),
+                         theta = rep(c('Known','Estimated','Known','Estimated'),3),
                          beta = c(coverage.isco.theta.true[1,1]/nsim,
                                   coverage.isco.theta.est[1,1]/nsim,
                                   coverage.iobs.theta.true[1,1]/nsim,
@@ -118,6 +118,7 @@ dataCoverageLMM <- cbind(rate = rep(1-seq.rate,each=4),
 dataCoverageLMM <- as.data.frame(dataCoverageLMM)
 dataCoverageLMM <- flextable(dataCoverageLMM, cwidth=1.2)
 dataCoverageLMM <- theme_box(dataCoverageLMM)
+dataCoverageLMM <- bold(dataCoverageLMM,j=1)
 dataCoverageLMM <- set_header_labels(
   x = dataCoverageLMM, values = c(rate="1-α", fisher="Fisher est.", theta="θ",
                                   beta="β", eta2="η2", sigma2="σ2"))

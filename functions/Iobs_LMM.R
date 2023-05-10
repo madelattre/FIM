@@ -22,7 +22,7 @@ Iobs_LMM <- function(datamat,beta,sigma2,eta2){
   Iobs[3,2] <- Iobs[2,3]
   Iobs[3,3] <- 1/(sigma2)^3*sum((obs-beta)^2) -
     eta2*sum(apply(datamat-beta,1,sum)^2)*(j*eta2/(sigma2+eta2*j)^2/sigma2^3 +
-                                             2/(sigma2+eta2*j)^2/sigma2^2 + 1/(sigma2+eta2*j)^3/sigma2 ) -
+    2/(sigma2+eta2*j)^2/sigma2^2 + 1/(sigma2+eta2*j)^3/sigma2 ) -
     n*(j-1)/2/sigma2^2 - n/2/(sigma2+eta2*j)^2
   Iobs <- Iobs/n
   

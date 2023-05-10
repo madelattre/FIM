@@ -1,4 +1,4 @@
-## 2- R script for the studying the asymptotic properties of Iobs and Isco in the 
+## 2- R script for studying the asymptotic properties of Iobs and Isco in the 
 ## Poisson mixture model
 ## -----------------------------------------------------------------------------
 

@@ -43,4 +43,5 @@ dataBiasMixt <- set_header_labels(dataBiasMixt, mIsco20="Isco", mIobs20="Iobs",
                                   mIsco100="Isco", mIobs100="Iobs", mIsco500="Isco", 
                                   mIobs500="Iobs", component="")
 dataBiasMixt <- align(dataBiasMixt, part = "all", align = "center")
+dataBiasMixt <- bold(dataBiasMixt, j=c(2,4,6))
 dataBiasMixt

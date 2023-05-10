@@ -23,4 +23,5 @@ dataSdMixt <- set_header_labels(dataSdMixt, sIsco20="Isco", sIobs20="Iobs",
                                   sIsco100="Isco", sIobs100="Iobs", sIsco500="Isco", 
                                   sIobs500="Iobs", component="")
 dataSdMixt <- align(dataSdMixt, part = "all", align = "center")
+dataSdMixt <- bold(dataSdMixt, j=c(2,4,6))
 dataSdMixt
