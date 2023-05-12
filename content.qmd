@@ -521,6 +521,59 @@ Convergence graphs obtained from a simulated data set are shown in @fig-NLMEnone
 #| file: scripts/simuNLME-nonexponential-conv-plot.R
 ```
 
+### Comparison with other methods {#sec-simuComparison}
+
+To the best of our knowledge, although there exists contributions focusing on the estimation of the Fisher information matrix in latent variable models, there is currently no method based on the first derivatives of the log-likelihood. We compare to [@Meng2017] who proposed an iterative method based on numerical first order derivatives of the Q function that is computed at each E-step of the EM algorithm. The model used by [@Meng2017] in their simulation study is a mixture of two Gaussian distributions with unknown expectations $\mu_1$ and $\mu_2$, fixed variances equal to $1$ and unknown proportion $\pi$. The model parameters are denoted by $\theta=(\mu_1,\mu_2,\pi)$.
+
+### Comparison with other methods {#sec-simuComparison}
+
+To the best of our knowledge, although there exists contributions focusing on the estimation of the Fisher information matrix in latent variable models, there is currently no method based on the first derivatives of the log-likelihood. We compare to [@Meng2017] who proposed an iterative method based on numerical first order derivatives of the Q function that is computed at each E-step of the EM algorithm. The model used by [@Meng2017] in their simulation study is a mixture of two Gaussian distributions with unknown expectations $\mu_1$ and $\mu_2$, fixed variances equal to $1$ and unknown proportion $\pi$. The model parameters are denoted by $\theta=(\mu_1,\mu_2,\pi)$.
+
+
+```{r}
+#| label: simuGaussianMixture-functions
+#| eval: false
+#| echo: false
+source('functions/sim_gaussian_mixture.R')
+source('functions/em_gaussian_mixture.R')
+source('functions/fisher_estimation_gaussian_mixture.R')
+```
+
+
+```{r}
+#| label: simusMeng
+#| echo: true
+#| eval: false
+#| file: scripts/simuGaussianMixture.R
+```
+
+```{r}
+#| label: simusMeng
+#| echo: false
+#| eval: true
+load("Rfiles/ResGaussianMixture.Rdata")
+```
+
+We simulate 10000 datasets according to this Gaussian mixture model, using the same setting as [@Meng2017], *i.e.* $n=750$, $\pi=2/3$, $\mu_1=3$ and $\mu_2=0$. For each dataset $k=1,\ldots,10000$, we compute the parameter maximum likelihood estimate $\hat{\theta}_k = (\hat{\pi}_k,\widehat{\mu_1}_k,\widehat{\mu_2}_k)$ with an EM algorithm and then we derive $I_{n,sco}(\hat{\theta}_k)$ directly according to @eq-vnmis (see R function provided in the Appendix section) contrary to [@Meng2017] who used an iterative method. We compute the empirical mean of the  10000 estimated matrices leading to: 
+
+$$
+\frac1{10000} \sum _k I_{n,sco}(\hat{\theta}_k)= \begin{pmatrix}
+`r res$isco[1,1]` & `r res$isco[1,2]` & `r res$isco[1,3]`\\
+`r res$isco[2,1]` & `r res$isco[2,2]` & `r res$isco[2,3]` \\
+`r res$isco[3,1]` & `r res$isco[3,2]` & `r res$isco[3,3]`\\
+\end{pmatrix}.
+$$
+
+Comparison with the results of [@Meng2017] is delicate since their numerical illustration of their method is based on a single simulated dataset thus potentially sensitive to sampling variations. However, they provide an estimation of the Fisher information matrix from this unique dataset   
+$$
+I_{Meng} = \begin{pmatrix}
+2591.3 & -237.9 & -231.8\\
+-237.9 & 155.8 & -86.7\\
+-231.8 & -86.7 & 394.5
+\end{pmatrix}.
+$$
+
+Our results are coherent with their ones. To check the reliability of our results, we then compute as above the 10000 asymptotic confidence intervals of the three model parameters. We obtain for the three parameters $(\pi,\mu_1,\mu_2)$ empirical covering rates of $`r res$recouvprob`$, $`r res$recouvm1`$, $`r res$recouvm2`$ respectively for a nominal covering rate of $0.95$. Thus $I_{n,sco}$ accurately quantifies the precisions of parameter estimates. 
 
 # Conclusion and discussion
 
