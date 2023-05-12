@@ -548,7 +548,7 @@ source('functions/fisher_estimation_gaussian_mixture.R')
 ```
 
 ```{r}
-#| label: simusMeng
+#| label: simusMeng-results
 #| echo: false
 #| eval: true
 load("Rfiles/ResGaussianMixture.Rdata")
