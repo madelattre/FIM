@@ -45,8 +45,8 @@ theta0       <- list(vpop=(vpop-5)*runif(1,0.8,1.2),kapop=kapop*runif(1,0.8,1.2)
 res <- saem_non_exp(datasim, nbiterem, nbiterburnin, theta0)
 
 # Save one in 10 iterations due to limited space on Github
-res$isco     <- res$isco[,,seq(10,nbiterem,10)]
-res$thetaest <- res$thetaest[,seq(10,nbiterem,10)]
+res$isco     <- res$isco[,,c(1,seq(10,nbiterem,10))]
+res$thetaest <- res$thetaest[,c(1,seq(10,nbiterem,10))]
 
 save(res,file="Rfiles/saem-non-exp-conv-plot.Rdata")
 

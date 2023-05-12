@@ -12,7 +12,7 @@ DataResEst <- data.frame(
   Iscov    = res$isco[2,2,],
   Iscocl   = res$isco[3,3,],
   Iscoo2ka = res$isco[4,4,],
-  Iter=seq(1,3000,10))
+  Iter = c(1,seq(10,nbiterem,10)))
 
 kaconv <- ggplot(DataResEst, aes(y=ka, x=Iter)) +
   geom_line(size=0.5) +
@@ -58,7 +58,7 @@ iscovconv <- ggplot(DataResEst, aes(y=Iscov, x=Iter)) +
   geom_line(size=0.5) +
   xlab("") +
   ylab("") +
-  ylim(0.1,0.25) +
+  #ylim(0.1,0.25) +
   ggtitle(bquote(I[n-sco](V,V))) +
   theme(plot.title = element_text(size=16,face="bold"),legend.position='none',
         axis.text.x = element_text(angle=45))
