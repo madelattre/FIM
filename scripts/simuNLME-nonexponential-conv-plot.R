@@ -3,6 +3,8 @@
 
 load("Rfiles/saem-non-exp-conv-plot.Rdata")
 
+nbiterem <- 3000
+
 DataResEst <- data.frame(
   ka       = res$thetaest[1,],
   V        = res$thetaest[2,],  
