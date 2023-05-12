@@ -2,7 +2,6 @@
 ## exponential family 
 ## -----------------------------------------------------------------------------
 
-source('~/work/FIM/functions/model-nlme.R')
 
 ## 1- Data simulation
 
