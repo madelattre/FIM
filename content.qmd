@@ -462,7 +462,7 @@ The results are displayed in @fig-simuNlme-exponential-bias and @fig-simuNlme-ex
 #| echo: false
 #| eval: true
 #| fig-cap: Non linear mixed effects model. Representation over iterations of the mean relative bias of the diagonal components of the estimated Fisher information matrix computed from the $M=500$ runs of the stochastic algorithm. Red line corresponds to $I_{n,sco}(\theta)$ and blue line corresponds to $I_{n,obs}(\theta)$. The burn-in iterations of the algorithm are not depicted.
-#| file: scripts/simuNlme-exponential-plots-bias.R
+#| file: scripts/simuNLME-exponential-plots-bias.R
 ```
 
 
@@ -471,7 +471,7 @@ The results are displayed in @fig-simuNlme-exponential-bias and @fig-simuNlme-ex
 #| echo: false
 #| eval: true
 #| fig-cap: Non linear mixed effects model. Representation over iterations of the mean relative standard error of the diagonal components of the estimated Fisher information matrix computed from the $M=500$ runs of the stochastic algorithm. Red line corresponds to $I_{n,sco}(\theta)$ and blue line corresponds to $I_{n,obs}(\theta)$. The burn-in iterations of the algorithme are not depicted
-#| file: scripts/simuNlme-exponential-plots-sd.R
+#| file: scripts/simuNLME-exponential-plots-sd.R
 ```
 
 We observe that the bias and the standard deviations of the estimates of the components of both matrices decrease over iterations, and that for both estimates the bias is nearly zero when the convergence of the algorithm is reached. According to these simulation results, there is no evidence that one method is better than the other in terms of bias or standard deviation.
