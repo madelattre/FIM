@@ -2,14 +2,14 @@ load('Rfiles/ResNLMEexponentialSdIsco.Rdata')
 load('Rfiles/ResNLMEexponentialSdIobs.Rdata')
 
 DataResRsd <- data.frame(
-  RsdF11=c(abs(MsdIsco[1,1,]),abs(MsdIobs[1,1,])),
-  RsdF22=c(abs(MsdIsco[2,2,]),abs(MsdIobs[2,2,])),
-  RsdF33=c(abs(MsdIsco[3,3,]),abs(MsdIobs[3,3,])),
-  RsdF44=c(abs(MsdIsco[4,4,]),abs(MsdIobs[4,4,])),
-  RsdF55=c(abs(MsdIsco[5,5,]),abs(MsdIobs[5,5,])),
-  RsdF66=c(abs(MsdIsco[6,6,]),abs(MsdIobs[6,6,])),
-  Iter=c(seq(nbiterburnin+1,(nbiter+nbiterburnin),10),seq(nbiterburnin+1,nbiter+nbiterburnin,10)),
-  Estimate=c(rep('Isco',nbiter),rep('Iobs',nbiter)))
+  RsdF11=c(abs(MsdIsco[1,1,-seq(1,nbiterburnin)]),abs(MsdIobs[1,1,-seq(1,nbiterburnin)])),
+  RsdF22=c(abs(MsdIsco[2,2,-seq(1,nbiterburnin)]),abs(MsdIobs[2,2,-seq(1,nbiterburnin)])),
+  RsdF33=c(abs(MsdIsco[3,3,-seq(1,nbiterburnin)]),abs(MsdIobs[3,3,-seq(1,nbiterburnin)])),
+  RsdF44=c(abs(MsdIsco[4,4,-seq(1,nbiterburnin)]),abs(MsdIobs[4,4,-seq(1,nbiterburnin)])),
+  RsdF55=c(abs(MsdIsco[5,5,-seq(1,nbiterburnin)]),abs(MsdIobs[5,5,-seq(1,nbiterburnin)])),
+  RsdF66=c(abs(MsdIsco[6,6,-seq(1,nbiterburnin)]),abs(MsdIobs[6,6,-seq(1,nbiterburnin)])),
+  Iter=c(seq(nbiterburnin+1,nbiter,1),seq(nbiterburnin+1,nbiter,1)),
+  Estimate=c(rep('Isco',nbiter-nbiterburnin),rep('Iobs',nbiter-nbiterburnin)))
 
 
 RsdF11 <- ggplot(DataResRsd, aes(y=RsdF11, x=Iter, color=Estimate)) +

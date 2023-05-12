@@ -402,6 +402,77 @@ From @tbl-BiasLMM, @tbl-SdLMM, @tbl-BiasMixt and @tbl-SdMixt, we observe that wh
 #| file: scripts/simuLMM-coverage-n500.R
 ```
 
+## Asymptotic properties of the stochastic approximation algorithm {#sec-SimusNLMM}
+
+We now investigate the properties of our algorithm in the curved exponential family when the number of iterations grows (@sec-simuExpo) and the good performance of its extended version in more general latent variable models (@sec-simuNonExpo). We also present a short comparison with existing methods (@sec-simuComparison).
+
+### In curved exponential family model {#sec-simuExpo}
+
+We consider the following nonlinear mixed effects model which is widely used in pharmacokinetics for describing the evolution of drug concentration over time:
+$$
+y_{ij}= g_i(t_{ij},z_i) + \varepsilon_{ij},
+$$ {#eq-modelPK}
+where $z_i=(\log ka_i, \log Cl_i, \log V_i)'$ are individual random parameters such that 
+$$\log ka_{i}  =  \log(ka) + \eta_{i,1}, \log Cl_{i}  =  \log(Cl) + \eta_{i,2}, \log V_i  =  \log(V) + \eta_{i,3},$$ 
+and 
+$$g_i(t_{ij},z_i) = \frac{d_i ka_{i}}{V_i ka_{i}-Cl_{i}}\left[e^{-\frac{Cl_{i}}{V_i} t_{ij}} - e^{-ka_{i} t_{ij}}\right].$$ 
+
+For all $1 \leq i \leq n$ and all $1\leq j \leq J$, $y_{ij}$ denotes the measure of drug concentration on individual $i$ at time $t_{ij}$, $d_i$  the dose of drug administered to individual $i$, and $V_i$, $ka_i$ and $Cl_i$ respectively denote the volume of the central compartment, the drug's absorption rate constant and the drug's clearance of individual $i$. 
+The terms $\eta_{i} = (\eta_{i,1},\eta_{i,2},\eta_{i,3})' \in \mathbb{R}^3$ are unobserved random effects which are assumed independent and identically distributed such that $\eta_i \underset{i.i.d.}{\sim} \mathcal{N}(0,\Omega)$, where $\Omega = \mathrm{diag}(\omega^2_{ka},\omega^2_{Cl},\omega^2_{V})$, the residuals $(\varepsilon_{ij})$ are assumed independent and identically distributed such that $\varepsilon_{ij} \underset{i.i.d.}{\sim} \mathcal{N}(0,\sigma^2)$ and the sequences $(\eta_i)$ and $(\varepsilon_{ij})$ are assumed mutually independent. Here, the model parameter is $\theta = (ka,V,Cl,\omega^2_{ka},\omega^2_{V},\omega^2_{Cl},\sigma^2)$. 
+
+In this model, as in a large majority of nonlinear mixed effects models, the likelihood does not have any analytical expression. As a consequence, neither the Fisher Information Matrix, nor the estimators $I_{n,sco}(\theta)$, $I_{n,obs}(\theta)$ have explicit expressions. However, as the complete data log-likelihood is explicit, stochastic approximations of $I_{n,sco}(\theta)$, $I_{n,obs}(\theta)$ can be implemented. Note moreover that this model belongs to the curved exponential family as defined in @eq-curvedexpo with 
+$$
+\begin{align*}
+S_i(z_i) = \left(\sum_{j=1}^{J} (y_{ij} g_i(t_{ij}, z_i)), (\log ka_i), (\log Cl_i), (\log V_i), (\log ka_i)^2, (\log Cl_i)^2, (\log V_i)^2 \right)'\\
+\phi_i(\theta) =  \left(\frac{1}{2\sigma^2},\frac{\log ka}{\omega_{ka}^2}, \frac{\log Cl}{\omega_{Cl}^2}, \frac{\log V}{\omega_{V}^2},-\frac{1}{2\omega_{ka}^2},-\frac{1}{2\omega_{Cl}^2},-\frac{1}{2\omega_{V}^2}\right),\\
+\psi_i(\theta) = \frac{1}{2}\left(\frac{(\log ka)^2}{\omega_{ka}^2} + \frac{(\log Cl)^2}{\omega_{Cl}^2} + \frac{(\log V)^2}{\omega_{V}^2}\right).
+\end{align*}
+$$
+
+The algorithm described in @sec-algoSAEM can therefore be easily implemented to estimate $\theta$ and the Fisher information matrix simultaneously (see R function provided in the Appendix section).
+
+We take the following values for the parameters $V=31$, $ka=1.6$, $Cl=2.8$, $\omega^2_V=0.40$, $\omega^2_{ka}=0.40$, $\omega^2_{Cl}=0.40$ and $\sigma^2=0.75$. We consider the same dose $d_i=320$ and the same observation times (in hours): $0.25$,$0.5$, $1$, $2$, $3.5$, $5$, $7$, $9$, $12$, $24$ for all the individuals. We simulate one dataset with $n=100$ individuals under model specified by @eq-modelPK. On this simulated dataset, we run $M=500$ times the stochastic approximation algorithm described in @sec-algoSAEM for computing $I_{n,sco}(\hat{\theta})$ together with $\hat{\theta}$ and the algorithm of [@Delyon1999] for computing $I_{n,obs}(\hat{\theta})$. We perform $K=3000$ iterations in total for each algorithm by setting $\gamma_k=0.95$ for $1 \leq k \leq 1000$ (burn in iterations) and $\gamma_k=(k-1000)^{-3/5}$ otherwise. At any iteration, we compute the empirical relative bias and the empirical relative standard deviation of each component $(\ell,\ell')$ of $I_{n,sco}$ defined respectively as: 
+$$
+\frac{1}{M} \sum\limits_{m=1}^{M} \frac{\widehat{I_{n,sco,\ell,\ell'}^{(k,m)}} - I_{n,sco,\ell,\ell'}^{\star}}{I_{n,sco,\ell,\ell'}^{\star}} \; \; \; \mathrm{and} 
+\; \; \; \sqrt{\frac{1}{M} \sum\limits_{m=1}^{M} \left(\frac{\widehat{I_{n,sco,\ell,\ell'}^{(k,m)}} - I_{n,sco,\ell,\ell'}^{\star}}{I_{n,sco,\ell,\ell'}^{\star}}
+\right)^2} 
+$$
+where $\widehat{I_{n,sco}^{(k,m)}}$ denotes the estimated value of $I_{n,sco}(\hat{\theta})$ at iteration $k$ of the $m^{th}$ algorithm. We compute the same quantities for $I_{n,obs}$. As the true values of $I_{n,sco}^{\star}=I_{n,sco}(\theta^{\star})$ and $I_{n,obs}^{\star}=I_{n,obs}(\theta^{\star})$ are not known, they are estimated by Monte-Carlo integration based on $10^5$ iterations, including $5000$ burnin, of a Metropolis-Hastings algorithm. 
+
+```{r}
+#| label: simuNlmeExponential-functions
+#| eval: false
+#| echo: false
+source('~/work/FIM/functions/model-nlme.R')
+source('~/work/FIM/functions/saem_nlme_exponential_bis.R')
+source('~/work/FIM/functions/fim-mcmc-nlme.R')
+```
+
+```{r}
+#| label: simuNlme-exponential
+#| echo: true
+#| eval: false
+#| file: scripts/simuNLME-exponential-bis.R
+```
+
+The results are displayed in @fig-simuNlme-exponential-bias and @fig-simuNlme-exponential-sd.
+
+```{r}
+#| label: fig-simuNlme-exponential-bias
+#| echo: false
+#| eval: true
+#| fig-cap: Non linear mixed effects model. Representation over iterations of the mean relative bias of the diagonal components of the estimated Fisher information matrix computed from the $M=500$ runs of the stochastic algorithm. Red line corresponds to $I_{n,sco}(\theta)$ and blue line corresponds to $I_{n,obs}(\theta)$. The burn-in iterations of the algorithm are not depicted.
+#| file: scripts/simuNlme-exponential-plots-bias.R
+```
+
+
+```{r}
+#| label: fig-simuNlme-exponential-sd
+#| echo: false
+#| eval: true
+#| fig-cap: Non linear mixed effects model. Representation over iterations of the mean relative standard error of the diagonal components of the estimated Fisher information matrix computed from the $M=500$ runs of the stochastic algorithm. Red line corresponds to $I_{n,sco}(\theta)$ and blue line corresponds to $I_{n,obs}(\theta)$. The burn-in iterations of the algorithme are not depicted
+#| file: scripts/simuNlme-exponential-plots-sd.R
+```
 
 # Conclusion and discussion
 
