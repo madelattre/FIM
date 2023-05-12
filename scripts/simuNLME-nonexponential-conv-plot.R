@@ -3,8 +3,6 @@
 
 load("Rfiles/saem-non-exp-conv-plot.Rdata")
 
-res <- resReduit
-
 DataResEst <- data.frame(
   ka       = res$thetaest[1,],
   V        = res$thetaest[2,],  
@@ -36,7 +34,6 @@ clconv <- ggplot(DataResEst, aes(y=Cl, x=Iter)) +
   geom_line(size=0.5) +
   xlab("") +
   ylab("") +
-  ylim(2.5,3.5) +
   ggtitle(bquote(Cl)) +
   theme(plot.title = element_text(size=16,face="bold"),legend.position='none',
         axis.text.x = element_text(angle=45))
@@ -61,6 +58,7 @@ iscovconv <- ggplot(DataResEst, aes(y=Iscov, x=Iter)) +
   geom_line(size=0.5) +
   xlab("") +
   ylab("") +
+  ylim(0.1,0.25) +
   ggtitle(bquote(I[n-sco](V,V))) +
   theme(plot.title = element_text(size=16,face="bold"),legend.position='none',
         axis.text.x = element_text(angle=45))

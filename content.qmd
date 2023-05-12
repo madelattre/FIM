@@ -443,9 +443,9 @@ where $\widehat{I_{n,sco}^{(k,m)}}$ denotes the estimated value of $I_{n,sco}(\h
 #| label: simuNlmeExponential-functions
 #| eval: false
 #| echo: false
-source('~/work/FIM/functions/model-nlme.R')
-source('~/work/FIM/functions/saem_nlme_exponential_bis.R')
-source('~/work/FIM/functions/fim-mcmc-nlme.R')
+source('functions/model-nlme.R')
+source('functions/saem_nlme_exponential_bis.R')
+source('functions/fim-mcmc-nlme.R')
 ```
 
 ```{r}
@@ -473,6 +473,54 @@ The results are displayed in @fig-simuNlme-exponential-bias and @fig-simuNlme-ex
 #| fig-cap: Non linear mixed effects model. Representation over iterations of the mean relative standard error of the diagonal components of the estimated Fisher information matrix computed from the $M=500$ runs of the stochastic algorithm. Red line corresponds to $I_{n,sco}(\theta)$ and blue line corresponds to $I_{n,obs}(\theta)$. The burn-in iterations of the algorithme are not depicted
 #| file: scripts/simuNlme-exponential-plots-sd.R
 ```
+
+We observe that the bias and the standard deviations of the estimates of the components of both matrices decrease over iterations, and that for both estimates the bias is nearly zero when the convergence of the algorithm is reached. According to these simulation results, there is no evidence that one method is better than the other in terms of bias or standard deviation.
+
+### In general latent variable model {#sec-simuNonExpo}
+
+We use model specified by @eq-modelPK again, but we now consider that individual parameter $V_i$ is fixed, *i.e.* $V_i \equiv V$ $\forall i = 1,\ldots,n$. The model is no longer exponential in the sense of equation @eq-curvedexpo. We must therefore use the general version of the stochastic approximation algorithm from @sec-generalmodel to compute $I_{n,sco}(\hat{\theta})$  (see R function provided in the Appendix section). We simulate 500 datasets according to this model and we estimate $I_{n,sco}(\hat{\theta})$ and $\hat{\theta}$ for each one. We perform $K=3000$ iterations of the algorithm by setting $\gamma_k=k^{-0.501}$. We compute the 500 asymptotic confidence intervals of the model parameters, by using either the inversed $I_{n,sco}(\hat{\theta}_k)$'s or the inversed $I_{n,obs}(\hat{\theta}_k)$'s and then deduce from them empirical coverage rates. 
+
+
+```{r}
+#| label: simuNlmeNonExponential-functions
+#| eval: false
+#| echo: false
+source('functions/saem_nlme_non_exponential.R')
+```
+
+```{r}
+#| label: simuNlme-non-exponential
+#| echo: true
+#| eval: false
+#| file: scripts/simuNLME-nonexponential.R
+```
+
+```{r}
+#| label: simuNlme-non-exponential-coverage
+#| echo: false
+#| eval: true
+#| file: scripts/simuNLME-nonexponential-coverage.R
+```
+
+We obtain for the six parameters $(ka,V,Cl,\omega^2_{ka},\omega^2_{Cl},\sigma^2)$ empirical covering rates of $`r covering.isco/nbsim`$ respectively for a nominal covering rate of $0.95$. This highlights that our estimate accurately quantifies the precisions of parameter estimates. Note that empirical coverage rates computed from $I_{n,obs}$ are similar (here $`r covering.iobs/nbsim`$) but that the real advantage of our method is that it requires stochastic approximation only on the first-order derivatives of the complete log-likelihood, contrary to $I_{n,obs}$ which requires deriving the complete log-likelihood at the second order and thus implies more complicated formulas since the model does not belong to the exponential family.
+
+Convergence graphs obtained from a simulated data set are shown in @fig-NLMEnonexponential-conv-plot. Although theoretical guarantee is missing in non exponential models, the stochastic approximation algorithm proposed in @sec-generalmodel converges in practice on this example for both the estimation of the model parameters and the estimation of the Fisher information matrix. 
+
+```{r}
+#| label: simusNLMEnonexponential-single-dataset
+#| echo: false
+#| eval: false
+#| file: scripts/simuNLME-nonexponential-single-dataset.R
+```
+
+```{r}
+#| label: fig-NLMEnonexponential-conv-plot
+#| echo: false
+#| eval: true
+#| fig-cap: Non linear mixed effects model. Convergence plot for some parameter estimates and for some diagonal components of $I_{n,sco}(\hat{\theta})$ over iterations of the stochastic approximation algorithm.
+#| file: scripts/simuNLME-nonexponential-conv-plot.R
+```
+
 
 # Conclusion and discussion
 
@@ -593,7 +641,7 @@ is bounded away from zero for $\theta$ in any compact subset of $\Theta$.
 ```{r}
 #| eval: true
 #| file: functions/saem_nlme_non_exponential.R
-#| label: simuNlmeExp-function-show
+#| label: simuNlmeNonExp-function-show
 ```
 
 ### Fisher information matrix estimation in the Gaussian mixture model {#sec-R-estFIMGaussian}
@@ -601,5 +649,5 @@ is bounded away from zero for $\theta$ in any compact subset of $\Theta$.
 ```{r}
 #| eval: true
 #| file: functions/fisher_estimation_gaussian_mixture.R
-#| label: simuGuassianMixture-function-show
+#| label: simuGaussianMixture-function-show
 ```

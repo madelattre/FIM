@@ -3,8 +3,6 @@
 ## -----------------------------------------------------------------------------
 
 source('~/work/FIM/functions/model-nlme.R')
-source('~/work/FIM/functions/saem_nlme_non_exponential.R')
-
 
 ## 1- Data simulation
 
