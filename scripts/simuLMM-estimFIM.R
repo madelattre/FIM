@@ -2,6 +2,8 @@
 ## linear mixed effects model
 ## -----------------------------------------------------------------------------
 
+library(lme4)
+
 nsim  <- 500            # number of replicates
 seq.n <- c(20,100,500)  # number of individuals 
 j     <- 12             # number of observations per individual
