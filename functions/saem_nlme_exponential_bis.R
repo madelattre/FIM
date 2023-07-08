@@ -8,7 +8,8 @@ saem <- function(data, nbiterem, nbiterburnin, theta0, kRW=0.5) {
   # nbiterem     : total number of iterations of the saem algorithm
   # nbiterburnin : number of burn-in iterations of the algorithm
   # theta0       : initial parameter values
-  # kRW          : coefficient used to adjust the variance of the proposal kernel of the MCMC procedure
+  # kRW          : coefficient used to adjust the variance of the proposal 
+  #                kernel of the MCMC procedure
   
   # data processing
   xidep <- cbind(data$dose,data$time)
@@ -106,8 +107,10 @@ saem <- function(data, nbiterem, nbiterburnin, theta0, kRW=0.5) {
         candidatka    <- currentka
         candidatka[k] <- candidatka[k] + rnorm(1,0,sqrt(eta2ka))
         psicandidat   <- cbind(exp(candidatka),exp(currentv),exp(currentcl))
-        logs          <- -1/2/sigma2*sum((y-model1cpt(psicandidat,id,xidep))^2)+1/2/sigma2*sum((y-model1cpt(currentpsi,id,xidep))^2)
-        logs          <- logs-1/2/omega2ka*((candidatka[k]-log(kapop))^2-(currentka[k]-log(kapop))^2)
+        logs          <- -1/2/sigma2*sum((y-model1cpt(psicandidat,id,xidep))^2)+
+          1/2/sigma2*sum((y-model1cpt(currentpsi,id,xidep))^2)
+        logs          <- logs-1/2/omega2ka*((candidatka[k]-log(kapop))^2-
+                                              (currentka[k]-log(kapop))^2)
         u             <- runif(1)
         logu          <- log(u)
         ind           <- (logu<logs)
@@ -118,8 +121,10 @@ saem <- function(data, nbiterem, nbiterburnin, theta0, kRW=0.5) {
         candidatv    <- currentv
         candidatv[k] <- candidatv[k] + rnorm(1,0,sqrt(eta2v))
         psicandidat  <- cbind(exp(currentka),exp(candidatv),exp(currentcl))
-        logs         <- -1/2/sigma2*sum((y-model1cpt(psicandidat,id,xidep))^2)+ 1/2/sigma2*sum((y-model1cpt(currentpsi,id,xidep))^2)
-        logs         <- logs -1/2/omega2v*((candidatv[k]-log(vpop))^2-(currentv[k]-log(vpop))^2)
+        logs         <- -1/2/sigma2*sum((y-model1cpt(psicandidat,id,xidep))^2)+ 
+          1/2/sigma2*sum((y-model1cpt(currentpsi,id,xidep))^2)
+        logs         <- logs -
+          1/2/omega2v*((candidatv[k]-log(vpop))^2-(currentv[k]-log(vpop))^2)
         u            <- runif(1)
         logu         <- log(u)
         ind          <- (logu<logs)
@@ -130,8 +135,10 @@ saem <- function(data, nbiterem, nbiterburnin, theta0, kRW=0.5) {
         candidatcl    <- currentcl
         candidatcl[k] <- candidatcl[k] + rnorm(1,0,sqrt(eta2cl))
         psicandidat   <- cbind(exp(currentka),exp(currentv),exp(candidatcl))
-        logs          <- -1/2/sigma2*sum((y-model1cpt(psicandidat,id,xidep))^2)+ 1/2/sigma2*sum((y-model1cpt(currentpsi,id,xidep))^2)
-        logs          <- logs -1/2/omega2cl*((candidatcl[k]-log(clpop))^2-(currentcl[k]-log(clpop))^2)
+        logs          <- -1/2/sigma2*sum((y-model1cpt(psicandidat,id,xidep))^2)+ 
+          1/2/sigma2*sum((y-model1cpt(currentpsi,id,xidep))^2)
+        logs          <- logs -
+          1/2/omega2cl*((candidatcl[k]-log(clpop))^2-(currentcl[k]-log(clpop))^2)
         u             <- runif(1)
         logu          <- log(u)
         ind           <- (logu<logs)
@@ -145,9 +152,6 @@ saem <- function(data, nbiterem, nbiterburnin, theta0, kRW=0.5) {
     # stochastic approximation of exhaustive statistics and parameter estimation update
     
     mco           <- matrix((y-model1cpt(psi[,,l+1],id,xidep))^2,n,j,byrow=TRUE)
-    #mcos          <- apply(mco,1,sum)
-    # STATEXH       <- c(apply(log(psi),2,mean), apply(log(psi)^2,2,mean), sum(mcos))
-    # statexh[,l+1] <- statexh[,l]*(1-gamma[l])+gamma[l]*STATEXH
     statexh[1:3,,l+1] <- statexh[1:3,,l]*(1-gamma[l])+gamma[l]*t(log(psi[,,l+1]))
     statexh[4:6,,l+1] <- statexh[4:6,,l]*(1-gamma[l])+gamma[l]*t(log(psi[,,l+1])^2)
     statexh[7,,l+1]   <- statexh[7,,l]*(1-gamma[l])+gamma[l]*apply(mco,1,sum)
@@ -201,19 +205,26 @@ saem <- function(data, nbiterem, nbiterburnin, theta0, kRW=0.5) {
     tempderiveeas[1,]<- (log(psi[,1,l+1])-log(kapop))/omega2ka/kapop
     tempderiveeas[2,]<- (log(psi[,2,l+1])-log(vpop))/omega2v/vpop
     tempderiveeas[3,]<- (log(psi[,3,l+1])-log(clpop))/omega2cl/clpop
-    tempderiveeas[4,]<- -1/2/omega2ka +1/2/omega2ka^2*(log(psi[,1,l+1])-log(kapop))^2
-    tempderiveeas[5,]<- -1/2/omega2v +1/2/omega2v^2*(log(psi[,2,l+1])-log(vpop))^2
-    tempderiveeas[6,]<- -1/2/omega2cl +1/2/omega2cl^2*(log(psi[,3,l+1])-log(clpop))^2
+    tempderiveeas[4,]<- -1/2/omega2ka +
+      1/2/omega2ka^2*(log(psi[,1,l+1])-log(kapop))^2
+    tempderiveeas[5,]<- -1/2/omega2v +
+      1/2/omega2v^2*(log(psi[,2,l+1])-log(vpop))^2
+    tempderiveeas[6,]<- -1/2/omega2cl +
+      1/2/omega2cl^2*(log(psi[,3,l+1])-log(clpop))^2
     tempderiveeas[7,]<- -j/2/sigma2+apply(mco,1,sum)/2/sigma2^2
     
     
     tempderiveeas2[1,1] <-  sum(-log(psi[,1,l+1])+log(kapop)-1)/omega2ka/kapop^2
     tempderiveeas2[2,2] <-  sum(-log(psi[,2,l+1])+log(vpop)-1)/omega2v/vpop^2
     tempderiveeas2[3,3] <-  sum(-log(psi[,3,l+1])+log(clpop)-1)/omega2cl/clpop^2
-    tempderiveeas2[4,4] <-  n/2/omega2ka^2 -1/omega2ka^3*sum((log(psi[,1,l+1])-log(kapop))^2)
-    tempderiveeas2[5,5] <-  n/2/omega2v^2 -1/omega2v^3*sum((log(psi[,2,l+1])-log(vpop))^2)
-    tempderiveeas2[6,6] <-  n/2/omega2cl^2 -1/omega2cl^3*sum((log(psi[,3,l+1])-log(clpop))^2)
-    tempderiveeas2[7,7] <-  n*j/2/sigma2^2-sum((y-model1cpt(psi[,,l+1],id,xidep))^2)/sigma2^3
+    tempderiveeas2[4,4] <-  n/2/omega2ka^2 -
+      1/omega2ka^3*sum((log(psi[,1,l+1])-log(kapop))^2)
+    tempderiveeas2[5,5] <-  n/2/omega2v^2 -
+      1/omega2v^3*sum((log(psi[,2,l+1])-log(vpop))^2)
+    tempderiveeas2[6,6] <-  n/2/omega2cl^2 -
+      1/omega2cl^3*sum((log(psi[,3,l+1])-log(clpop))^2)
+    tempderiveeas2[7,7] <-  n*j/2/sigma2^2-
+      sum((y-model1cpt(psi[,,l+1],id,xidep))^2)/sigma2^3
     tempderiveeas2[1,4] <- -sum(log(psi[,1,l+1])-log(kapop))/omega2ka^2/kapop
     tempderiveeas2[2,5] <- -sum(log(psi[,2,l+1])-log(vpop))/omega2v^2/vpop
     tempderiveeas2[3,6] <- -sum(log(psi[,3,l+1])-log(clpop))/omega2cl^2/clpop
@@ -223,7 +234,8 @@ saem <- function(data, nbiterem, nbiterburnin, theta0, kRW=0.5) {
     
     
     for (i in 1:n){
-      H[,,i,l+1]<-H[,,i,l]*(1-gamma[l])+gamma[l]*(tempderiveeas[,i]%*%t(tempderiveeas[,i]))
+      H[,,i,l+1]<-H[,,i,l]*(1-gamma[l])+
+        gamma[l]*(tempderiveeas[,i]%*%t(tempderiveeas[,i]))
     }
     G2[,,l+1] <- G2[,,l]*(1-gamma[l])+gamma[l]*(tempderiveeas2/n)
   }
@@ -231,8 +243,8 @@ saem <- function(data, nbiterem, nbiterburnin, theta0, kRW=0.5) {
   
   ## Computation of the FIM estimations
   
-  isco <- array(0,c(p,p,nbiterem)) # estimation based on the score
-  iobs <- array(0,c(p,p,nbiterem)) # estimation based on the observed information matrix
+  isco <- array(0,c(p,p,nbiterem)) 
+  iobs <- array(0,c(p,p,nbiterem)) 
   SH   <- vector("list",nbiterem)
   
   

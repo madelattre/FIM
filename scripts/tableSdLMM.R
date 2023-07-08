@@ -21,4 +21,5 @@ dataSdLMM <- add_header_row(
 dataSdLMM <- set_header_labels(dataSdLMM, sIsco20="Isco", sIobs20="Iobs", sIsco100="Isco", sIobs100="Iobs", sIsco500="Isco", sIobs500="Iobs", component="")
 dataSdLMM <- align(dataSdLMM, part = "all", align = "center")
 dataSdLMM <- bold(dataSdLMM, j=c(2,4,6))
+dataSdLMM <- width(dataSdLMM, width = 0.8)
 dataSdLMM

@@ -4,7 +4,7 @@
 
 nbsim  <- 500           # number of replicates
 alpha  <- c(0.3,0.5)    # mixture weights of the first K-1 components 
-lambda <- c(2,5,9)      # parameter values of the K Poisson distribution of the mixture
+lambda <- c(2,5,9)      # parameter values of the K Poisson distributions
 seq.n  <- c(20,100,500) # sample size
 
 Iobs.theta.est  <- array(NA,dim=c(5,5,nbsim))

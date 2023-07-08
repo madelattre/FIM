@@ -62,9 +62,12 @@ for (k in 1:nbsim){
   
   set.seed(k*100+10)
   
-  theta0         <- list(vpop=vpop*runif(1,0.8,1.2),kapop=kapop*runif(1,0.8,1.2),
-                         clpop=clpop*runif(1,0.8,1.2),omega2v=omega2v*runif(1,0.4,2),
-                         omega2ka=omega2ka*runif(1,0.4,2),omega2cl=omega2cl*runif(1,0.4,2),
+  theta0         <- list(vpop=vpop*runif(1,0.8,1.2),
+                         kapop=kapop*runif(1,0.8,1.2),
+                         clpop=clpop*runif(1,0.8,1.2),
+                         omega2v=omega2v*runif(1,0.4,2),
+                         omega2ka=omega2ka*runif(1,0.4,2),
+                         omega2cl=omega2cl*runif(1,0.4,2),
                          sigma2=sigma2*runif(1,0.4,2))
   res            <- saem(datasim, nbiterem, nbiterburnin, theta0)
   iscoarray[k,,,]<- res$isco
@@ -82,8 +85,8 @@ nbMCburnin <- 5000
 
 tm <- rowMeans(thetaest)
 
-thetaMean <- list(kapop=tm[1],vpop=tm[2],clpop=tm[3],omega2ka=tm[4],omega2v=tm[5],
-                  omega2cl=tm[6],sigma2=tm[7])
+thetaMean <- list(kapop=tm[1],vpop=tm[2],clpop=tm[3],omega2ka=tm[4],
+                  omega2v=tm[5],omega2cl=tm[6],sigma2=tm[7])
 
 FisherMC <- FIM_mc(datasim, nbMC, nbMCburnin, thetaMean)
 

@@ -41,31 +41,43 @@ DataRes <- data.frame(EstF11=c(sqrt(n)*(Isco[1,1,]-trueFIM[1,1]),
 
 
 F11 <- ggplot(DataRes, aes(EstF11, color=Estimate)) +
-  geom_density(bw=0.2,alpha=0.6) +
-  scale_fill_manual(values = c("#984EA3",'#E69F00')) +
+  geom_density(bw=0.2,linewidth=0.6,
+               key_glyph = draw_key_path) +
+  scale_color_manual(values = c("#984EA3",'#E69F00')) +
   xlab("") +
   ylab("") +
   xlim(-1,1) +
+  ylim(0,2.3) +
   ggtitle(bquote('('~lambda[1]~','~ lambda[1]~')')) +
-  theme(legend.position = c(-0.05, 0.95), plot.title = element_text(size=20,face="bold"))
+  theme(legend.position = c(0,1),
+        legend.justification = c(0, 1),
+        legend.background = element_rect(fill = NA),
+        legend.key = element_rect(fill = NA),
+        plot.title = element_text(size=10,face="bold"))
 
 F22 <- ggplot(DataRes, aes(EstF22, color=Estimate)) +
-  geom_density(bw=0.2,alpha=0.6) +
-  scale_fill_manual(values = c("#984EA3",'#E69F00'))  +
+  geom_density(bw=0.2,linewidth=0.6,
+               key_glyph = draw_key_path) +
+  scale_color_manual(values = c("#984EA3",'#E69F00'))  +
   xlab("") +
   ylab("") +
-  xlim(-0.75,0.75) +
+  xlim(-1,1) +
+  ylim(0,2.3) +
   ggtitle(bquote('('~lambda[2]~','~ lambda[2]~')')) +
-  theme(legend.position = "none", plot.title = element_text(size=20,face="bold"))
+  theme(legend.position = "none", 
+        plot.title = element_text(size=10,face="bold"))
 
 F25 <- ggplot(DataRes, aes(EstF25, color=Estimate)) +
-  geom_density(bw=0.2,alpha=0.6) +
-  scale_fill_manual(values = c("#984EA3",'#E69F00')) +
+  geom_density(bw=0.2,linewidth=0.6,
+               key_glyph = draw_key_path) +
+  scale_color_manual(values = c("#984EA3",'#E69F00')) +
   xlab("") +
   ylab("") +
   xlim(-1.5,1.5) +
+  ylim(0,2.3) +
   ggtitle(bquote('('~lambda[2]~','~ alpha[2]~')')) +
-  theme(legend.position = "none", plot.title = element_text(size=20,face="bold"))
+  theme(legend.position = "none", 
+        plot.title = element_text(size=10,face="bold"))
 
 
 plot_grid(F11, F22, F25, ncol = 3, nrow = 1)

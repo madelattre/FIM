@@ -21,7 +21,7 @@ kaconv <- ggplot(DataResEst, aes(y=ka, x=Iter)) +
   xlab("") +
   ylab("") +
   ggtitle(bquote(ka)) +
-  theme(plot.title = element_text(size=16,face="bold"),legend.position='none',
+  theme(plot.title = element_text(size=10,face="bold"),legend.position='none',
         axis.text.x = element_text(angle=45))
 
 vconv <- ggplot(DataResEst, aes(y=V, x=Iter)) +
@@ -29,7 +29,7 @@ vconv <- ggplot(DataResEst, aes(y=V, x=Iter)) +
   xlab("") +
   ylab("") +
   ggtitle(bquote(V)) +
-  theme(plot.title = element_text(size=16,face="bold"),legend.position='none',
+  theme(plot.title = element_text(size=10,face="bold"),legend.position='none',
         axis.text.x = element_text(angle=45))
 
 clconv <- ggplot(DataResEst, aes(y=Cl, x=Iter)) +
@@ -37,7 +37,7 @@ clconv <- ggplot(DataResEst, aes(y=Cl, x=Iter)) +
   xlab("") +
   ylab("") +
   ggtitle(bquote(Cl)) +
-  theme(plot.title = element_text(size=16,face="bold"),legend.position='none',
+  theme(plot.title = element_text(size=10,face="bold"),legend.position='none',
         axis.text.x = element_text(angle=45))
 
 o2kaconv <- ggplot(DataResEst, aes(y=o2ka, x=Iter)) +
@@ -45,7 +45,7 @@ o2kaconv <- ggplot(DataResEst, aes(y=o2ka, x=Iter)) +
   xlab("") +
   ylab("") +
   ggtitle(bquote(omega[ka]^2)) +
-  theme(plot.title = element_text(size=16,face="bold"),legend.position='none',
+  theme(plot.title = element_text(size=10,face="bold"),legend.position='none',
         axis.text.x = element_text(angle=45))
 
 iscokaconv <- ggplot(DataResEst, aes(y=Iscoka, x=Iter)) +
@@ -53,7 +53,7 @@ iscokaconv <- ggplot(DataResEst, aes(y=Iscoka, x=Iter)) +
   xlab("") +
   ylab("") +
   ggtitle(bquote(I[n-sco](ka,ka))) +
-  theme(plot.title = element_text(size=16,face="bold"),legend.position='none',
+  theme(plot.title = element_text(size=10,face="bold"),legend.position='none',
         axis.text.x = element_text(angle=45))
 
 iscovconv <- ggplot(DataResEst, aes(y=Iscov, x=Iter)) +
@@ -62,7 +62,7 @@ iscovconv <- ggplot(DataResEst, aes(y=Iscov, x=Iter)) +
   ylab("") +
   #ylim(0.1,0.25) +
   ggtitle(bquote(I[n-sco](V,V))) +
-  theme(plot.title = element_text(size=16,face="bold"),legend.position='none',
+  theme(plot.title = element_text(size=10,face="bold"),legend.position='none',
         axis.text.x = element_text(angle=45))
 
 iscoclconv <- ggplot(DataResEst, aes(y=Iscocl, x=Iter)) +
@@ -70,7 +70,7 @@ iscoclconv <- ggplot(DataResEst, aes(y=Iscocl, x=Iter)) +
   xlab("") +
   ylab("") +
   ggtitle(bquote(I[n-sco](Cl,Cl))) +
-  theme(plot.title = element_text(size=16,face="bold"),legend.position='none',
+  theme(plot.title = element_text(size=10,face="bold"),legend.position='none',
         axis.text.x = element_text(angle=45))
 
 iscoo2kaconv <- ggplot(DataResEst, aes(y=Iscoo2ka, x=Iter)) +
@@ -78,7 +78,7 @@ iscoo2kaconv <- ggplot(DataResEst, aes(y=Iscoo2ka, x=Iter)) +
   xlab("") +
   ylab("") +
   ggtitle(bquote(I[n-sco](omega[ka]^2,omega[ka]^2))) +
-  theme(plot.title = element_text(size=16,face="bold"),legend.position='none',
+  theme(plot.title = element_text(size=10,face="bold"),legend.position='none',
         axis.text.x = element_text(angle=45))
 
 plot_grid(kaconv, vconv, clconv, o2kaconv, iscokaconv, iscovconv, iscoclconv, 

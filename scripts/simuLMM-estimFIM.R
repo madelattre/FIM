@@ -72,9 +72,11 @@ for (l in 1:length(seq.n)){
     eta2.est.n   <- c(eta2.est.n,variances[1,'vcov'])
     sigma2.est.n <- c(sigma2.est.n,variances[2,'vcov'])
     
-    resIobs.theta.est[,,k,l] <- Iobs_LMM(datamat,est.mle@beta,variances[2,'vcov'],
+    resIobs.theta.est[,,k,l] <- Iobs_LMM(datamat,est.mle@beta,
+                                         variances[2,'vcov'],
                                        variances[1,'vcov'])
-    resIsco.theta.est[,,k,l] <- Isco_LMM(datamat,est.mle@beta,variances[2,'vcov'],
+    resIsco.theta.est[,,k,l] <- Isco_LMM(datamat,est.mle@beta,
+                                         variances[2,'vcov'],
                                        variances[1,'vcov'])
     
   }
@@ -118,7 +120,8 @@ DataRes <- data.frame(EstF11.true=EstF11.true, EstF22.true=EstF22.true,
                       EstF11.est=EstF11.est, EstF22.est=EstF22.est, 
                       EstF33.est=EstF33.est, EstF12.est=EstF12.est, 
                       EstF13.est=EstF13.est, EstF23.est=EstF23.est,
-                      beta.est=beta.est, eta2.est=eta2.est, sigma2.est=sigma2.est,
+                      beta.est=beta.est, eta2.est=eta2.est, 
+                      sigma2.est=sigma2.est,
                       Estimate=rep(c(rep('I n,sco',nsim),rep('I n,obs',nsim)),
                                    length(seq.n)),
                       n=rep(seq.n,each=nsim*2)

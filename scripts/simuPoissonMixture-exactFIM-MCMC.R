@@ -5,7 +5,7 @@
 
 nMC <- 100000000
 alpha <- c(0.3,0.5) # mixture weights of the first K-1 components 
-lambda <- c(2,5,9)  # parameter values of the K Poisson distribution of the mixture
+lambda <- c(2,5,9)  # parameter values of the K Poisson distributions 
 
 y       <- sim_poisson_mixture(nMC,lambda,alpha)
 trueFIM <-  fisher_estimation_poisson_mixture(y, nMC, lambda, alpha)

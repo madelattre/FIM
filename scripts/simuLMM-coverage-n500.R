@@ -126,4 +126,5 @@ dataCoverageLMM <- dataCoverageLMM %>% merge_at(i=1:4,j=1) %>% merge_at(i=5:8,j=
  merge_at(i=9:12,j=1) %>% merge_at(i=1:2,j=2) %>% merge_at(i=3:4,j=2) %>%
  merge_at(i=5:6,j=2) %>% merge_at(i=7:8,j=2) %>% merge_at(i=9:10,j=2) %>%
  merge_at(i=11:12,j=2)
+dataCoverageLMM <- width(dataCoverageLMM, width = 0.8)
 dataCoverageLMM

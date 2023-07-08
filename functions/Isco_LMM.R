@@ -1,4 +1,5 @@
-## Computation of the estimator of the Fisher information matrix based on the score
+## Computation of the estimator of the Fisher information matrix based on 
+## the score
 
 Isco_LMM <- function(datamat,beta,sigma2,eta2){
   # datamat : observations organized in a matrix. Each row is an individual

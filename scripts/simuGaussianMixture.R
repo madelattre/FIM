@@ -32,8 +32,10 @@ for (j in 1:nrep){
   
   iscoest <- fisher_estimation_gaussian_mixture(y,est$m1,est$m2,est$prob)
   
-  ICinf <- c(est$prob,est$m1,est$m2) - qnorm(1-(1-rate)/2)*sqrt(diag(solve(iscoest)))
-  ICsup <- c(est$prob,est$m1,est$m2) + qnorm(1-(1-rate)/2)*sqrt(diag(solve(iscoest)))
+  ICinf <- 
+    c(est$prob,est$m1,est$m2) - qnorm(1-(1-rate)/2)*sqrt(diag(solve(iscoest)))
+  ICsup <- 
+    c(est$prob,est$m1,est$m2) + qnorm(1-(1-rate)/2)*sqrt(diag(solve(iscoest)))
   
   if ((probtrue>=ICinf[1])&(probtrue<=ICsup[1])){recouvprob <- recouvprob + 1}
   if ((m1true>=ICinf[2])&(m1true<=ICsup[2])){recouvm1 <- recouvm1 + 1}

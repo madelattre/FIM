@@ -48,7 +48,8 @@ for (kk in 1:nbsim){
   
   y <- ypred + rnorm(n*j,0,sd=sqrt(sigma2))
   
-  datasim <- data.frame(y=y,dose=rep(dose,n*j),time=rep(times,n),subject=kronecker(1:n, rep(1,j)))
+  datasim <- data.frame(y=y,dose=rep(dose,n*j),time=rep(times,n),
+                        subject=kronecker(1:n, rep(1,j)))
   
   ## Estimation
   theta0 <- list(vpop=vpop*runif(1,0.95,1.05),kapop=kapop*runif(1,0.8,1.2),
