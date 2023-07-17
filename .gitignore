@@ -45,3 +45,4 @@ renv/
 *.Rproj
 .Rprofile
 .luarc.json
+/.luarc.json
