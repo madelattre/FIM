@@ -1,50 +1,43 @@
 name: build
-on:
-  schedule:
-    - cron: '0 0 * * 0' 
-  push:
-    branches:
-      - master
-      - main
 
-env: # Change this if needed
-  quarto_file: content
-  GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+on:
+  workflow_dispatch:
+  push:
+    branches: main
 
 jobs:
-  computorticle:
+  build-deploy:
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: write
     steps:
-      - name: Checking out repository for Github action
+      - name: Check out repository
         uses: actions/checkout@v2
 
-      - name: Installing dependencies with Miniconda
-        uses: conda-incubator/setup-miniconda@v2
+      - name: Set up quarto
+        uses: quarto-dev/quarto-actions/setup@v2
         with:
-          auto-update-conda: true
-          auto-activate-base: false
-          miniconda-version: 'latest'
-          python-version: 3.9
-          environment-file: environment.yml
-          activate-environment: computo
+          tinytex: true
+          version: pre-release
 
-      - name: Installing quarto
-        uses: quarto-dev/quarto-actions/install-quarto@v1
-
-      - name: Rendering with Quarto
-        shell: bash -l {0}
+      - name: Install Computo extension for Quarto
         run: |
-            quarto render ${{ env.quarto_file }}.qmd
-            mkdir _build
-            mv ${{ env.quarto_file }}.html _build/index.html
-            cp environment.yml _build/
+            quarto add --no-prompt computorg/computo-quarto-extension
 
-      - name: Deploying article on github pages
-        uses: JamesIves/github-pages-deploy-action@v4
+      - name: Install R
+        uses: r-lib/actions/setup-r@v2
         with:
-          BRANCH: gh-pages
-          FOLDER: _build
-          CLEAN: true
-        
+          r-version: '4.3.1'
+
+      - name: Install R Dependencies with renv
+        uses: r-lib/actions/setup-renv@v2
+        with:
+          cache-version: 1
+
+      - name: Render and Publish
+        uses: quarto-dev/quarto-actions/publish@v2
+        with:
+          target: gh-pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
