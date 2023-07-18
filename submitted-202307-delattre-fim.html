@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.433">
+<meta name="generator" content="quarto-1.4.232">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -107,8 +107,8 @@ div.csl-indent {
 background: #034E79;
       }
 </style>
-<link href="submitted-202307-delattre-fim_files/libs/tabwid-1.1.0/tabwid.css" rel="stylesheet">
-<link href="submitted-202307-delattre-fim_files/libs/tabwid-1.1.0/scrool.css" rel="stylesheet">
+<link href="submitted-202307-delattre-fim_files/libs/tabwid-1.1.3/tabwid.css" rel="stylesheet">
+<script src="submitted-202307-delattre-fim_files/libs/tabwid-1.1.3/tabwid.js"></script>
 
   <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
   <script>document.addEventListener("DOMContentLoaded", function () {
@@ -276,7 +276,7 @@ I(\theta) =  V_\theta\left[\partial_\theta \log g(Y;\theta) \right].
 <p>One can also derive a second estimate from this expression defined as <span class="math display">
 I_{n,cov}(\theta,y) = \frac{1}{n} \sum_{i=1}^n \partial_\theta \log g(y_i;\theta) (\partial_\theta \log g(y_i;\theta))^t-\bar{s}(\theta,y)\bar{s}(\theta,y)^t,
 </span> where <span class="math inline">\bar{s}(\theta,y)=\frac{1}{n}\sum_{i=1}^n \partial_\theta \log g(y_i;\theta)</span> (see <em>e.g.</em> <span class="citation" data-cites="Scott2002">(<a href="#ref-Scott2002" role="doc-biblioref">Scott W.-A. 2002</a>)</span>). We emphasize here that the terminology “empirical Fisher information matrix” is used in the literature for both estimates (see <em>e.g.</em> <span class="citation" data-cites="kunstner2019limitations">(<a href="#ref-kunstner2019limitations" role="doc-biblioref">Kunstner F., Hennig P., and Balles L. 2019</a>)</span>).</p>
-<p>Moreover if additionally the second derivative with respect to <span class="math inline">\theta</span> of <span class="math inline">\log g(y;\theta)</span> exists for all <span class="math inline">y</span> and <span class="math inline">\theta</span> and the second derivative with respect to <span class="math inline">\theta</span> of the left side of <a href="#eq-density">Equation&nbsp;2</a> can be obtained by differentiating twice under the integral sign (see <span class="citation" data-cites="lehmann2006theory">(<a href="#ref-lehmann2006theory" role="doc-biblioref">Lehmann E. L. and Casella G. 2006</a>)</span>), we have <span id="eq-fisher_der2"><span class="math display">
+<p>Moreover if additionally the second derivative with respect to <span class="math inline">\theta</span> of <span class="math inline">\log g(y;\theta)</span> exists for all <span class="math inline">y</span> and <span class="math inline">\theta</span> and the second derivative with respect to <span class="math inline">\theta</span> of the left side of <a href="#eq-density" class="quarto-xref">Equation&nbsp;2</a> can be obtained by differentiating twice under the integral sign (see <span class="citation" data-cites="lehmann2006theory">(<a href="#ref-lehmann2006theory" role="doc-biblioref">Lehmann E. L. and Casella G. 2006</a>)</span>), we have <span id="eq-fisher_der2"><span class="math display">
 I(\theta) =  - E_\theta\left[\partial_\theta^2 \log g(Y;\theta) \right].
 \tag{4}</span></span></p>
 <p>Considering this third expression, we can derive another moment estimator of the Fisher information matrix based on a <span class="math inline">n</span>-sample <span class="math inline">(y_1, \ldots, y_{n})</span> of observations, called the observed Fisher information matrix defined as: <span class="math display">
@@ -306,14 +306,14 @@ I_{n,sco}(\theta) = \frac{1}{n} \sum_{i=1}^n \mathrm{E}_{Z_i|Y_i;\theta} (\parti
 \tag{5}</span></span></p>
 <p>where <span class="math inline">\mathrm{E}_{Z|Y;\theta}</span> denotes the expectation under the law of <span class="math inline">Z</span> conditionally to <span class="math inline">Y</span>.</p>
 </div>
-<p>We apply the classical Fisher identity <span class="citation" data-cites="fisher1925">(<a href="#ref-fisher1925" role="doc-biblioref">Fisher R.A. 1925</a>)</span> to establish the equality stated in <a href="#prp-fisherequality">Proposition&nbsp;1</a>. We refer to Proposition 100 of <span class="citation" data-cites="cappe2005">(<a href="#ref-cappe2005" role="doc-biblioref">Cappé O., Moulines E., and Rydén T. 2005</a>)</span> for the statement of the Fisher identity. This statement is indeed in the same spirit as the well-known Louis formulae for the observed Fisher information matrix estimate <span class="citation" data-cites="Louis1982">(<a href="#ref-Louis1982" role="doc-biblioref">Louis T. A. 1982</a>)</span>. The result follows directly.</p>
+<p>We apply the classical Fisher identity <span class="citation" data-cites="fisher1925">(<a href="#ref-fisher1925" role="doc-biblioref">Fisher R.A. 1925</a>)</span> to establish the equality stated in <a href="#prp-fisherequality" class="quarto-xref">Proposition&nbsp;1</a>. We refer to Proposition 100 of <span class="citation" data-cites="cappe2005">(<a href="#ref-cappe2005" role="doc-biblioref">Cappé O., Moulines E., and Rydén T. 2005</a>)</span> for the statement of the Fisher identity. This statement is indeed in the same spirit as the well-known Louis formulae for the observed Fisher information matrix estimate <span class="citation" data-cites="Louis1982">(<a href="#ref-Louis1982" role="doc-biblioref">Louis T. A. 1982</a>)</span>. The result follows directly.</p>
 <div class="remark proof">
-<p><span class="proof-title"><em>Remark</em>. </span>In some specific cases the conditional expectations involved in the previous proposition admit exact analytical expressions for example in mixture models which are developed in <a href="#sec-simul">Section&nbsp;4</a> in some simulation studies.</p>
+<p><span class="proof-title"><em>Remark</em>. </span>In some specific cases the conditional expectations involved in the previous proposition admit exact analytical expressions for example in mixture models which are developed in <a href="#sec-simul" class="quarto-xref">Section&nbsp;4</a> in some simulation studies.</p>
 </div>
 </section>
 <section id="computing-i_nscotheta-using-stochastic-approximation-algorithm" class="level2" data-number="3.2">
 <h2 data-number="3.2" class="anchored" data-anchor-id="computing-i_nscotheta-using-stochastic-approximation-algorithm"><span class="header-section-number">3.2</span> Computing <span class="math inline">I_{n,sco}(\theta)</span> using stochastic approximation algorithm</h2>
-<p>When exact computation of the estimator <span class="math inline">I_{n,sco}(\theta)</span> is not possible for all <span class="math inline">\theta\in\Theta</span>, we propose to evaluate its value by using a new stochastic algorithm which provides the estimate <span class="math inline">I_{n,sco}(\bar{\theta}_{ML})</span> as a by-product of the maximum likelihood estimate <span class="math inline">\bar{\theta}_{ML}</span>. More precisely we provide three algorithms: a first one in the curved exponential family context which requires to simulate the latent variable from a transition kernel of an ergodic Markov chain and assumes less strong assumptions to get theoretical convergence result thanks to a truncation on random boundaries step, a second one in the curved exponential family context which does not include this additional projection step but requires stronger assumptions to ensure theoretical convergence. This second one and the related results are presented in Appendix. Finally we provide a third algorithm dedicated to general latent variables models without any theoretical results as it is usually the case for such kind of methods (see <a href="#sec-generalmodel">Section&nbsp;3.2.3</a>).</p>
+<p>When exact computation of the estimator <span class="math inline">I_{n,sco}(\theta)</span> is not possible for all <span class="math inline">\theta\in\Theta</span>, we propose to evaluate its value by using a new stochastic algorithm which provides the estimate <span class="math inline">I_{n,sco}(\bar{\theta}_{ML})</span> as a by-product of the maximum likelihood estimate <span class="math inline">\bar{\theta}_{ML}</span>. More precisely we provide three algorithms: a first one in the curved exponential family context which requires to simulate the latent variable from a transition kernel of an ergodic Markov chain and assumes less strong assumptions to get theoretical convergence result thanks to a truncation on random boundaries step, a second one in the curved exponential family context which does not include this additional projection step but requires stronger assumptions to ensure theoretical convergence. This second one and the related results are presented in Appendix. Finally we provide a third algorithm dedicated to general latent variables models without any theoretical results as it is usually the case for such kind of methods (see <a href="#sec-generalmodel" class="quarto-xref">Section&nbsp;3.2.3</a>).</p>
 <section id="sec-algoSAEM" class="level3" data-number="3.2.1">
 <h3 data-number="3.2.1" class="anchored" data-anchor-id="sec-algoSAEM"><span class="header-section-number">3.2.1</span> Description of the algorithm with truncation on random boundaries in curved exponential family model</h3>
 <p>We develop an extension of the stochastic approximation Expectation Maximization algorithm coupled with a Monte Carlo Markov Chain studied by <span class="citation" data-cites="Allassonniere2010">(<a href="#ref-Allassonniere2010" role="doc-biblioref">Allassonnière S., Kuhn E., and Trouvé A. 2010</a>)</span> which allows to compute simultaneously the maximum likelihood estimate and the FIM estimate proposed in the previous section. We assume in this section that all the individual complete log-likelihoods belong to the curved exponential family (see <span class="citation" data-cites="bickel2015mathematical">(<a href="#ref-bickel2015mathematical" role="doc-biblioref">Bickel P. J. and Doksum K. A. 2015</a>)</span>) for stating the theoretical results. As our estimate involves individual conditional expectations, we have to consider an extended form of sufficient statistics for the model at the individual level. Indeed, it is necessary to compute stochastic approximation of each individual sufficient statistic at individual level since they are required to be able to compute the proposed FIM estimate. This is the main difference with the usual algorithm. Therefore we introduce the following notations and assumptions.</p>
@@ -397,7 +397,7 @@ Q_{k}(\theta) = (1-\gamma_k)Q_{k-1}(\theta)+\gamma_k \sum_{i=1}^n \log f(y_i,Z_i
 <p><strong>When convergence is reached, say at iteration <span class="math inline">K</span> of the algorithm, evaluate the FIM estimator according to</strong>: <span class="math display">
 I_{n,sco}^K = \frac{1}{n} \sum_{i=1}^n \Delta_i^K (\Delta_i^K )^t.
 </span></p>
-<p>We illustrate through simulations in a nonlinear mixed effects model the performance of this algorithm in <a href="#sec-SimusNLMM">Section&nbsp;4.2</a>.</p>
+<p>We illustrate through simulations in a nonlinear mixed effects model the performance of this algorithm in <a href="#sec-SimusNLMM" class="quarto-xref">Section&nbsp;4.2</a>.</p>
 </section>
 </section>
 </section>
@@ -410,10 +410,10 @@ I_{n,sco}^K = \frac{1}{n} \sum_{i=1}^n \Delta_i^K (\Delta_i^K )^t.
 <h3 data-number="4.1.1" class="anchored" data-anchor-id="simulation-settings"><span class="header-section-number">4.1.1</span> Simulation settings</h3>
 <p>First we consider the following linear mixed effects model <span class="math inline">y_{ij} = \beta + z_{i} + \varepsilon_{ij},</span> where <span class="math inline">y_{ij} \in \mathbb{R}</span> denotes the <span class="math inline">j^{th}</span> observation of individual <span class="math inline">i</span>, <span class="math inline">1\leq i \leq n</span>, <span class="math inline">1\leq j \leq J</span>, <span class="math inline">z_i \in \mathbb{R}</span> the unobserved random effect of individual <span class="math inline">i</span> and <span class="math inline">\varepsilon_{ij} \in \mathbb{R}</span> the residual term. The random effects <span class="math inline">(z_{i})</span> are assumed independent and identically distributed such that <span class="math inline">z_{i} \underset{i.i.d.}{\sim} \mathcal{N}(0,\eta^2)</span>, the residuals <span class="math inline">(\varepsilon_{ij})</span> are assumed independent and identically distributed such that <span class="math inline">\varepsilon_{ij} \underset{i.i.d.}{\sim} \mathcal{N}(0,\sigma^2)</span> and the sequences <span class="math inline">(z_i)</span> and <span class="math inline">(\varepsilon_{ij})</span> are assumed mutually independent. Here, the model parameters are <span class="math inline">\theta = (\beta, \eta^2, \sigma^2)</span>. We set <span class="math inline">\beta=3</span>, <span class="math inline">\eta^2=2</span>, <span class="math inline">\sigma^2=5</span> and <span class="math inline">J=12</span>.</p>
 <p>Second we consider the following Poisson mixture model where the distribution of each observation <span class="math inline">y_i</span>, <span class="math inline">1\leq i \leq n</span>, depends on a state variable <span class="math inline">z_i</span> which is latent leading to <span class="math inline">y_i|z_i=k \sim \mathcal{P}(\lambda_k)</span> with <span class="math inline">P(z_i=k) = \alpha_k</span> and <span class="math inline">\sum_{k=1}^{K} \alpha_k = 1.</span> The model parameters are <span class="math inline">\theta=(\lambda_1,\ldots,\lambda_K,\alpha_1,\ldots,\alpha_{K-1})</span>. For the simulation study, we consider a mixture of <span class="math inline">K=3</span> components, and the following values for the parameters <span class="math inline">\lambda_1=2</span>, <span class="math inline">\lambda_2=5</span>, <span class="math inline">\lambda_3=9</span>, <span class="math inline">\alpha_1=0.3</span> and <span class="math inline">\alpha_2=0.5</span>.</p>
-<p>For each model, we generate <span class="math inline">M=500</span> datasets for different sample sizes <span class="math inline">n \in \left\{20,100,500 \right\}</span>. As a first step, we assume that the true parameter values, denoted by <span class="math inline">\theta^{\star}</span>, are known in order to investigate the asymptotic properties of both <span class="math inline">I_{n,sco}</span> and <span class="math inline">I_{n,obs}</span> without adding extra noise induced by the estimation of the parameters. Hence, for each value of <span class="math inline">n</span> and for each <span class="math inline">1 \leq m \leq M</span>, we derive <span class="math inline">I_{n,sco}^{(m)}(\theta^{\star})</span> and <span class="math inline">I_{n,obs}^{(m)}(\theta^{\star})</span>. The estimators <span class="math inline">I_{n,sco}(\theta^{\star})</span> and <span class="math inline">I_{n,obs}(\theta^{\star})</span> can be computed explicitly in both models by applying formula <a href="#eq-vnmis">Equation&nbsp;5</a> and Louis’ formula <span class="citation" data-cites="Louis1982">(<a href="#ref-Louis1982" role="doc-biblioref">Louis T. A. 1982</a>)</span> (see R functions provided in the Appendix section). We then compute the empirical bias and the root mean squared deviation of each component <span class="math inline">(\ell,\ell')</span> of the estimated matrix as: <span class="math display">
+<p>For each model, we generate <span class="math inline">M=500</span> datasets for different sample sizes <span class="math inline">n \in \left\{20,100,500 \right\}</span>. As a first step, we assume that the true parameter values, denoted by <span class="math inline">\theta^{\star}</span>, are known in order to investigate the asymptotic properties of both <span class="math inline">I_{n,sco}</span> and <span class="math inline">I_{n,obs}</span> without adding extra noise induced by the estimation of the parameters. Hence, for each value of <span class="math inline">n</span> and for each <span class="math inline">1 \leq m \leq M</span>, we derive <span class="math inline">I_{n,sco}^{(m)}(\theta^{\star})</span> and <span class="math inline">I_{n,obs}^{(m)}(\theta^{\star})</span>. The estimators <span class="math inline">I_{n,sco}(\theta^{\star})</span> and <span class="math inline">I_{n,obs}(\theta^{\star})</span> can be computed explicitly in both models by applying formula <a href="#eq-vnmis" class="quarto-xref">Equation&nbsp;5</a> and Louis’ formula <span class="citation" data-cites="Louis1982">(<a href="#ref-Louis1982" role="doc-biblioref">Louis T. A. 1982</a>)</span> (see R functions provided in the Appendix section). We then compute the empirical bias and the root mean squared deviation of each component <span class="math inline">(\ell,\ell')</span> of the estimated matrix as: <span class="math display">
 \frac{1}{M} \sum\limits_{m=1}^{M} I_{n,sco,\ell,\ell'}^{(m)}(\theta^\star) - I_{\ell,\ell'}(\theta^\star)  \; \; \;  \mathrm{and} \; \; \; \sqrt{\frac{1}{M} \sum\limits_{m=1}^{M} \left(I_{n,sco,\ell,\ell'}^{(m)}(\theta^\star) - I_{\ell,\ell'}(\theta^\star)\right)^2}.
 </span></p>
-<p>In the previous quantities, <span class="math inline">I(\theta^\star)</span> is explicit in the linear mixed effects model and approximated by a Monte-Carlo estimation based on a sample of size <span class="math inline">10^8</span> in the Poisson mixture model. The results are presented in <a href="#tbl-BiasLMM">Table&nbsp;1</a> and <a href="#tbl-SdLMM">Table&nbsp;2</a> for the linear mixed effects model and in <a href="#tbl-BiasMixt">Table&nbsp;3</a> and <a href="#tbl-SdMixt">Table&nbsp;4</a> for the mixture model. In a second step, we use the linear mixed effects model to look at what happens when the parameter <span class="math inline">\theta</span> is unknown and the estimation of the Fisher information matrix requires to compute an estimate <span class="math inline">\hat{\theta}_n</span>. We use the datasets simulated with <span class="math inline">n=500</span> and we compute the <span class="math inline">M=500</span> asymptotic confidence intervals of the three model parameters. We then deduce empirical coverage rates for the following nominal rates <span class="math inline">1-\alpha \in \{0.90, 0.95, 0.99\}</span> by using the diagonal terms of either the inversed <span class="math inline">I_{n,sco}^{(m)}(\theta^{\star})</span> (resp. <span class="math inline">I_{n,obs}^{(m)}(\theta^{\star})</span>) or the inversed <span class="math inline">I_{n,sco}^{(m)}(\hat{\theta}_n)</span> (resp. <span class="math inline">I_{n,obs}^{(m)}(\hat{\theta}_n)</span>). The results are depicted in <a href="#tbl-coverageLMM-n100">Table&nbsp;5</a> and <a href="#tbl-coverageLMM-n500">Table&nbsp;6</a>.</p>
+<p>In the previous quantities, <span class="math inline">I(\theta^\star)</span> is explicit in the linear mixed effects model and approximated by a Monte-Carlo estimation based on a sample of size <span class="math inline">10^8</span> in the Poisson mixture model. The results are presented in <a href="#tbl-BiasLMM" class="quarto-xref">Table&nbsp;1</a> and <a href="#tbl-SdLMM" class="quarto-xref">Table&nbsp;2</a> for the linear mixed effects model and in <a href="#tbl-BiasMixt" class="quarto-xref">Table&nbsp;3</a> and <a href="#tbl-SdMixt" class="quarto-xref">Table&nbsp;4</a> for the mixture model. In a second step, we use the linear mixed effects model to look at what happens when the parameter <span class="math inline">\theta</span> is unknown and the estimation of the Fisher information matrix requires to compute an estimate <span class="math inline">\hat{\theta}_n</span>. We use the datasets simulated with <span class="math inline">n=500</span> and we compute the <span class="math inline">M=500</span> asymptotic confidence intervals of the three model parameters. We then deduce empirical coverage rates for the following nominal rates <span class="math inline">1-\alpha \in \{0.90, 0.95, 0.99\}</span> by using the diagonal terms of either the inversed <span class="math inline">I_{n,sco}^{(m)}(\theta^{\star})</span> (resp. <span class="math inline">I_{n,obs}^{(m)}(\theta^{\star})</span>) or the inversed <span class="math inline">I_{n,sco}^{(m)}(\hat{\theta}_n)</span> (resp. <span class="math inline">I_{n,obs}^{(m)}(\hat{\theta}_n)</span>). The results are depicted in <a href="#tbl-coverageLMM-n100" class="quarto-xref">Table&nbsp;5</a> and <a href="#tbl-coverageLMM-n500" class="quarto-xref">Table&nbsp;6</a>.</p>
 <div class="cell" data-file="scripts/simuLMM-estimFIM.R">
 <details>
 <summary>Code</summary>
@@ -615,7 +615,7 @@ I_{n,sco}^K = \frac{1}{n} \sum_{i=1}^n \Delta_i^K (\Delta_i^K )^t.
 </section>
 <section id="results" class="level3" data-number="4.1.2">
 <h3 data-number="4.1.2" class="anchored" data-anchor-id="results"><span class="header-section-number">4.1.2</span> Results</h3>
-<p>From <a href="#tbl-BiasLMM">Table&nbsp;1</a>, <a href="#tbl-SdLMM">Table&nbsp;2</a>, <a href="#tbl-BiasMixt">Table&nbsp;3</a> and <a href="#tbl-SdMixt">Table&nbsp;4</a>, we observe that whatever the model and whatever the components of <span class="math inline">I_{n,sco}(\theta^{\star})</span> and <span class="math inline">I_{n,obs}(\theta^{\star})</span>, the bias is very small even for small values of <span class="math inline">n</span>. Note that in the linear mixed effects model the second derivative with respect to parameter <span class="math inline">\beta</span> is deterministic, which explains why the bias and the dispersion of the estimations <span class="math inline">I_{n,obs}(\theta^{\star})</span> are zero for every value of <span class="math inline">n</span>. The bias and the standard deviation decrease as <span class="math inline">n</span> increases overall, which illustrates the consistency of both M-estimators. The distributions of the normalized estimations <span class="math inline">\sqrt{n} \left(I_{n,sco}^{(m)}(\theta^\star) - I(\theta^\star)\right)</span> and <span class="math inline">\sqrt{n} \left(I_{n,obs}^{(m)}(\theta^\star) - I(\theta^\star)\right)</span> are also represented when <span class="math inline">n=500</span> for some components of the matrices in <a href="#fig-simuLMM">Figure&nbsp;1</a> (linear mixed effects model) and <a href="#fig-simuPoissonMixture">Figure&nbsp;2</a> (Poisson mixture model). The empirical distributions have the shape of Gaussian distributions and illustrate the asymptotic normality of the two estimators. The numerical results highlight that neither <span class="math inline">I_{n,sco}(\theta^{\star})</span> nor <span class="math inline">I_{n,obs}(\theta^{\star})</span> is systematically better than the other one in terms of bias and asymptotic covariance matrix. In the same model, different behaviors can be observed depending on the components of the parameter vector.</p>
+<p>From <a href="#tbl-BiasLMM" class="quarto-xref">Table&nbsp;1</a>, <a href="#tbl-SdLMM" class="quarto-xref">Table&nbsp;2</a>, <a href="#tbl-BiasMixt" class="quarto-xref">Table&nbsp;3</a> and <a href="#tbl-SdMixt" class="quarto-xref">Table&nbsp;4</a>, we observe that whatever the model and whatever the components of <span class="math inline">I_{n,sco}(\theta^{\star})</span> and <span class="math inline">I_{n,obs}(\theta^{\star})</span>, the bias is very small even for small values of <span class="math inline">n</span>. Note that in the linear mixed effects model the second derivative with respect to parameter <span class="math inline">\beta</span> is deterministic, which explains why the bias and the dispersion of the estimations <span class="math inline">I_{n,obs}(\theta^{\star})</span> are zero for every value of <span class="math inline">n</span>. The bias and the standard deviation decrease as <span class="math inline">n</span> increases overall, which illustrates the consistency of both M-estimators. The distributions of the normalized estimations <span class="math inline">\sqrt{n} \left(I_{n,sco}^{(m)}(\theta^\star) - I(\theta^\star)\right)</span> and <span class="math inline">\sqrt{n} \left(I_{n,obs}^{(m)}(\theta^\star) - I(\theta^\star)\right)</span> are also represented when <span class="math inline">n=500</span> for some components of the matrices in <a href="#fig-simuLMM" class="quarto-xref">Figure&nbsp;1</a> (linear mixed effects model) and <a href="#fig-simuPoissonMixture" class="quarto-xref">Figure&nbsp;2</a> (Poisson mixture model). The empirical distributions have the shape of Gaussian distributions and illustrate the asymptotic normality of the two estimators. The numerical results highlight that neither <span class="math inline">I_{n,sco}(\theta^{\star})</span> nor <span class="math inline">I_{n,obs}(\theta^{\star})</span> is systematically better than the other one in terms of bias and asymptotic covariance matrix. In the same model, different behaviors can be observed depending on the components of the parameter vector.</p>
 <div class="cell" data-file="scripts/simuLMM-resPlots.R">
 <div class="cell-output-display">
 <div id="fig-simuLMM" class="quarto-figure quarto-figure-center anchored">
@@ -638,546 +638,60 @@ I_{n,sco}^K = \frac{1}{n} \sum_{i=1}^n \Delta_i^K (\Delta_i^K )^t.
 </div>
 <div class="cell" data-file="scripts/tableBiasLMM.R">
 <div class="cell-output-display">
-<div class="tabwid"><style>.cl-febd1a9e{}.cl-feb5cfbe{font-family:'Helvetica';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-feb5d07c{font-family:'Helvetica';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-feb94d6a{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-feb96048{width:57.6pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-feb96052{width:57.6pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-feb96053{width:57.6pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
 <div id="tbl-BiasLMM" class="anchored">
-<table class="cl-febd1a9e table table-sm table-striped small" data-quarto-postprocess="true">
-<caption>Table&nbsp;1: Linear mixed effects model. Empirical bias to the Fisher Information matrix of <span class="math inline">I_{n,sco}</span> and <span class="math inline">I_{n,obs}</span> computed in the true parameter values for different values of n.</caption>
-<thead>
-<tr class="header" style="overflow-wrap:break-word;">
-<th class="cl-feb96048"><p><span class="cl-feb5cfbe"></span></p></th>
-<th colspan="2" class="cl-feb96048"><p><span class="cl-feb5cfbe">n=20</span></p></th>
-<th colspan="2" class="cl-feb96048"><p><span class="cl-feb5cfbe">n=100</span></p></th>
-<th colspan="2" class="cl-feb96048"><p><span class="cl-feb5cfbe">n=500</span></p></th>
-</tr>
-<tr class="odd" style="overflow-wrap:break-word;">
-<th class="cl-feb96048"><p><span class="cl-feb5cfbe"></span></p></th>
-<th class="cl-feb96048"><p><span class="cl-feb5cfbe">Isco</span></p></th>
-<th class="cl-feb96048"><p><span class="cl-feb5cfbe">Iobs</span></p></th>
-<th class="cl-feb96048"><p><span class="cl-feb5cfbe">Isco</span></p></th>
-<th class="cl-feb96048"><p><span class="cl-feb5cfbe">Iobs</span></p></th>
-<th class="cl-feb96048"><p><span class="cl-feb5cfbe">Isco</span></p></th>
-<th class="cl-feb96048"><p><span class="cl-feb5cfbe">Iobs</span></p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd" style="overflow-wrap:break-word;">
-<td class="cl-feb96052"><p><span class="cl-feb5cfbe">(β,β)</span></p></td>
-<td class="cl-feb96052"><p><span class="cl-feb5d07c">0.00552</span></p></td>
-<td class="cl-feb96052"><p><span class="cl-feb5cfbe">0.00000</span></p></td>
-<td class="cl-feb96052"><p><span class="cl-feb5d07c">0.00075</span></p></td>
-<td class="cl-feb96052"><p><span class="cl-feb5cfbe">0.00000</span></p></td>
-<td class="cl-feb96052"><p><span class="cl-feb5d07c">-0.00064</span></p></td>
-<td class="cl-feb96052"><p><span class="cl-feb5cfbe">0.00000</span></p></td>
-</tr>
-<tr class="even" style="overflow-wrap:break-word;">
-<td class="cl-feb96052"><p><span class="cl-feb5cfbe">(η2,η2)</span></p></td>
-<td class="cl-feb96052"><p><span class="cl-feb5d07c">0.00325</span></p></td>
-<td class="cl-feb96052"><p><span class="cl-feb5cfbe">0.00228</span></p></td>
-<td class="cl-feb96052"><p><span class="cl-feb5d07c">-0.00138</span></p></td>
-<td class="cl-feb96052"><p><span class="cl-feb5cfbe">0.00031</span></p></td>
-<td class="cl-feb96052"><p><span class="cl-feb5d07c">-0.00122</span></p></td>
-<td class="cl-feb96052"><p><span class="cl-feb5cfbe">-0.00027</span></p></td>
-</tr>
-<tr class="odd" style="overflow-wrap:break-word;">
-<td class="cl-feb96052"><p><span class="cl-feb5cfbe">(σ2,σ2)</span></p></td>
-<td class="cl-feb96052"><p><span class="cl-feb5d07c">-0.00314</span></p></td>
-<td class="cl-feb96052"><p><span class="cl-feb5cfbe">0.00009</span></p></td>
-<td class="cl-feb96052"><p><span class="cl-feb5d07c">0.00002</span></p></td>
-<td class="cl-feb96052"><p><span class="cl-feb5cfbe">0.00077</span></p></td>
-<td class="cl-feb96052"><p><span class="cl-feb5d07c">-0.00027</span></p></td>
-<td class="cl-feb96052"><p><span class="cl-feb5cfbe">-0.00013</span></p></td>
-</tr>
-<tr class="even" style="overflow-wrap:break-word;">
-<td class="cl-feb96052"><p><span class="cl-feb5cfbe">(β,η2)</span></p></td>
-<td class="cl-feb96052"><p><span class="cl-feb5d07c">-0.00241</span></p></td>
-<td class="cl-feb96052"><p><span class="cl-feb5cfbe">0.00255</span></p></td>
-<td class="cl-feb96052"><p><span class="cl-feb5d07c">-0.00040</span></p></td>
-<td class="cl-feb96052"><p><span class="cl-feb5cfbe">-0.00062</span></p></td>
-<td class="cl-feb96052"><p><span class="cl-feb5d07c">-0.00058</span></p></td>
-<td class="cl-feb96052"><p><span class="cl-feb5cfbe">-0.00133</span></p></td>
-</tr>
-<tr class="odd" style="overflow-wrap:break-word;">
-<td class="cl-feb96052"><p><span class="cl-feb5cfbe">(β,σ2)</span></p></td>
-<td class="cl-feb96052"><p><span class="cl-feb5d07c">0.00360</span></p></td>
-<td class="cl-feb96052"><p><span class="cl-feb5cfbe">0.00021</span></p></td>
-<td class="cl-feb96052"><p><span class="cl-feb5d07c">-0.00006</span></p></td>
-<td class="cl-feb96052"><p><span class="cl-feb5cfbe">-0.00005</span></p></td>
-<td class="cl-feb96052"><p><span class="cl-feb5d07c">-0.00043</span></p></td>
-<td class="cl-feb96052"><p><span class="cl-feb5cfbe">-0.00011</span></p></td>
-</tr>
-<tr class="even" style="overflow-wrap:break-word;">
-<td class="cl-feb96053"><p><span class="cl-feb5cfbe">(η2,σ2)</span></p></td>
-<td class="cl-feb96053"><p><span class="cl-feb5d07c">-0.00050</span></p></td>
-<td class="cl-feb96053"><p><span class="cl-feb5cfbe">0.00019</span></p></td>
-<td class="cl-feb96053"><p><span class="cl-feb5d07c">0.00013</span></p></td>
-<td class="cl-feb96053"><p><span class="cl-feb5cfbe">0.00003</span></p></td>
-<td class="cl-feb96053"><p><span class="cl-feb5d07c">0.00002</span></p></td>
-<td class="cl-feb96053"><p><span class="cl-feb5cfbe">-0.00002</span></p></td>
-</tr>
-</tbody>
-</table>
-</div>
+<div class="tabwid"><style>.cl-00f86342{}.cl-00eab08a{font-family:'DejaVu Sans';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-00eab09e{font-family:'DejaVu Sans';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-00f06d04{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-00f09586{width:0.8in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-00f0959a{width:0.8in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-00f0959b{width:0.8in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table data-quarto-disable-processing="true" class="cl-00f86342"><caption>Table&nbsp;1:  <p>Linear mixed effects model. Empirical bias to the Fisher Information
+matrix of <span class="math inline"><em>I</em><sub><em>n</em>, <em>s</em><em>c</em><em>o</em></sub></span>
+and <span class="math inline"><em>I</em><sub><em>n</em>, <em>o</em><em>b</em><em>s</em></sub></span>
+computed in the true parameter values for different values of n.</p> </caption><thead><tr style="overflow-wrap:break-word;"><th class="cl-00f09586"><p class="cl-00f06d04"><span class="cl-00eab08a"></span></p></th><th colspan="2" class="cl-00f09586"><p class="cl-00f06d04"><span class="cl-00eab08a">n=20</span></p></th><th colspan="2" class="cl-00f09586"><p class="cl-00f06d04"><span class="cl-00eab08a">n=100</span></p></th><th colspan="2" class="cl-00f09586"><p class="cl-00f06d04"><span class="cl-00eab08a">n=500</span></p></th></tr><tr style="overflow-wrap:break-word;"><th class="cl-00f09586"><p class="cl-00f06d04"><span class="cl-00eab08a"></span></p></th><th class="cl-00f09586"><p class="cl-00f06d04"><span class="cl-00eab08a">Isco</span></p></th><th class="cl-00f09586"><p class="cl-00f06d04"><span class="cl-00eab08a">Iobs</span></p></th><th class="cl-00f09586"><p class="cl-00f06d04"><span class="cl-00eab08a">Isco</span></p></th><th class="cl-00f09586"><p class="cl-00f06d04"><span class="cl-00eab08a">Iobs</span></p></th><th class="cl-00f09586"><p class="cl-00f06d04"><span class="cl-00eab08a">Isco</span></p></th><th class="cl-00f09586"><p class="cl-00f06d04"><span class="cl-00eab08a">Iobs</span></p></th></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td class="cl-00f0959a"><p class="cl-00f06d04"><span class="cl-00eab08a">(β,β)</span></p></td><td class="cl-00f0959a"><p class="cl-00f06d04"><span class="cl-00eab09e">0.00552</span></p></td><td class="cl-00f0959a"><p class="cl-00f06d04"><span class="cl-00eab08a">0.00000</span></p></td><td class="cl-00f0959a"><p class="cl-00f06d04"><span class="cl-00eab09e">0.00075</span></p></td><td class="cl-00f0959a"><p class="cl-00f06d04"><span class="cl-00eab08a">0.00000</span></p></td><td class="cl-00f0959a"><p class="cl-00f06d04"><span class="cl-00eab09e">-0.00064</span></p></td><td class="cl-00f0959a"><p class="cl-00f06d04"><span class="cl-00eab08a">0.00000</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-00f0959a"><p class="cl-00f06d04"><span class="cl-00eab08a">(η2,η2)</span></p></td><td class="cl-00f0959a"><p class="cl-00f06d04"><span class="cl-00eab09e">0.00325</span></p></td><td class="cl-00f0959a"><p class="cl-00f06d04"><span class="cl-00eab08a">0.00228</span></p></td><td class="cl-00f0959a"><p class="cl-00f06d04"><span class="cl-00eab09e">-0.00138</span></p></td><td class="cl-00f0959a"><p class="cl-00f06d04"><span class="cl-00eab08a">0.00031</span></p></td><td class="cl-00f0959a"><p class="cl-00f06d04"><span class="cl-00eab09e">-0.00122</span></p></td><td class="cl-00f0959a"><p class="cl-00f06d04"><span class="cl-00eab08a">-0.00027</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-00f0959a"><p class="cl-00f06d04"><span class="cl-00eab08a">(σ2,σ2)</span></p></td><td class="cl-00f0959a"><p class="cl-00f06d04"><span class="cl-00eab09e">-0.00314</span></p></td><td class="cl-00f0959a"><p class="cl-00f06d04"><span class="cl-00eab08a">0.00009</span></p></td><td class="cl-00f0959a"><p class="cl-00f06d04"><span class="cl-00eab09e">0.00002</span></p></td><td class="cl-00f0959a"><p class="cl-00f06d04"><span class="cl-00eab08a">0.00077</span></p></td><td class="cl-00f0959a"><p class="cl-00f06d04"><span class="cl-00eab09e">-0.00027</span></p></td><td class="cl-00f0959a"><p class="cl-00f06d04"><span class="cl-00eab08a">-0.00013</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-00f0959a"><p class="cl-00f06d04"><span class="cl-00eab08a">(β,η2)</span></p></td><td class="cl-00f0959a"><p class="cl-00f06d04"><span class="cl-00eab09e">-0.00241</span></p></td><td class="cl-00f0959a"><p class="cl-00f06d04"><span class="cl-00eab08a">0.00255</span></p></td><td class="cl-00f0959a"><p class="cl-00f06d04"><span class="cl-00eab09e">-0.00040</span></p></td><td class="cl-00f0959a"><p class="cl-00f06d04"><span class="cl-00eab08a">-0.00062</span></p></td><td class="cl-00f0959a"><p class="cl-00f06d04"><span class="cl-00eab09e">-0.00058</span></p></td><td class="cl-00f0959a"><p class="cl-00f06d04"><span class="cl-00eab08a">-0.00133</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-00f0959a"><p class="cl-00f06d04"><span class="cl-00eab08a">(β,σ2)</span></p></td><td class="cl-00f0959a"><p class="cl-00f06d04"><span class="cl-00eab09e">0.00360</span></p></td><td class="cl-00f0959a"><p class="cl-00f06d04"><span class="cl-00eab08a">0.00021</span></p></td><td class="cl-00f0959a"><p class="cl-00f06d04"><span class="cl-00eab09e">-0.00006</span></p></td><td class="cl-00f0959a"><p class="cl-00f06d04"><span class="cl-00eab08a">-0.00005</span></p></td><td class="cl-00f0959a"><p class="cl-00f06d04"><span class="cl-00eab09e">-0.00043</span></p></td><td class="cl-00f0959a"><p class="cl-00f06d04"><span class="cl-00eab08a">-0.00011</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-00f0959b"><p class="cl-00f06d04"><span class="cl-00eab08a">(η2,σ2)</span></p></td><td class="cl-00f0959b"><p class="cl-00f06d04"><span class="cl-00eab09e">-0.00050</span></p></td><td class="cl-00f0959b"><p class="cl-00f06d04"><span class="cl-00eab08a">0.00019</span></p></td><td class="cl-00f0959b"><p class="cl-00f06d04"><span class="cl-00eab09e">0.00013</span></p></td><td class="cl-00f0959b"><p class="cl-00f06d04"><span class="cl-00eab08a">0.00003</span></p></td><td class="cl-00f0959b"><p class="cl-00f06d04"><span class="cl-00eab09e">0.00002</span></p></td><td class="cl-00f0959b"><p class="cl-00f06d04"><span class="cl-00eab08a">-0.00002</span></p></td></tr></tbody></table></div>
 </div>
 </div>
 </div>
 <div class="cell" data-file="scripts/tableSdLMM.R">
 <div class="cell-output-display">
-<div class="tabwid"><style>.cl-fed65658{}.cl-fed08eb2{font-family:'Helvetica';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-fed08ebc{font-family:'Helvetica';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-fed30606{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-fed31524{width:57.6pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-fed3152e{width:57.6pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-fed3152f{width:57.6pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
 <div id="tbl-SdLMM" class="anchored">
-<table class="cl-fed65658 table table-sm table-striped small" data-quarto-postprocess="true">
-<caption>Table&nbsp;2: Linear mixed effects model. Empirical squared deviation to the Fisher Information matrix of <span class="math inline">I_{n,sco}</span> and <span class="math inline">I_{n,obs}</span> computed in the true parameter values for different values of n.</caption>
-<thead>
-<tr class="header" style="overflow-wrap:break-word;">
-<th class="cl-fed31524"><p><span class="cl-fed08eb2"></span></p></th>
-<th colspan="2" class="cl-fed31524"><p><span class="cl-fed08eb2">n=20</span></p></th>
-<th colspan="2" class="cl-fed31524"><p><span class="cl-fed08eb2">n=100</span></p></th>
-<th colspan="2" class="cl-fed31524"><p><span class="cl-fed08eb2">n=500</span></p></th>
-</tr>
-<tr class="odd" style="overflow-wrap:break-word;">
-<th class="cl-fed31524"><p><span class="cl-fed08eb2"></span></p></th>
-<th class="cl-fed31524"><p><span class="cl-fed08eb2">Isco</span></p></th>
-<th class="cl-fed31524"><p><span class="cl-fed08eb2">Iobs</span></p></th>
-<th class="cl-fed31524"><p><span class="cl-fed08eb2">Isco</span></p></th>
-<th class="cl-fed31524"><p><span class="cl-fed08eb2">Iobs</span></p></th>
-<th class="cl-fed31524"><p><span class="cl-fed08eb2">Isco</span></p></th>
-<th class="cl-fed31524"><p><span class="cl-fed08eb2">Iobs</span></p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd" style="overflow-wrap:break-word;">
-<td class="cl-fed3152e"><p><span class="cl-fed08eb2">(β,β)</span></p></td>
-<td class="cl-fed3152e"><p><span class="cl-fed08ebc">0.13433</span></p></td>
-<td class="cl-fed3152e"><p><span class="cl-fed08eb2">0.00000</span></p></td>
-<td class="cl-fed3152e"><p><span class="cl-fed08ebc">0.05843</span></p></td>
-<td class="cl-fed3152e"><p><span class="cl-fed08eb2">0.00000</span></p></td>
-<td class="cl-fed3152e"><p><span class="cl-fed08ebc">0.02634</span></p></td>
-<td class="cl-fed3152e"><p><span class="cl-fed08eb2">0.00000</span></p></td>
-</tr>
-<tr class="even" style="overflow-wrap:break-word;">
-<td class="cl-fed3152e"><p><span class="cl-fed08eb2">(η2,η2)</span></p></td>
-<td class="cl-fed3152e"><p><span class="cl-fed08ebc">0.07916</span></p></td>
-<td class="cl-fed3152e"><p><span class="cl-fed08eb2">0.05559</span></p></td>
-<td class="cl-fed3152e"><p><span class="cl-fed08ebc">0.02931</span></p></td>
-<td class="cl-fed3152e"><p><span class="cl-fed08eb2">0.02418</span></p></td>
-<td class="cl-fed3152e"><p><span class="cl-fed08ebc">0.01372</span></p></td>
-<td class="cl-fed3152e"><p><span class="cl-fed08eb2">0.01090</span></p></td>
-</tr>
-<tr class="odd" style="overflow-wrap:break-word;">
-<td class="cl-fed3152e"><p><span class="cl-fed08eb2">(σ2,σ2)</span></p></td>
-<td class="cl-fed3152e"><p><span class="cl-fed08ebc">0.08201</span></p></td>
-<td class="cl-fed3152e"><p><span class="cl-fed08eb2">0.04177</span></p></td>
-<td class="cl-fed3152e"><p><span class="cl-fed08ebc">0.03982</span></p></td>
-<td class="cl-fed3152e"><p><span class="cl-fed08eb2">0.01946</span></p></td>
-<td class="cl-fed3152e"><p><span class="cl-fed08ebc">0.01729</span></p></td>
-<td class="cl-fed3152e"><p><span class="cl-fed08eb2">0.00819</span></p></td>
-</tr>
-<tr class="even" style="overflow-wrap:break-word;">
-<td class="cl-fed3152e"><p><span class="cl-fed08eb2">(β,η2)</span></p></td>
-<td class="cl-fed3152e"><p><span class="cl-fed08ebc">0.09730</span></p></td>
-<td class="cl-fed3152e"><p><span class="cl-fed08eb2">0.05970</span></p></td>
-<td class="cl-fed3152e"><p><span class="cl-fed08ebc">0.04380</span></p></td>
-<td class="cl-fed3152e"><p><span class="cl-fed08eb2">0.02786</span></p></td>
-<td class="cl-fed3152e"><p><span class="cl-fed08ebc">0.01898</span></p></td>
-<td class="cl-fed3152e"><p><span class="cl-fed08eb2">0.01145</span></p></td>
-</tr>
-<tr class="odd" style="overflow-wrap:break-word;">
-<td class="cl-fed3152e"><p><span class="cl-fed08eb2">(β,σ2)</span></p></td>
-<td class="cl-fed3152e"><p><span class="cl-fed08ebc">0.07115</span></p></td>
-<td class="cl-fed3152e"><p><span class="cl-fed08eb2">0.00497</span></p></td>
-<td class="cl-fed3152e"><p><span class="cl-fed08ebc">0.03100</span></p></td>
-<td class="cl-fed3152e"><p><span class="cl-fed08eb2">0.00232</span></p></td>
-<td class="cl-fed3152e"><p><span class="cl-fed08ebc">0.01378</span></p></td>
-<td class="cl-fed3152e"><p><span class="cl-fed08eb2">0.00095</span></p></td>
-</tr>
-<tr class="even" style="overflow-wrap:break-word;">
-<td class="cl-fed3152f"><p><span class="cl-fed08eb2">(η2,σ2)</span></p></td>
-<td class="cl-fed3152f"><p><span class="cl-fed08ebc">0.02907</span></p></td>
-<td class="cl-fed3152f"><p><span class="cl-fed08eb2">0.00463</span></p></td>
-<td class="cl-fed3152f"><p><span class="cl-fed08ebc">0.01308</span></p></td>
-<td class="cl-fed3152f"><p><span class="cl-fed08eb2">0.00201</span></p></td>
-<td class="cl-fed3152f"><p><span class="cl-fed08ebc">0.00639</span></p></td>
-<td class="cl-fed3152f"><p><span class="cl-fed08eb2">0.00091</span></p></td>
-</tr>
-</tbody>
-</table>
-</div>
+<div class="tabwid"><style>.cl-012803fe{}.cl-011d22e0{font-family:'DejaVu Sans';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-011d22fe{font-family:'DejaVu Sans';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-0121b65c{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-0121dc4a{width:0.8in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-0121dc54{width:0.8in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-0121dc5e{width:0.8in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table data-quarto-disable-processing="true" class="cl-012803fe"><caption>Table&nbsp;2:  <p>Linear mixed effects model. Empirical squared deviation to the Fisher
+Information matrix of <span class="math inline"><em>I</em><sub><em>n</em>, <em>s</em><em>c</em><em>o</em></sub></span>
+and <span class="math inline"><em>I</em><sub><em>n</em>, <em>o</em><em>b</em><em>s</em></sub></span>
+computed in the true parameter values for different values of n.</p> </caption><thead><tr style="overflow-wrap:break-word;"><th class="cl-0121dc4a"><p class="cl-0121b65c"><span class="cl-011d22e0"></span></p></th><th colspan="2" class="cl-0121dc4a"><p class="cl-0121b65c"><span class="cl-011d22e0">n=20</span></p></th><th colspan="2" class="cl-0121dc4a"><p class="cl-0121b65c"><span class="cl-011d22e0">n=100</span></p></th><th colspan="2" class="cl-0121dc4a"><p class="cl-0121b65c"><span class="cl-011d22e0">n=500</span></p></th></tr><tr style="overflow-wrap:break-word;"><th class="cl-0121dc4a"><p class="cl-0121b65c"><span class="cl-011d22e0"></span></p></th><th class="cl-0121dc4a"><p class="cl-0121b65c"><span class="cl-011d22e0">Isco</span></p></th><th class="cl-0121dc4a"><p class="cl-0121b65c"><span class="cl-011d22e0">Iobs</span></p></th><th class="cl-0121dc4a"><p class="cl-0121b65c"><span class="cl-011d22e0">Isco</span></p></th><th class="cl-0121dc4a"><p class="cl-0121b65c"><span class="cl-011d22e0">Iobs</span></p></th><th class="cl-0121dc4a"><p class="cl-0121b65c"><span class="cl-011d22e0">Isco</span></p></th><th class="cl-0121dc4a"><p class="cl-0121b65c"><span class="cl-011d22e0">Iobs</span></p></th></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td class="cl-0121dc54"><p class="cl-0121b65c"><span class="cl-011d22e0">(β,β)</span></p></td><td class="cl-0121dc54"><p class="cl-0121b65c"><span class="cl-011d22fe">0.13433</span></p></td><td class="cl-0121dc54"><p class="cl-0121b65c"><span class="cl-011d22e0">0.00000</span></p></td><td class="cl-0121dc54"><p class="cl-0121b65c"><span class="cl-011d22fe">0.05843</span></p></td><td class="cl-0121dc54"><p class="cl-0121b65c"><span class="cl-011d22e0">0.00000</span></p></td><td class="cl-0121dc54"><p class="cl-0121b65c"><span class="cl-011d22fe">0.02634</span></p></td><td class="cl-0121dc54"><p class="cl-0121b65c"><span class="cl-011d22e0">0.00000</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-0121dc54"><p class="cl-0121b65c"><span class="cl-011d22e0">(η2,η2)</span></p></td><td class="cl-0121dc54"><p class="cl-0121b65c"><span class="cl-011d22fe">0.07916</span></p></td><td class="cl-0121dc54"><p class="cl-0121b65c"><span class="cl-011d22e0">0.05559</span></p></td><td class="cl-0121dc54"><p class="cl-0121b65c"><span class="cl-011d22fe">0.02931</span></p></td><td class="cl-0121dc54"><p class="cl-0121b65c"><span class="cl-011d22e0">0.02418</span></p></td><td class="cl-0121dc54"><p class="cl-0121b65c"><span class="cl-011d22fe">0.01372</span></p></td><td class="cl-0121dc54"><p class="cl-0121b65c"><span class="cl-011d22e0">0.01090</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-0121dc54"><p class="cl-0121b65c"><span class="cl-011d22e0">(σ2,σ2)</span></p></td><td class="cl-0121dc54"><p class="cl-0121b65c"><span class="cl-011d22fe">0.08201</span></p></td><td class="cl-0121dc54"><p class="cl-0121b65c"><span class="cl-011d22e0">0.04177</span></p></td><td class="cl-0121dc54"><p class="cl-0121b65c"><span class="cl-011d22fe">0.03982</span></p></td><td class="cl-0121dc54"><p class="cl-0121b65c"><span class="cl-011d22e0">0.01946</span></p></td><td class="cl-0121dc54"><p class="cl-0121b65c"><span class="cl-011d22fe">0.01729</span></p></td><td class="cl-0121dc54"><p class="cl-0121b65c"><span class="cl-011d22e0">0.00819</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-0121dc54"><p class="cl-0121b65c"><span class="cl-011d22e0">(β,η2)</span></p></td><td class="cl-0121dc54"><p class="cl-0121b65c"><span class="cl-011d22fe">0.09730</span></p></td><td class="cl-0121dc54"><p class="cl-0121b65c"><span class="cl-011d22e0">0.05970</span></p></td><td class="cl-0121dc54"><p class="cl-0121b65c"><span class="cl-011d22fe">0.04380</span></p></td><td class="cl-0121dc54"><p class="cl-0121b65c"><span class="cl-011d22e0">0.02786</span></p></td><td class="cl-0121dc54"><p class="cl-0121b65c"><span class="cl-011d22fe">0.01898</span></p></td><td class="cl-0121dc54"><p class="cl-0121b65c"><span class="cl-011d22e0">0.01145</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-0121dc54"><p class="cl-0121b65c"><span class="cl-011d22e0">(β,σ2)</span></p></td><td class="cl-0121dc54"><p class="cl-0121b65c"><span class="cl-011d22fe">0.07115</span></p></td><td class="cl-0121dc54"><p class="cl-0121b65c"><span class="cl-011d22e0">0.00497</span></p></td><td class="cl-0121dc54"><p class="cl-0121b65c"><span class="cl-011d22fe">0.03100</span></p></td><td class="cl-0121dc54"><p class="cl-0121b65c"><span class="cl-011d22e0">0.00232</span></p></td><td class="cl-0121dc54"><p class="cl-0121b65c"><span class="cl-011d22fe">0.01378</span></p></td><td class="cl-0121dc54"><p class="cl-0121b65c"><span class="cl-011d22e0">0.00095</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-0121dc5e"><p class="cl-0121b65c"><span class="cl-011d22e0">(η2,σ2)</span></p></td><td class="cl-0121dc5e"><p class="cl-0121b65c"><span class="cl-011d22fe">0.02907</span></p></td><td class="cl-0121dc5e"><p class="cl-0121b65c"><span class="cl-011d22e0">0.00463</span></p></td><td class="cl-0121dc5e"><p class="cl-0121b65c"><span class="cl-011d22fe">0.01308</span></p></td><td class="cl-0121dc5e"><p class="cl-0121b65c"><span class="cl-011d22e0">0.00201</span></p></td><td class="cl-0121dc5e"><p class="cl-0121b65c"><span class="cl-011d22fe">0.00639</span></p></td><td class="cl-0121dc5e"><p class="cl-0121b65c"><span class="cl-011d22e0">0.00091</span></p></td></tr></tbody></table></div>
 </div>
 </div>
 </div>
 <div class="cell" data-file="scripts/tableBiasPoissonMixture.R">
 <div class="cell-output-display">
-<div class="tabwid"><style>.cl-fef6070a{}.cl-feeec1d4{font-family:'Helvetica';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-feeec1de{font-family:'Helvetica';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-fef1b4e8{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-fef1c7b2{width:57.6pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-fef1c7b3{width:57.6pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-fef1c7bc{width:57.6pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
 <div id="tbl-BiasMixt" class="anchored">
-<table class="cl-fef6070a table table-sm table-striped small" data-quarto-postprocess="true">
-<caption>Table&nbsp;3: Poisson mixture model. Empirical bias to the Fisher Information matrix of <span class="math inline">I_{n,sco}</span> and <span class="math inline">I_{n,obs}</span> computed in the true parameter values for different values of n.</caption>
-<thead>
-<tr class="header" style="overflow-wrap:break-word;">
-<th class="cl-fef1c7b2"><p><span class="cl-feeec1d4"></span></p></th>
-<th colspan="2" class="cl-fef1c7b2"><p><span class="cl-feeec1d4">n=20</span></p></th>
-<th colspan="2" class="cl-fef1c7b2"><p><span class="cl-feeec1d4">n=100</span></p></th>
-<th colspan="2" class="cl-fef1c7b2"><p><span class="cl-feeec1d4">n=500</span></p></th>
-</tr>
-<tr class="odd" style="overflow-wrap:break-word;">
-<th class="cl-fef1c7b2"><p><span class="cl-feeec1d4"></span></p></th>
-<th class="cl-fef1c7b2"><p><span class="cl-feeec1d4">Isco</span></p></th>
-<th class="cl-fef1c7b2"><p><span class="cl-feeec1d4">Iobs</span></p></th>
-<th class="cl-fef1c7b2"><p><span class="cl-feeec1d4">Isco</span></p></th>
-<th class="cl-fef1c7b2"><p><span class="cl-feeec1d4">Iobs</span></p></th>
-<th class="cl-fef1c7b2"><p><span class="cl-feeec1d4">Isco</span></p></th>
-<th class="cl-fef1c7b2"><p><span class="cl-feeec1d4">Iobs</span></p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd" style="overflow-wrap:break-word;">
-<td class="cl-fef1c7b3"><p><span class="cl-feeec1d4">(λ2,λ2)</span></p></td>
-<td class="cl-fef1c7b3"><p><span class="cl-feeec1de">0.00009</span></p></td>
-<td class="cl-fef1c7b3"><p><span class="cl-feeec1d4">-0.00025</span></p></td>
-<td class="cl-fef1c7b3"><p><span class="cl-feeec1de">-0.00003</span></p></td>
-<td class="cl-fef1c7b3"><p><span class="cl-feeec1d4">0.00025</span></p></td>
-<td class="cl-fef1c7b3"><p><span class="cl-feeec1de">0.00008</span></p></td>
-<td class="cl-fef1c7b3"><p><span class="cl-feeec1d4">-0.00029</span></p></td>
-</tr>
-<tr class="even" style="overflow-wrap:break-word;">
-<td class="cl-fef1c7b3"><p><span class="cl-feeec1d4">(λ3,λ3)</span></p></td>
-<td class="cl-fef1c7b3"><p><span class="cl-feeec1de">0.00005</span></p></td>
-<td class="cl-fef1c7b3"><p><span class="cl-feeec1d4">0.00047</span></p></td>
-<td class="cl-fef1c7b3"><p><span class="cl-feeec1de">-0.00023</span></p></td>
-<td class="cl-fef1c7b3"><p><span class="cl-feeec1d4">-0.00035</span></p></td>
-<td class="cl-fef1c7b3"><p><span class="cl-feeec1de">0.00008</span></p></td>
-<td class="cl-fef1c7b3"><p><span class="cl-feeec1d4">0.00015</span></p></td>
-</tr>
-<tr class="odd" style="overflow-wrap:break-word;">
-<td class="cl-fef1c7b3"><p><span class="cl-feeec1d4">(α1,α1)</span></p></td>
-<td class="cl-fef1c7b3"><p><span class="cl-feeec1de">0.05981</span></p></td>
-<td class="cl-fef1c7b3"><p><span class="cl-feeec1d4">0.05981</span></p></td>
-<td class="cl-fef1c7b3"><p><span class="cl-feeec1de">-0.04072</span></p></td>
-<td class="cl-fef1c7b3"><p><span class="cl-feeec1d4">-0.04072</span></p></td>
-<td class="cl-fef1c7b3"><p><span class="cl-feeec1de">0.01849</span></p></td>
-<td class="cl-fef1c7b3"><p><span class="cl-feeec1d4">0.01849</span></p></td>
-</tr>
-<tr class="even" style="overflow-wrap:break-word;">
-<td class="cl-fef1c7b3"><p><span class="cl-feeec1d4">(α2,α2)</span></p></td>
-<td class="cl-fef1c7b3"><p><span class="cl-feeec1de">0.04756</span></p></td>
-<td class="cl-fef1c7b3"><p><span class="cl-feeec1d4">0.04756</span></p></td>
-<td class="cl-fef1c7b3"><p><span class="cl-feeec1de">-0.04006</span></p></td>
-<td class="cl-fef1c7b3"><p><span class="cl-feeec1d4">-0.04006</span></p></td>
-<td class="cl-fef1c7b3"><p><span class="cl-feeec1de">0.01205</span></p></td>
-<td class="cl-fef1c7b3"><p><span class="cl-feeec1d4">0.01205</span></p></td>
-</tr>
-<tr class="odd" style="overflow-wrap:break-word;">
-<td class="cl-fef1c7b3"><p><span class="cl-feeec1d4">(λ2,λ3)</span></p></td>
-<td class="cl-fef1c7b3"><p><span class="cl-feeec1de">0.00009</span></p></td>
-<td class="cl-fef1c7b3"><p><span class="cl-feeec1d4">0.00009</span></p></td>
-<td class="cl-fef1c7b3"><p><span class="cl-feeec1de">-0.00007</span></p></td>
-<td class="cl-fef1c7b3"><p><span class="cl-feeec1d4">-0.00007</span></p></td>
-<td class="cl-fef1c7b3"><p><span class="cl-feeec1de">0.00002</span></p></td>
-<td class="cl-fef1c7b3"><p><span class="cl-feeec1d4">0.00002</span></p></td>
-</tr>
-<tr class="even" style="overflow-wrap:break-word;">
-<td class="cl-fef1c7bc"><p><span class="cl-feeec1d4">(λ3,α2)</span></p></td>
-<td class="cl-fef1c7bc"><p><span class="cl-feeec1de">-0.00220</span></p></td>
-<td class="cl-fef1c7bc"><p><span class="cl-feeec1d4">0.00082</span></p></td>
-<td class="cl-fef1c7bc"><p><span class="cl-feeec1de">0.00284</span></p></td>
-<td class="cl-fef1c7bc"><p><span class="cl-feeec1d4">-0.00061</span></p></td>
-<td class="cl-fef1c7bc"><p><span class="cl-feeec1de">-0.00077</span></p></td>
-<td class="cl-fef1c7bc"><p><span class="cl-feeec1d4">0.00041</span></p></td>
-</tr>
-</tbody>
-</table>
-</div>
+<div class="tabwid"><style>.cl-015cfb5e{}.cl-01522120{font-family:'DejaVu Sans';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-0152247c{font-family:'DejaVu Sans';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-0156c7a2{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-0156e962{width:0.8in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-0156e96c{width:0.8in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-0156e96d{width:0.8in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table data-quarto-disable-processing="true" class="cl-015cfb5e"><caption>Table&nbsp;3:  <p>Poisson mixture model. Empirical bias to the Fisher Information
+matrix of <span class="math inline"><em>I</em><sub><em>n</em>, <em>s</em><em>c</em><em>o</em></sub></span>
+and <span class="math inline"><em>I</em><sub><em>n</em>, <em>o</em><em>b</em><em>s</em></sub></span>
+computed in the true parameter values for different values of n.</p> </caption><thead><tr style="overflow-wrap:break-word;"><th class="cl-0156e962"><p class="cl-0156c7a2"><span class="cl-01522120"></span></p></th><th colspan="2" class="cl-0156e962"><p class="cl-0156c7a2"><span class="cl-01522120">n=20</span></p></th><th colspan="2" class="cl-0156e962"><p class="cl-0156c7a2"><span class="cl-01522120">n=100</span></p></th><th colspan="2" class="cl-0156e962"><p class="cl-0156c7a2"><span class="cl-01522120">n=500</span></p></th></tr><tr style="overflow-wrap:break-word;"><th class="cl-0156e962"><p class="cl-0156c7a2"><span class="cl-01522120"></span></p></th><th class="cl-0156e962"><p class="cl-0156c7a2"><span class="cl-01522120">Isco</span></p></th><th class="cl-0156e962"><p class="cl-0156c7a2"><span class="cl-01522120">Iobs</span></p></th><th class="cl-0156e962"><p class="cl-0156c7a2"><span class="cl-01522120">Isco</span></p></th><th class="cl-0156e962"><p class="cl-0156c7a2"><span class="cl-01522120">Iobs</span></p></th><th class="cl-0156e962"><p class="cl-0156c7a2"><span class="cl-01522120">Isco</span></p></th><th class="cl-0156e962"><p class="cl-0156c7a2"><span class="cl-01522120">Iobs</span></p></th></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td class="cl-0156e96c"><p class="cl-0156c7a2"><span class="cl-01522120">(λ2,λ2)</span></p></td><td class="cl-0156e96c"><p class="cl-0156c7a2"><span class="cl-0152247c">0.00009</span></p></td><td class="cl-0156e96c"><p class="cl-0156c7a2"><span class="cl-01522120">-0.00025</span></p></td><td class="cl-0156e96c"><p class="cl-0156c7a2"><span class="cl-0152247c">-0.00003</span></p></td><td class="cl-0156e96c"><p class="cl-0156c7a2"><span class="cl-01522120">0.00025</span></p></td><td class="cl-0156e96c"><p class="cl-0156c7a2"><span class="cl-0152247c">0.00008</span></p></td><td class="cl-0156e96c"><p class="cl-0156c7a2"><span class="cl-01522120">-0.00029</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-0156e96c"><p class="cl-0156c7a2"><span class="cl-01522120">(λ3,λ3)</span></p></td><td class="cl-0156e96c"><p class="cl-0156c7a2"><span class="cl-0152247c">0.00005</span></p></td><td class="cl-0156e96c"><p class="cl-0156c7a2"><span class="cl-01522120">0.00047</span></p></td><td class="cl-0156e96c"><p class="cl-0156c7a2"><span class="cl-0152247c">-0.00023</span></p></td><td class="cl-0156e96c"><p class="cl-0156c7a2"><span class="cl-01522120">-0.00035</span></p></td><td class="cl-0156e96c"><p class="cl-0156c7a2"><span class="cl-0152247c">0.00008</span></p></td><td class="cl-0156e96c"><p class="cl-0156c7a2"><span class="cl-01522120">0.00015</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-0156e96c"><p class="cl-0156c7a2"><span class="cl-01522120">(α1,α1)</span></p></td><td class="cl-0156e96c"><p class="cl-0156c7a2"><span class="cl-0152247c">0.05981</span></p></td><td class="cl-0156e96c"><p class="cl-0156c7a2"><span class="cl-01522120">0.05981</span></p></td><td class="cl-0156e96c"><p class="cl-0156c7a2"><span class="cl-0152247c">-0.04072</span></p></td><td class="cl-0156e96c"><p class="cl-0156c7a2"><span class="cl-01522120">-0.04072</span></p></td><td class="cl-0156e96c"><p class="cl-0156c7a2"><span class="cl-0152247c">0.01849</span></p></td><td class="cl-0156e96c"><p class="cl-0156c7a2"><span class="cl-01522120">0.01849</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-0156e96c"><p class="cl-0156c7a2"><span class="cl-01522120">(α2,α2)</span></p></td><td class="cl-0156e96c"><p class="cl-0156c7a2"><span class="cl-0152247c">0.04756</span></p></td><td class="cl-0156e96c"><p class="cl-0156c7a2"><span class="cl-01522120">0.04756</span></p></td><td class="cl-0156e96c"><p class="cl-0156c7a2"><span class="cl-0152247c">-0.04006</span></p></td><td class="cl-0156e96c"><p class="cl-0156c7a2"><span class="cl-01522120">-0.04006</span></p></td><td class="cl-0156e96c"><p class="cl-0156c7a2"><span class="cl-0152247c">0.01205</span></p></td><td class="cl-0156e96c"><p class="cl-0156c7a2"><span class="cl-01522120">0.01205</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-0156e96c"><p class="cl-0156c7a2"><span class="cl-01522120">(λ2,λ3)</span></p></td><td class="cl-0156e96c"><p class="cl-0156c7a2"><span class="cl-0152247c">0.00009</span></p></td><td class="cl-0156e96c"><p class="cl-0156c7a2"><span class="cl-01522120">0.00009</span></p></td><td class="cl-0156e96c"><p class="cl-0156c7a2"><span class="cl-0152247c">-0.00007</span></p></td><td class="cl-0156e96c"><p class="cl-0156c7a2"><span class="cl-01522120">-0.00007</span></p></td><td class="cl-0156e96c"><p class="cl-0156c7a2"><span class="cl-0152247c">0.00002</span></p></td><td class="cl-0156e96c"><p class="cl-0156c7a2"><span class="cl-01522120">0.00002</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-0156e96d"><p class="cl-0156c7a2"><span class="cl-01522120">(λ3,α2)</span></p></td><td class="cl-0156e96d"><p class="cl-0156c7a2"><span class="cl-0152247c">-0.00220</span></p></td><td class="cl-0156e96d"><p class="cl-0156c7a2"><span class="cl-01522120">0.00082</span></p></td><td class="cl-0156e96d"><p class="cl-0156c7a2"><span class="cl-0152247c">0.00284</span></p></td><td class="cl-0156e96d"><p class="cl-0156c7a2"><span class="cl-01522120">-0.00061</span></p></td><td class="cl-0156e96d"><p class="cl-0156c7a2"><span class="cl-0152247c">-0.00077</span></p></td><td class="cl-0156e96d"><p class="cl-0156c7a2"><span class="cl-01522120">0.00041</span></p></td></tr></tbody></table></div>
 </div>
 </div>
 </div>
 <div class="cell" data-file="scripts/tableSdPoissonMixture.R">
 <div class="cell-output-display">
-<div class="tabwid"><style>.cl-ff102b76{}.cl-ff09263c{font-family:'Helvetica';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-ff092646{font-family:'Helvetica';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-ff0c1040{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-ff0c224c{width:57.6pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 2pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ff0c2256{width:57.6pt;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ff0c2260{width:57.6pt;background-color:transparent;vertical-align: middle;border-bottom: 2pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
 <div id="tbl-SdMixt" class="anchored">
-<table class="cl-ff102b76 table table-sm table-striped small" data-quarto-postprocess="true">
-<caption>Table&nbsp;4: Poisson mixture model. Empirical squared deviation to the Fisher Information matrix of <span class="math inline">I_{n,sco}</span> and <span class="math inline">I_{n,obs}</span> computed in the true parameter values for different values of n.</caption>
-<thead>
-<tr class="header" style="overflow-wrap:break-word;">
-<th class="cl-ff0c224c"><p><span class="cl-ff09263c"></span></p></th>
-<th colspan="2" class="cl-ff0c224c"><p><span class="cl-ff09263c">n=20</span></p></th>
-<th colspan="2" class="cl-ff0c224c"><p><span class="cl-ff09263c">n=100</span></p></th>
-<th colspan="2" class="cl-ff0c224c"><p><span class="cl-ff09263c">n=500</span></p></th>
-</tr>
-<tr class="odd" style="overflow-wrap:break-word;">
-<th class="cl-ff0c224c"><p><span class="cl-ff09263c"></span></p></th>
-<th class="cl-ff0c224c"><p><span class="cl-ff09263c">Isco</span></p></th>
-<th class="cl-ff0c224c"><p><span class="cl-ff09263c">Iobs</span></p></th>
-<th class="cl-ff0c224c"><p><span class="cl-ff09263c">Isco</span></p></th>
-<th class="cl-ff0c224c"><p><span class="cl-ff09263c">Iobs</span></p></th>
-<th class="cl-ff0c224c"><p><span class="cl-ff09263c">Isco</span></p></th>
-<th class="cl-ff0c224c"><p><span class="cl-ff09263c">Iobs</span></p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd" style="overflow-wrap:break-word;">
-<td class="cl-ff0c2256"><p><span class="cl-ff09263c">(λ2,λ2)</span></p></td>
-<td class="cl-ff0c2256"><p><span class="cl-ff092646">0.00717</span></p></td>
-<td class="cl-ff0c2256"><p><span class="cl-ff09263c">0.02238</span></p></td>
-<td class="cl-ff0c2256"><p><span class="cl-ff092646">0.00310</span></p></td>
-<td class="cl-ff0c2256"><p><span class="cl-ff09263c">0.00996</span></p></td>
-<td class="cl-ff0c2256"><p><span class="cl-ff092646">0.00141</span></p></td>
-<td class="cl-ff0c2256"><p><span class="cl-ff09263c">0.00463</span></p></td>
-</tr>
-<tr class="even" style="overflow-wrap:break-word;">
-<td class="cl-ff0c2256"><p><span class="cl-ff09263c">(λ3,λ3)</span></p></td>
-<td class="cl-ff0c2256"><p><span class="cl-ff092646">0.01523</span></p></td>
-<td class="cl-ff0c2256"><p><span class="cl-ff09263c">0.00872</span></p></td>
-<td class="cl-ff0c2256"><p><span class="cl-ff092646">0.00664</span></p></td>
-<td class="cl-ff0c2256"><p><span class="cl-ff09263c">0.00403</span></p></td>
-<td class="cl-ff0c2256"><p><span class="cl-ff092646">0.00299</span></p></td>
-<td class="cl-ff0c2256"><p><span class="cl-ff09263c">0.00167</span></p></td>
-</tr>
-<tr class="odd" style="overflow-wrap:break-word;">
-<td class="cl-ff0c2256"><p><span class="cl-ff09263c">(α1,α1)</span></p></td>
-<td class="cl-ff0c2256"><p><span class="cl-ff092646">1.20192</span></p></td>
-<td class="cl-ff0c2256"><p><span class="cl-ff09263c">1.20192</span></p></td>
-<td class="cl-ff0c2256"><p><span class="cl-ff092646">0.52483</span></p></td>
-<td class="cl-ff0c2256"><p><span class="cl-ff09263c">0.52483</span></p></td>
-<td class="cl-ff0c2256"><p><span class="cl-ff092646">0.23129</span></p></td>
-<td class="cl-ff0c2256"><p><span class="cl-ff09263c">0.23129</span></p></td>
-</tr>
-<tr class="even" style="overflow-wrap:break-word;">
-<td class="cl-ff0c2256"><p><span class="cl-ff09263c">(α2,α2)</span></p></td>
-<td class="cl-ff0c2256"><p><span class="cl-ff092646">1.05566</span></p></td>
-<td class="cl-ff0c2256"><p><span class="cl-ff09263c">1.05566</span></p></td>
-<td class="cl-ff0c2256"><p><span class="cl-ff092646">0.46762</span></p></td>
-<td class="cl-ff0c2256"><p><span class="cl-ff09263c">0.46762</span></p></td>
-<td class="cl-ff0c2256"><p><span class="cl-ff092646">0.20510</span></p></td>
-<td class="cl-ff0c2256"><p><span class="cl-ff09263c">0.20510</span></p></td>
-</tr>
-<tr class="odd" style="overflow-wrap:break-word;">
-<td class="cl-ff0c2256"><p><span class="cl-ff09263c">(λ2,λ3)</span></p></td>
-<td class="cl-ff0c2256"><p><span class="cl-ff092646">0.00295</span></p></td>
-<td class="cl-ff0c2256"><p><span class="cl-ff09263c">0.00295</span></p></td>
-<td class="cl-ff0c2256"><p><span class="cl-ff092646">0.00132</span></p></td>
-<td class="cl-ff0c2256"><p><span class="cl-ff09263c">0.00132</span></p></td>
-<td class="cl-ff0c2256"><p><span class="cl-ff092646">0.00059</span></p></td>
-<td class="cl-ff0c2256"><p><span class="cl-ff09263c">0.00059</span></p></td>
-</tr>
-<tr class="even" style="overflow-wrap:break-word;">
-<td class="cl-ff0c2260"><p><span class="cl-ff09263c">(λ3,α2)</span></p></td>
-<td class="cl-ff0c2260"><p><span class="cl-ff092646">0.11013</span></p></td>
-<td class="cl-ff0c2260"><p><span class="cl-ff09263c">0.03428</span></p></td>
-<td class="cl-ff0c2260"><p><span class="cl-ff092646">0.04614</span></p></td>
-<td class="cl-ff0c2260"><p><span class="cl-ff09263c">0.01561</span></p></td>
-<td class="cl-ff0c2260"><p><span class="cl-ff092646">0.02137</span></p></td>
-<td class="cl-ff0c2260"><p><span class="cl-ff09263c">0.00712</span></p></td>
-</tr>
-</tbody>
-</table>
+<div class="tabwid"><style>.cl-01896acc{}.cl-017ee2fa{font-family:'DejaVu Sans';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-017ee318{font-family:'DejaVu Sans';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-018346e2{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-01836410{width:0.8in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-01836424{width:0.8in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-0183642e{width:0.8in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table data-quarto-disable-processing="true" class="cl-01896acc"><caption>Table&nbsp;4:  <p>Poisson mixture model. Empirical squared deviation to the Fisher
+Information matrix of <span class="math inline"><em>I</em><sub><em>n</em>, <em>s</em><em>c</em><em>o</em></sub></span>
+and <span class="math inline"><em>I</em><sub><em>n</em>, <em>o</em><em>b</em><em>s</em></sub></span>
+computed in the true parameter values for different values of n.</p> </caption><thead><tr style="overflow-wrap:break-word;"><th class="cl-01836410"><p class="cl-018346e2"><span class="cl-017ee2fa"></span></p></th><th colspan="2" class="cl-01836410"><p class="cl-018346e2"><span class="cl-017ee2fa">n=20</span></p></th><th colspan="2" class="cl-01836410"><p class="cl-018346e2"><span class="cl-017ee2fa">n=100</span></p></th><th colspan="2" class="cl-01836410"><p class="cl-018346e2"><span class="cl-017ee2fa">n=500</span></p></th></tr><tr style="overflow-wrap:break-word;"><th class="cl-01836410"><p class="cl-018346e2"><span class="cl-017ee2fa"></span></p></th><th class="cl-01836410"><p class="cl-018346e2"><span class="cl-017ee2fa">Isco</span></p></th><th class="cl-01836410"><p class="cl-018346e2"><span class="cl-017ee2fa">Iobs</span></p></th><th class="cl-01836410"><p class="cl-018346e2"><span class="cl-017ee2fa">Isco</span></p></th><th class="cl-01836410"><p class="cl-018346e2"><span class="cl-017ee2fa">Iobs</span></p></th><th class="cl-01836410"><p class="cl-018346e2"><span class="cl-017ee2fa">Isco</span></p></th><th class="cl-01836410"><p class="cl-018346e2"><span class="cl-017ee2fa">Iobs</span></p></th></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td class="cl-01836424"><p class="cl-018346e2"><span class="cl-017ee2fa">(λ2,λ2)</span></p></td><td class="cl-01836424"><p class="cl-018346e2"><span class="cl-017ee318">0.00717</span></p></td><td class="cl-01836424"><p class="cl-018346e2"><span class="cl-017ee2fa">0.02238</span></p></td><td class="cl-01836424"><p class="cl-018346e2"><span class="cl-017ee318">0.00310</span></p></td><td class="cl-01836424"><p class="cl-018346e2"><span class="cl-017ee2fa">0.00996</span></p></td><td class="cl-01836424"><p class="cl-018346e2"><span class="cl-017ee318">0.00141</span></p></td><td class="cl-01836424"><p class="cl-018346e2"><span class="cl-017ee2fa">0.00463</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-01836424"><p class="cl-018346e2"><span class="cl-017ee2fa">(λ3,λ3)</span></p></td><td class="cl-01836424"><p class="cl-018346e2"><span class="cl-017ee318">0.01523</span></p></td><td class="cl-01836424"><p class="cl-018346e2"><span class="cl-017ee2fa">0.00872</span></p></td><td class="cl-01836424"><p class="cl-018346e2"><span class="cl-017ee318">0.00664</span></p></td><td class="cl-01836424"><p class="cl-018346e2"><span class="cl-017ee2fa">0.00403</span></p></td><td class="cl-01836424"><p class="cl-018346e2"><span class="cl-017ee318">0.00299</span></p></td><td class="cl-01836424"><p class="cl-018346e2"><span class="cl-017ee2fa">0.00167</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-01836424"><p class="cl-018346e2"><span class="cl-017ee2fa">(α1,α1)</span></p></td><td class="cl-01836424"><p class="cl-018346e2"><span class="cl-017ee318">1.20192</span></p></td><td class="cl-01836424"><p class="cl-018346e2"><span class="cl-017ee2fa">1.20192</span></p></td><td class="cl-01836424"><p class="cl-018346e2"><span class="cl-017ee318">0.52483</span></p></td><td class="cl-01836424"><p class="cl-018346e2"><span class="cl-017ee2fa">0.52483</span></p></td><td class="cl-01836424"><p class="cl-018346e2"><span class="cl-017ee318">0.23129</span></p></td><td class="cl-01836424"><p class="cl-018346e2"><span class="cl-017ee2fa">0.23129</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-01836424"><p class="cl-018346e2"><span class="cl-017ee2fa">(α2,α2)</span></p></td><td class="cl-01836424"><p class="cl-018346e2"><span class="cl-017ee318">1.05566</span></p></td><td class="cl-01836424"><p class="cl-018346e2"><span class="cl-017ee2fa">1.05566</span></p></td><td class="cl-01836424"><p class="cl-018346e2"><span class="cl-017ee318">0.46762</span></p></td><td class="cl-01836424"><p class="cl-018346e2"><span class="cl-017ee2fa">0.46762</span></p></td><td class="cl-01836424"><p class="cl-018346e2"><span class="cl-017ee318">0.20510</span></p></td><td class="cl-01836424"><p class="cl-018346e2"><span class="cl-017ee2fa">0.20510</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-01836424"><p class="cl-018346e2"><span class="cl-017ee2fa">(λ2,λ3)</span></p></td><td class="cl-01836424"><p class="cl-018346e2"><span class="cl-017ee318">0.00295</span></p></td><td class="cl-01836424"><p class="cl-018346e2"><span class="cl-017ee2fa">0.00295</span></p></td><td class="cl-01836424"><p class="cl-018346e2"><span class="cl-017ee318">0.00132</span></p></td><td class="cl-01836424"><p class="cl-018346e2"><span class="cl-017ee2fa">0.00132</span></p></td><td class="cl-01836424"><p class="cl-018346e2"><span class="cl-017ee318">0.00059</span></p></td><td class="cl-01836424"><p class="cl-018346e2"><span class="cl-017ee2fa">0.00059</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-0183642e"><p class="cl-018346e2"><span class="cl-017ee2fa">(λ3,α2)</span></p></td><td class="cl-0183642e"><p class="cl-018346e2"><span class="cl-017ee318">0.11013</span></p></td><td class="cl-0183642e"><p class="cl-018346e2"><span class="cl-017ee2fa">0.03428</span></p></td><td class="cl-0183642e"><p class="cl-018346e2"><span class="cl-017ee318">0.04614</span></p></td><td class="cl-0183642e"><p class="cl-018346e2"><span class="cl-017ee2fa">0.01561</span></p></td><td class="cl-0183642e"><p class="cl-018346e2"><span class="cl-017ee318">0.02137</span></p></td><td class="cl-0183642e"><p class="cl-018346e2"><span class="cl-017ee2fa">0.00712</span></p></td></tr></tbody></table></div>
 </div>
 </div>
 </div>
-</div>
-<p><a href="#tbl-coverageLMM-n100">Table&nbsp;5</a> and <a href="#tbl-coverageLMM-n500">Table&nbsp;6</a> show that the empirical coverage rates computed from <span class="math inline">I_{n,sco}</span> and <span class="math inline">I_{n,obs}</span> in the linear mixed effects model are close to the nominal values, which corroborates the relevance of both estimators. Moreover there is little difference between the results obtained when using <span class="math inline">I_{n,sco}</span> or <span class="math inline">I_{n,obs}</span> to estimate the Fisher information matrix. When the parameter value is unknown, the uncertainty related to the parameter estimation leads to a deterioration of the coverage rates. Still, this deterioration diminishes when <span class="math inline">n</span> increases.</p>
+<p><a href="#tbl-coverageLMM-n100" class="quarto-xref">Table&nbsp;5</a> and <a href="#tbl-coverageLMM-n500" class="quarto-xref">Table&nbsp;6</a> show that the empirical coverage rates computed from <span class="math inline">I_{n,sco}</span> and <span class="math inline">I_{n,obs}</span> in the linear mixed effects model are close to the nominal values, which corroborates the relevance of both estimators. Moreover there is little difference between the results obtained when using <span class="math inline">I_{n,sco}</span> or <span class="math inline">I_{n,obs}</span> to estimate the Fisher information matrix. When the parameter value is unknown, the uncertainty related to the parameter estimation leads to a deterioration of the coverage rates. Still, this deterioration diminishes when <span class="math inline">n</span> increases.</p>
 <div class="cell" data-file="scripts/simuLMM-coverage-n100.R">
 <div class="cell-output-display">
-<div class="tabwid"><style>.cl-ff61c58a{}.cl-ff5c1d42{font-family:'Helvetica';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-ff5c1d4c{font-family:'Helvetica';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-ff5e7880{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-ff5e85e6{width:57.6pt;background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(102, 102, 102, 1.00);border-top: 1pt solid rgba(102, 102, 102, 1.00);border-left: 1pt solid rgba(102, 102, 102, 1.00);border-right: 1pt solid rgba(102, 102, 102, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ff5e85f0{width:57.6pt;background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 1pt solid rgba(102, 102, 102, 1.00);border-right: 1pt solid rgba(102, 102, 102, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
 <div id="tbl-coverageLMM-n100" class="anchored">
-<table class="cl-ff61c58a table table-sm table-striped small" data-quarto-postprocess="true">
-<caption>Table&nbsp;5: Linear mixed effects model. Comparison of the coverage rates computed from both estimates of the Fisher information matrix in either the true or the estimated parameter values when n=100.</caption>
-<thead>
-<tr class="header" style="overflow-wrap:break-word;">
-<th class="cl-ff5e85e6"><p><span class="cl-ff5c1d42">1-α</span></p></th>
-<th class="cl-ff5e85e6"><p><span class="cl-ff5c1d42">Fisher est.</span></p></th>
-<th class="cl-ff5e85e6"><p><span class="cl-ff5c1d42">θ</span></p></th>
-<th class="cl-ff5e85e6"><p><span class="cl-ff5c1d42">β</span></p></th>
-<th class="cl-ff5e85e6"><p><span class="cl-ff5c1d42">η2</span></p></th>
-<th class="cl-ff5e85e6"><p><span class="cl-ff5c1d42">σ2</span></p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd" style="overflow-wrap:break-word;">
-<td rowspan="4" class="cl-ff5e85f0"><p><span class="cl-ff5c1d42">0.99</span></p></td>
-<td rowspan="2" class="cl-ff5e85f0"><p><span class="cl-ff5c1d4c">Isco</span></p></td>
-<td class="cl-ff5e85f0"><p><span class="cl-ff5c1d4c">Known</span></p></td>
-<td class="cl-ff5e85f0"><p><span class="cl-ff5c1d4c">0.992</span></p></td>
-<td class="cl-ff5e85f0"><p><span class="cl-ff5c1d4c">0.98</span></p></td>
-<td class="cl-ff5e85f0"><p><span class="cl-ff5c1d4c">0.984</span></p></td>
-</tr>
-<tr class="even" style="overflow-wrap:break-word;">
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">Estimated</span></p></td>
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">0.988</span></p></td>
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">0.974</span></p></td>
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">0.992</span></p></td>
-</tr>
-<tr class="odd" style="overflow-wrap:break-word;">
-<td rowspan="2" class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">Iobs</span></p></td>
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">Known</span></p></td>
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">0.99</span></p></td>
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">0.982</span></p></td>
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">0.982</span></p></td>
-</tr>
-<tr class="even" style="overflow-wrap:break-word;">
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">Estimated</span></p></td>
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">0.986</span></p></td>
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">0.972</span></p></td>
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">0.988</span></p></td>
-</tr>
-<tr class="odd" style="overflow-wrap:break-word;">
-<td rowspan="4" class="cl-ff5e85e6"><p><span class="cl-ff5c1d42">0.95</span></p></td>
-<td rowspan="2" class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">Isco</span></p></td>
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">Known</span></p></td>
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">0.964</span></p></td>
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">0.946</span></p></td>
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">0.948</span></p></td>
-</tr>
-<tr class="even" style="overflow-wrap:break-word;">
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">Estimated</span></p></td>
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">0.944</span></p></td>
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">0.936</span></p></td>
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">0.944</span></p></td>
-</tr>
-<tr class="odd" style="overflow-wrap:break-word;">
-<td rowspan="2" class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">Iobs</span></p></td>
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">Known</span></p></td>
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">0.96</span></p></td>
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">0.944</span></p></td>
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">0.948</span></p></td>
-</tr>
-<tr class="even" style="overflow-wrap:break-word;">
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">Estimated</span></p></td>
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">0.938</span></p></td>
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">0.942</span></p></td>
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">0.944</span></p></td>
-</tr>
-<tr class="odd" style="overflow-wrap:break-word;">
-<td rowspan="4" class="cl-ff5e85e6"><p><span class="cl-ff5c1d42">0.9</span></p></td>
-<td rowspan="2" class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">Isco</span></p></td>
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">Known</span></p></td>
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">0.904</span></p></td>
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">0.914</span></p></td>
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">0.876</span></p></td>
-</tr>
-<tr class="even" style="overflow-wrap:break-word;">
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">Estimated</span></p></td>
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">0.89</span></p></td>
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">0.906</span></p></td>
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">0.884</span></p></td>
-</tr>
-<tr class="odd" style="overflow-wrap:break-word;">
-<td rowspan="2" class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">Iobs</span></p></td>
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">Known</span></p></td>
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">0.892</span></p></td>
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">0.916</span></p></td>
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">0.89</span></p></td>
-</tr>
-<tr class="even" style="overflow-wrap:break-word;">
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">Estimated</span></p></td>
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">0.882</span></p></td>
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">0.89</span></p></td>
-<td class="cl-ff5e85e6"><p><span class="cl-ff5c1d4c">0.872</span></p></td>
-</tr>
-</tbody>
-</table>
-</div>
+<div class="tabwid"><style>.cl-0243ecc6{}.cl-0237a2e0{font-family:'DejaVu Sans';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-0237a2f4{font-family:'DejaVu Sans';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-023c8ae4{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-023cb2ee{width:0.8in;background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(102, 102, 102, 1.00);border-top: 0.75pt solid rgba(102, 102, 102, 1.00);border-left: 0.75pt solid rgba(102, 102, 102, 1.00);border-right: 0.75pt solid rgba(102, 102, 102, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-023cb2f8{width:0.8in;background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0.75pt solid rgba(102, 102, 102, 1.00);border-right: 0.75pt solid rgba(102, 102, 102, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table data-quarto-disable-processing="true" class="cl-0243ecc6"><caption>Table&nbsp;5:  <p>Linear mixed effects model. Comparison of the coverage rates computed
+from both estimates of the Fisher information matrix in either the true
+or the estimated parameter values when n=100.</p> </caption><thead><tr style="overflow-wrap:break-word;"><th class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2e0">1-α</span></p></th><th class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2e0">Fisher est.</span></p></th><th class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2e0">θ</span></p></th><th class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2e0">β</span></p></th><th class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2e0">η2</span></p></th><th class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2e0">σ2</span></p></th></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td rowspan="4" class="cl-023cb2f8"><p class="cl-023c8ae4"><span class="cl-0237a2e0">0.99</span></p></td><td rowspan="2" class="cl-023cb2f8"><p class="cl-023c8ae4"><span class="cl-0237a2f4">Isco</span></p></td><td class="cl-023cb2f8"><p class="cl-023c8ae4"><span class="cl-0237a2f4">Known</span></p></td><td class="cl-023cb2f8"><p class="cl-023c8ae4"><span class="cl-0237a2f4">0.992</span></p></td><td class="cl-023cb2f8"><p class="cl-023c8ae4"><span class="cl-0237a2f4">0.98</span></p></td><td class="cl-023cb2f8"><p class="cl-023c8ae4"><span class="cl-0237a2f4">0.984</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">Estimated</span></p></td><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">0.988</span></p></td><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">0.974</span></p></td><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">0.992</span></p></td></tr><tr style="overflow-wrap:break-word;"><td rowspan="2" class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">Iobs</span></p></td><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">Known</span></p></td><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">0.99</span></p></td><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">0.982</span></p></td><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">0.982</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">Estimated</span></p></td><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">0.986</span></p></td><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">0.972</span></p></td><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">0.988</span></p></td></tr><tr style="overflow-wrap:break-word;"><td rowspan="4" class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2e0">0.95</span></p></td><td rowspan="2" class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">Isco</span></p></td><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">Known</span></p></td><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">0.964</span></p></td><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">0.946</span></p></td><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">0.948</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">Estimated</span></p></td><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">0.944</span></p></td><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">0.936</span></p></td><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">0.944</span></p></td></tr><tr style="overflow-wrap:break-word;"><td rowspan="2" class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">Iobs</span></p></td><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">Known</span></p></td><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">0.96</span></p></td><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">0.944</span></p></td><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">0.948</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">Estimated</span></p></td><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">0.938</span></p></td><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">0.942</span></p></td><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">0.944</span></p></td></tr><tr style="overflow-wrap:break-word;"><td rowspan="4" class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2e0">0.9</span></p></td><td rowspan="2" class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">Isco</span></p></td><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">Known</span></p></td><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">0.904</span></p></td><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">0.914</span></p></td><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">0.876</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">Estimated</span></p></td><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">0.89</span></p></td><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">0.906</span></p></td><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">0.884</span></p></td></tr><tr style="overflow-wrap:break-word;"><td rowspan="2" class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">Iobs</span></p></td><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">Known</span></p></td><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">0.892</span></p></td><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">0.916</span></p></td><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">0.89</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">Estimated</span></p></td><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">0.882</span></p></td><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">0.89</span></p></td><td class="cl-023cb2ee"><p class="cl-023c8ae4"><span class="cl-0237a2f4">0.872</span></p></td></tr></tbody></table></div>
 </div>
 </div>
 </div>
 <div class="cell" data-file="scripts/simuLMM-coverage-n500.R">
 <div class="cell-output-display">
-<div class="tabwid"><style>.cl-ffb2838a{}.cl-ffab6848{font-family:'Helvetica';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-ffab6852{font-family:'Helvetica';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-ffaed280{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-ffaee20c{width:57.6pt;background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(102, 102, 102, 1.00);border-top: 1pt solid rgba(102, 102, 102, 1.00);border-left: 1pt solid rgba(102, 102, 102, 1.00);border-right: 1pt solid rgba(102, 102, 102, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ffaee216{width:57.6pt;background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 1pt solid rgba(102, 102, 102, 1.00);border-right: 1pt solid rgba(102, 102, 102, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
 <div id="tbl-coverageLMM-n500" class="anchored">
-<table class="cl-ffb2838a table table-sm table-striped small" data-quarto-postprocess="true">
-<caption>Table&nbsp;6: Linear mixed effects model. Comparison of the coverage rates computed from both estimates of the Fisher information matrix in either the true or the estimated parameter values when n=500.</caption>
-<thead>
-<tr class="header" style="overflow-wrap:break-word;">
-<th class="cl-ffaee20c"><p><span class="cl-ffab6848">1-α</span></p></th>
-<th class="cl-ffaee20c"><p><span class="cl-ffab6848">Fisher est.</span></p></th>
-<th class="cl-ffaee20c"><p><span class="cl-ffab6848">θ</span></p></th>
-<th class="cl-ffaee20c"><p><span class="cl-ffab6848">β</span></p></th>
-<th class="cl-ffaee20c"><p><span class="cl-ffab6848">η2</span></p></th>
-<th class="cl-ffaee20c"><p><span class="cl-ffab6848">σ2</span></p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd" style="overflow-wrap:break-word;">
-<td rowspan="4" class="cl-ffaee216"><p><span class="cl-ffab6848">0.99</span></p></td>
-<td rowspan="2" class="cl-ffaee216"><p><span class="cl-ffab6852">Isco</span></p></td>
-<td class="cl-ffaee216"><p><span class="cl-ffab6852">Known</span></p></td>
-<td class="cl-ffaee216"><p><span class="cl-ffab6852">0.996</span></p></td>
-<td class="cl-ffaee216"><p><span class="cl-ffab6852">0.986</span></p></td>
-<td class="cl-ffaee216"><p><span class="cl-ffab6852">0.984</span></p></td>
-</tr>
-<tr class="even" style="overflow-wrap:break-word;">
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">Estimated</span></p></td>
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">0.996</span></p></td>
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">0.986</span></p></td>
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">0.992</span></p></td>
-</tr>
-<tr class="odd" style="overflow-wrap:break-word;">
-<td rowspan="2" class="cl-ffaee20c"><p><span class="cl-ffab6852">Iobs</span></p></td>
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">Known</span></p></td>
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">0.996</span></p></td>
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">0.986</span></p></td>
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">0.984</span></p></td>
-</tr>
-<tr class="even" style="overflow-wrap:break-word;">
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">Estimated</span></p></td>
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">0.996</span></p></td>
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">0.988</span></p></td>
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">0.986</span></p></td>
-</tr>
-<tr class="odd" style="overflow-wrap:break-word;">
-<td rowspan="4" class="cl-ffaee20c"><p><span class="cl-ffab6848">0.95</span></p></td>
-<td rowspan="2" class="cl-ffaee20c"><p><span class="cl-ffab6852">Isco</span></p></td>
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">Known</span></p></td>
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">0.952</span></p></td>
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">0.954</span></p></td>
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">0.952</span></p></td>
-</tr>
-<tr class="even" style="overflow-wrap:break-word;">
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">Estimated</span></p></td>
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">0.95</span></p></td>
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">0.956</span></p></td>
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">0.944</span></p></td>
-</tr>
-<tr class="odd" style="overflow-wrap:break-word;">
-<td rowspan="2" class="cl-ffaee20c"><p><span class="cl-ffab6852">Iobs</span></p></td>
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">Known</span></p></td>
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">0.952</span></p></td>
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">0.956</span></p></td>
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">0.952</span></p></td>
-</tr>
-<tr class="even" style="overflow-wrap:break-word;">
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">Estimated</span></p></td>
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">0.95</span></p></td>
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">0.95</span></p></td>
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">0.946</span></p></td>
-</tr>
-<tr class="odd" style="overflow-wrap:break-word;">
-<td rowspan="4" class="cl-ffaee20c"><p><span class="cl-ffab6848">0.9</span></p></td>
-<td rowspan="2" class="cl-ffaee20c"><p><span class="cl-ffab6852">Isco</span></p></td>
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">Known</span></p></td>
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">0.922</span></p></td>
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">0.914</span></p></td>
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">0.906</span></p></td>
-</tr>
-<tr class="even" style="overflow-wrap:break-word;">
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">Estimated</span></p></td>
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">0.916</span></p></td>
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">0.898</span></p></td>
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">0.91</span></p></td>
-</tr>
-<tr class="odd" style="overflow-wrap:break-word;">
-<td rowspan="2" class="cl-ffaee20c"><p><span class="cl-ffab6852">Iobs</span></p></td>
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">Known</span></p></td>
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">0.918</span></p></td>
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">0.912</span></p></td>
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">0.908</span></p></td>
-</tr>
-<tr class="even" style="overflow-wrap:break-word;">
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">Estimated</span></p></td>
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">0.914</span></p></td>
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">0.888</span></p></td>
-<td class="cl-ffaee20c"><p><span class="cl-ffab6852">0.912</span></p></td>
-</tr>
-</tbody>
-</table>
-</div>
+<div class="tabwid"><style>.cl-03022a2e{}.cl-02f66d4c{font-family:'DejaVu Sans';font-size:11pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-02f66d60{font-family:'DejaVu Sans';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-02fb58ac{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-02fb78aa{width:0.8in;background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(102, 102, 102, 1.00);border-top: 0.75pt solid rgba(102, 102, 102, 1.00);border-left: 0.75pt solid rgba(102, 102, 102, 1.00);border-right: 0.75pt solid rgba(102, 102, 102, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-02fb78b4{width:0.8in;background-color:transparent;vertical-align: middle;border-bottom: 0.75pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0.75pt solid rgba(102, 102, 102, 1.00);border-right: 0.75pt solid rgba(102, 102, 102, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style><table data-quarto-disable-processing="true" class="cl-03022a2e"><caption>Table&nbsp;6:  <p>Linear mixed effects model. Comparison of the coverage rates computed
+from both estimates of the Fisher information matrix in either the true
+or the estimated parameter values when n=500.</p> </caption><thead><tr style="overflow-wrap:break-word;"><th class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d4c">1-α</span></p></th><th class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d4c">Fisher est.</span></p></th><th class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d4c">θ</span></p></th><th class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d4c">β</span></p></th><th class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d4c">η2</span></p></th><th class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d4c">σ2</span></p></th></tr></thead><tbody><tr style="overflow-wrap:break-word;"><td rowspan="4" class="cl-02fb78b4"><p class="cl-02fb58ac"><span class="cl-02f66d4c">0.99</span></p></td><td rowspan="2" class="cl-02fb78b4"><p class="cl-02fb58ac"><span class="cl-02f66d60">Isco</span></p></td><td class="cl-02fb78b4"><p class="cl-02fb58ac"><span class="cl-02f66d60">Known</span></p></td><td class="cl-02fb78b4"><p class="cl-02fb58ac"><span class="cl-02f66d60">0.996</span></p></td><td class="cl-02fb78b4"><p class="cl-02fb58ac"><span class="cl-02f66d60">0.986</span></p></td><td class="cl-02fb78b4"><p class="cl-02fb58ac"><span class="cl-02f66d60">0.984</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">Estimated</span></p></td><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">0.996</span></p></td><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">0.986</span></p></td><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">0.992</span></p></td></tr><tr style="overflow-wrap:break-word;"><td rowspan="2" class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">Iobs</span></p></td><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">Known</span></p></td><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">0.996</span></p></td><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">0.986</span></p></td><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">0.984</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">Estimated</span></p></td><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">0.996</span></p></td><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">0.988</span></p></td><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">0.986</span></p></td></tr><tr style="overflow-wrap:break-word;"><td rowspan="4" class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d4c">0.95</span></p></td><td rowspan="2" class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">Isco</span></p></td><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">Known</span></p></td><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">0.952</span></p></td><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">0.954</span></p></td><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">0.952</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">Estimated</span></p></td><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">0.95</span></p></td><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">0.956</span></p></td><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">0.944</span></p></td></tr><tr style="overflow-wrap:break-word;"><td rowspan="2" class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">Iobs</span></p></td><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">Known</span></p></td><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">0.952</span></p></td><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">0.956</span></p></td><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">0.952</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">Estimated</span></p></td><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">0.95</span></p></td><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">0.95</span></p></td><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">0.946</span></p></td></tr><tr style="overflow-wrap:break-word;"><td rowspan="4" class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d4c">0.9</span></p></td><td rowspan="2" class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">Isco</span></p></td><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">Known</span></p></td><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">0.922</span></p></td><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">0.914</span></p></td><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">0.906</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">Estimated</span></p></td><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">0.916</span></p></td><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">0.898</span></p></td><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">0.91</span></p></td></tr><tr style="overflow-wrap:break-word;"><td rowspan="2" class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">Iobs</span></p></td><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">Known</span></p></td><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">0.918</span></p></td><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">0.912</span></p></td><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">0.908</span></p></td></tr><tr style="overflow-wrap:break-word;"><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">Estimated</span></p></td><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">0.914</span></p></td><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">0.888</span></p></td><td class="cl-02fb78aa"><p class="cl-02fb58ac"><span class="cl-02f66d60">0.912</span></p></td></tr></tbody></table></div>
 </div>
 </div>
 </div>
@@ -1185,22 +699,22 @@ I_{n,sco}^K = \frac{1}{n} \sum_{i=1}^n \Delta_i^K (\Delta_i^K )^t.
 </section>
 <section id="sec-SimusNLMM" class="level2" data-number="4.2">
 <h2 data-number="4.2" class="anchored" data-anchor-id="sec-SimusNLMM"><span class="header-section-number">4.2</span> Asymptotic properties of the stochastic approximation algorithm</h2>
-<p>We now investigate the properties of our algorithm with truncation on random boundaries in the curved exponential family when the number of iterations grows (<a href="#sec-simuExpo">Section&nbsp;4.2.1</a>) and the good performance of its extended version in more general latent variable models (<a href="#sec-simuNonExpo">Section&nbsp;4.2.2</a>). We also present a short comparison with existing methods (<a href="#sec-simuComparison">Section&nbsp;4.2.3</a>).</p>
+<p>We now investigate the properties of our algorithm with truncation on random boundaries in the curved exponential family when the number of iterations grows (<a href="#sec-simuExpo" class="quarto-xref">Section&nbsp;4.2.1</a>) and the good performance of its extended version in more general latent variable models (<a href="#sec-simuNonExpo" class="quarto-xref">Section&nbsp;4.2.2</a>). We also present a short comparison with existing methods (<a href="#sec-simuComparison" class="quarto-xref">Section&nbsp;4.2.3</a>).</p>
 <section id="sec-simuExpo" class="level3" data-number="4.2.1">
 <h3 data-number="4.2.1" class="anchored" data-anchor-id="sec-simuExpo"><span class="header-section-number">4.2.1</span> In curved exponential family models</h3>
 <p>We consider the following nonlinear mixed effects model which is widely used in pharmacokinetics for describing the evolution of drug concentration over time: <span id="eq-modelPK"><span class="math display">
 y_{ij}= g_i(t_{ij},z_i) + \varepsilon_{ij},
 \tag{7}</span></span> where <span class="math inline">z_i=(\log ka_i, \log Cl_i, \log V_i)'</span> are individual random parameters such that <span class="math display">\log ka_{i}  =  \log(ka) + \eta_{i,1}, \log Cl_{i}  =  \log(Cl) + \eta_{i,2}, \log V_i  =  \log(V) + \eta_{i,3},</span> and <span class="math display">g_i(t_{ij},z_i) = \frac{d_i ka_{i}}{V_i ka_{i}-Cl_{i}}\left[e^{-\frac{Cl_{i}}{V_i} t_{ij}} - e^{-ka_{i} t_{ij}}\right].</span></p>
 <p>For all <span class="math inline">1 \leq i \leq n</span> and all <span class="math inline">1\leq j \leq J</span>, <span class="math inline">y_{ij}</span> denotes the measure of drug concentration on individual <span class="math inline">i</span> at time <span class="math inline">t_{ij}</span>, <span class="math inline">d_i</span> the dose of drug administered to individual <span class="math inline">i</span>, and <span class="math inline">V_i</span>, <span class="math inline">ka_i</span> and <span class="math inline">Cl_i</span> respectively denote the volume of the central compartment, the drug’s absorption rate constant and the drug’s clearance of individual <span class="math inline">i</span>. The terms <span class="math inline">\eta_{i} = (\eta_{i,1},\eta_{i,2},\eta_{i,3})' \in \mathbb{R}^3</span> are unobserved random effects which are assumed independent and identically distributed such that <span class="math inline">\eta_i \underset{i.i.d.}{\sim} \mathcal{N}(0,\Omega)</span>, where <span class="math inline">\Omega = \mathrm{diag}(\omega^2_{ka},\omega^2_{Cl},\omega^2_{V})</span>, the residuals <span class="math inline">(\varepsilon_{ij})</span> are assumed independent and identically distributed such that <span class="math inline">\varepsilon_{ij} \underset{i.i.d.}{\sim} \mathcal{N}(0,\sigma^2)</span> and the sequences <span class="math inline">(\eta_i)</span> and <span class="math inline">(\varepsilon_{ij})</span> are assumed mutually independent. Here, the model parameter is <span class="math inline">\theta = (ka,V,Cl,\omega^2_{ka},\omega^2_{V},\omega^2_{Cl},\sigma^2)</span>.</p>
-<p>In this model, as in a large majority of nonlinear mixed effects models, the likelihood does not have any analytical expression. As a consequence, neither the Fisher Information Matrix, nor the estimators <span class="math inline">I_{n,sco}(\theta)</span>, <span class="math inline">I_{n,obs}(\theta)</span> have explicit expressions. However, as the complete data log-likelihood is explicit, stochastic approximations of <span class="math inline">I_{n,sco}(\theta)</span>, <span class="math inline">I_{n,obs}(\theta)</span> can be implemented. Note moreover that this model belongs to the curved exponential family as defined in <a href="#eq-curvedexpo">Equation&nbsp;6</a> with <span class="math display">
+<p>In this model, as in a large majority of nonlinear mixed effects models, the likelihood does not have any analytical expression. As a consequence, neither the Fisher Information Matrix, nor the estimators <span class="math inline">I_{n,sco}(\theta)</span>, <span class="math inline">I_{n,obs}(\theta)</span> have explicit expressions. However, as the complete data log-likelihood is explicit, stochastic approximations of <span class="math inline">I_{n,sco}(\theta)</span>, <span class="math inline">I_{n,obs}(\theta)</span> can be implemented. Note moreover that this model belongs to the curved exponential family as defined in <a href="#eq-curvedexpo" class="quarto-xref">Equation&nbsp;6</a> with <span class="math display">
 \begin{aligned}
 S_i(z_i) = \left(\sum_{j=1}^{J} (y_{ij} g_i(t_{ij}, z_i)), (\log ka_i), (\log Cl_i), (\log V_i), (\log ka_i)^2, (\log Cl_i)^2, (\log V_i)^2 \right)'\\
 \phi_i(\theta) =  \left(\frac{1}{2\sigma^2},\frac{\log ka}{\omega_{ka}^2}, \frac{\log Cl}{\omega_{Cl}^2}, \frac{\log V}{\omega_{V}^2},-\frac{1}{2\omega_{ka}^2},-\frac{1}{2\omega_{Cl}^2},-\frac{1}{2\omega_{V}^2}\right),\\
 \psi_i(\theta) = \frac{1}{2}\left(\frac{(\log ka)^2}{\omega_{ka}^2} + \frac{(\log Cl)^2}{\omega_{Cl}^2} + \frac{(\log V)^2}{\omega_{V}^2}\right).
 \end{aligned}
 </span></p>
-<p>The algorithm described in <a href="#sec-algoSAEM">Section&nbsp;3.2.1</a> can therefore be easily implemented to estimate <span class="math inline">\theta</span> and the Fisher information matrix simultaneously (see R function provided in the Appendix section).</p>
-<p>We take the following values for the parameters <span class="math inline">V=31</span>, <span class="math inline">ka=1.6</span>, <span class="math inline">Cl=2.8</span>, <span class="math inline">\omega^2_V=0.40</span>, <span class="math inline">\omega^2_{ka}=0.40</span>, <span class="math inline">\omega^2_{Cl}=0.40</span> and <span class="math inline">\sigma^2=0.75</span>. We consider the same dose <span class="math inline">d_i=320</span> and the same observation times (in hours): <span class="math inline">0.25</span>,<span class="math inline">0.5</span>, <span class="math inline">1</span>, <span class="math inline">2</span>, <span class="math inline">3.5</span>, <span class="math inline">5</span>, <span class="math inline">7</span>, <span class="math inline">9</span>, <span class="math inline">12</span>, <span class="math inline">24</span> for all the individuals. We simulate one dataset with <span class="math inline">n=100</span> individuals under model specified by <a href="#eq-modelPK">Equation&nbsp;7</a>. On this simulated dataset, we run <span class="math inline">M=500</span> times the stochastic approximation algorithm described in <a href="#sec-algoSAEM">Section&nbsp;3.2.1</a> for computing <span class="math inline">I_{n,sco}(\hat{\theta})</span> together with <span class="math inline">\hat{\theta}</span> and the algorithm of <span class="citation" data-cites="Delyon1999">(<a href="#ref-Delyon1999" role="doc-biblioref">Delyon B., Lavielle M., and Moulines E. 1999</a>)</span> for computing <span class="math inline">I_{n,obs}(\hat{\theta})</span>. We perform <span class="math inline">K=3000</span> iterations in total for each algorithm by setting <span class="math inline">\gamma_k=0.95</span> for <span class="math inline">1 \leq k \leq 1000</span> (burn in iterations) and <span class="math inline">\gamma_k=(k-1000)^{-3/5}</span> otherwise, <span class="math inline">\varepsilon_k=5.10^4\gamma_k^{2/5}</span> and <span class="math inline">\mathcal{K}_{\kappa} = [-20-\kappa,20+\kappa]^6\times[0,5.10^4+\kappa]</span>. At any iteration, we compute the empirical relative bias and the empirical relative standard deviation of each component <span class="math inline">(\ell,\ell')</span> of <span class="math inline">I_{n,sco}</span> defined respectively as: <span class="math display">
+<p>The algorithm described in <a href="#sec-algoSAEM" class="quarto-xref">Section&nbsp;3.2.1</a> can therefore be easily implemented to estimate <span class="math inline">\theta</span> and the Fisher information matrix simultaneously (see R function provided in the Appendix section).</p>
+<p>We take the following values for the parameters <span class="math inline">V=31</span>, <span class="math inline">ka=1.6</span>, <span class="math inline">Cl=2.8</span>, <span class="math inline">\omega^2_V=0.40</span>, <span class="math inline">\omega^2_{ka}=0.40</span>, <span class="math inline">\omega^2_{Cl}=0.40</span> and <span class="math inline">\sigma^2=0.75</span>. We consider the same dose <span class="math inline">d_i=320</span> and the same observation times (in hours): <span class="math inline">0.25</span>,<span class="math inline">0.5</span>, <span class="math inline">1</span>, <span class="math inline">2</span>, <span class="math inline">3.5</span>, <span class="math inline">5</span>, <span class="math inline">7</span>, <span class="math inline">9</span>, <span class="math inline">12</span>, <span class="math inline">24</span> for all the individuals. We simulate one dataset with <span class="math inline">n=100</span> individuals under model specified by <a href="#eq-modelPK" class="quarto-xref">Equation&nbsp;7</a>. On this simulated dataset, we run <span class="math inline">M=500</span> times the stochastic approximation algorithm described in <a href="#sec-algoSAEM" class="quarto-xref">Section&nbsp;3.2.1</a> for computing <span class="math inline">I_{n,sco}(\hat{\theta})</span> together with <span class="math inline">\hat{\theta}</span> and the algorithm of <span class="citation" data-cites="Delyon1999">(<a href="#ref-Delyon1999" role="doc-biblioref">Delyon B., Lavielle M., and Moulines E. 1999</a>)</span> for computing <span class="math inline">I_{n,obs}(\hat{\theta})</span>. We perform <span class="math inline">K=3000</span> iterations in total for each algorithm by setting <span class="math inline">\gamma_k=0.95</span> for <span class="math inline">1 \leq k \leq 1000</span> (burn in iterations) and <span class="math inline">\gamma_k=(k-1000)^{-3/5}</span> otherwise, <span class="math inline">\varepsilon_k=5.10^4\gamma_k^{2/5}</span> and <span class="math inline">\mathcal{K}_{\kappa} = [-20-\kappa,20+\kappa]^6\times[0,5.10^4+\kappa]</span>. At any iteration, we compute the empirical relative bias and the empirical relative standard deviation of each component <span class="math inline">(\ell,\ell')</span> of <span class="math inline">I_{n,sco}</span> defined respectively as: <span class="math display">
 \frac{1}{M} \sum\limits_{m=1}^{M} \frac{\widehat{I_{n,sco,\ell,\ell'}^{(k,m)}} - I_{n,sco,\ell,\ell'}^{\star}}{I_{n,sco,\ell,\ell'}^{\star}} \; \; \; \mathrm{and}
 \; \; \; \sqrt{\frac{1}{M} \sum\limits_{m=1}^{M} \left(\frac{\widehat{I_{n,sco,\ell,\ell'}^{(k,m)}} - I_{n,sco,\ell,\ell'}^{\star}}{I_{n,sco,\ell,\ell'}^{\star}}
 \right)^2}
@@ -1366,7 +880,7 @@ S_i(z_i) = \left(\sum_{j=1}^{J} (y_{ij} g_i(t_{ij}, z_i)), (\log ka_i), (\log Cl
 <span id="cb4-156"><a href="#cb4-156" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(MsdIobs,<span class="at">file=</span><span class="st">'Rfiles/ResNLMEexponentialSdIobs.Rdata'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>The results are displayed in <a href="#fig-simuNlme-exponential-bias">Figure&nbsp;3</a> and <a href="#fig-simuNlme-exponential-sd">Figure&nbsp;4</a>.</p>
+<p>The results are displayed in <a href="#fig-simuNlme-exponential-bias" class="quarto-xref">Figure&nbsp;3</a> and <a href="#fig-simuNlme-exponential-sd" class="quarto-xref">Figure&nbsp;4</a>.</p>
 <div class="cell" data-file="scripts/simuNLME-exponential-plots-bias.R">
 <div class="cell-output-display">
 <div id="fig-simuNlme-exponential-bias" class="quarto-figure quarto-figure-center anchored">
@@ -1391,7 +905,7 @@ S_i(z_i) = \left(\sum_{j=1}^{J} (y_{ij} g_i(t_{ij}, z_i)), (\log ka_i), (\log Cl
 </section>
 <section id="sec-simuNonExpo" class="level3" data-number="4.2.2">
 <h3 data-number="4.2.2" class="anchored" data-anchor-id="sec-simuNonExpo"><span class="header-section-number">4.2.2</span> In general latent variable models</h3>
-<p>We use model specified by <a href="#eq-modelPK">Equation&nbsp;7</a> again, but we now consider that individual parameter <span class="math inline">V_i</span> is fixed, <em>i.e.</em> <span class="math inline">V_i \equiv V</span> <span class="math inline">\forall i = 1,\ldots,n</span>. The model is no longer exponential in the sense of <a href="#eq-curvedexpo">Equation&nbsp;6</a>. We must therefore use the general version of the stochastic approximation algorithm from <a href="#sec-generalmodel">Section&nbsp;3.2.3</a> to compute <span class="math inline">I_{n,sco}(\hat{\theta})</span> (see R function provided in the Appendix section). We simulate 500 datasets according to this model and we estimate <span class="math inline">I_{n,sco}(\hat{\theta})</span> and <span class="math inline">\hat{\theta}</span> for each one. We perform <span class="math inline">K=3000</span> iterations of the algorithm by setting <span class="math inline">\gamma_k=k^{-0.501}</span>. We compute the 500 asymptotic confidence intervals of the model parameters, by using either the inversed <span class="math inline">I_{n,sco}(\hat{\theta}_k)</span>’s or the inversed <span class="math inline">I_{n,obs}(\hat{\theta}_k)</span>’s and then deduce from them empirical coverage rates.</p>
+<p>We use model specified by <a href="#eq-modelPK" class="quarto-xref">Equation&nbsp;7</a> again, but we now consider that individual parameter <span class="math inline">V_i</span> is fixed, <em>i.e.</em> <span class="math inline">V_i \equiv V</span> <span class="math inline">\forall i = 1,\ldots,n</span>. The model is no longer exponential in the sense of <a href="#eq-curvedexpo" class="quarto-xref">Equation&nbsp;6</a>. We must therefore use the general version of the stochastic approximation algorithm from <a href="#sec-generalmodel" class="quarto-xref">Section&nbsp;3.2.3</a> to compute <span class="math inline">I_{n,sco}(\hat{\theta})</span> (see R function provided in the Appendix section). We simulate 500 datasets according to this model and we estimate <span class="math inline">I_{n,sco}(\hat{\theta})</span> and <span class="math inline">\hat{\theta}</span> for each one. We perform <span class="math inline">K=3000</span> iterations of the algorithm by setting <span class="math inline">\gamma_k=k^{-0.501}</span>. We compute the 500 asymptotic confidence intervals of the model parameters, by using either the inversed <span class="math inline">I_{n,sco}(\hat{\theta}_k)</span>’s or the inversed <span class="math inline">I_{n,obs}(\hat{\theta}_k)</span>’s and then deduce from them empirical coverage rates.</p>
 <div class="cell" data-file="scripts/simuNLME-nonexponential.R">
 <details>
 <summary>Code</summary>
@@ -1466,7 +980,7 @@ S_i(z_i) = \left(\sum_{j=1}^{J} (y_{ij} g_i(t_{ij}, z_i)), (\log ka_i), (\log Cl
 </details>
 </div>
 <p>We obtain for the six parameters <span class="math inline">(ka,V,Cl,\omega^2_{ka},\omega^2_{Cl},\sigma^2)</span> empirical covering rates of <span class="math inline">0.96, 0.948, 0.948, 0.932, 0.948, 0.948</span> respectively for a nominal covering rate of <span class="math inline">0.95</span>. This highlights that our estimate accurately quantifies the precisions of parameter estimates. Note that empirical coverage rates computed from <span class="math inline">I_{n,obs}</span> are similar (here <span class="math inline">0.952, 0.93, 0.942, 0.924, 0.952, 0.946</span>) but that the real advantage of our method is that it requires stochastic approximation only on the first-order derivatives of the complete log-likelihood, contrary to <span class="math inline">I_{n,obs}</span> which requires deriving the complete log-likelihood at the second order and thus implies more complicated formulas since the model does not belong to the exponential family.</p>
-<p>Convergence graphs obtained from a simulated data set are shown in <a href="#fig-NLMEnonexponential-conv-plot">Figure&nbsp;5</a>. Although theoretical guarantee is missing in non exponential models, the stochastic approximation algorithm proposed in <a href="#sec-generalmodel">Section&nbsp;3.2.3</a> converges in practice on this example for both the estimation of the model parameters and the estimation of the Fisher information matrix.</p>
+<p>Convergence graphs obtained from a simulated data set are shown in <a href="#fig-NLMEnonexponential-conv-plot" class="quarto-xref">Figure&nbsp;5</a>. Although theoretical guarantee is missing in non exponential models, the stochastic approximation algorithm proposed in <a href="#sec-generalmodel" class="quarto-xref">Section&nbsp;3.2.3</a> converges in practice on this example for both the estimation of the model parameters and the estimation of the Fisher information matrix.</p>
 <div class="cell" data-file="scripts/simuNLME-nonexponential-conv-plot.R">
 <div class="cell-output-display">
 <div id="fig-NLMEnonexponential-conv-plot" class="quarto-figure quarto-figure-center anchored">
@@ -1535,7 +1049,7 @@ S_i(z_i) = \left(\sum_{j=1}^{J} (y_{ij} g_i(t_{ij}, z_i)), (\log ka_i), (\log Cl
 <span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(res,<span class="at">file=</span><span class="st">"Rfiles/ResGaussianMixture.Rdata"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>We simulate 10000 datasets according to this Gaussian mixture model, using the same setting as <span class="citation" data-cites="Meng2017">(<a href="#ref-Meng2017" role="doc-biblioref">Meng L. and Spall J. C. 2017</a>)</span>, <em>i.e.</em> <span class="math inline">n=750</span>, <span class="math inline">\pi=2/3</span>, <span class="math inline">\mu_1=3</span> and <span class="math inline">\mu_2=0</span>. For each dataset <span class="math inline">k=1,\ldots,10000</span>, we compute the parameter maximum likelihood estimate <span class="math inline">\hat{\theta}_k = (\hat{\pi}_k,\widehat{\mu_1}_k,\widehat{\mu_2}_k)</span> with an EM algorithm and then we derive <span class="math inline">I_{n,sco}(\hat{\theta}_k)</span> directly according to <a href="#eq-vnmis">Equation&nbsp;5</a> (see R function provided in the Appendix section) contrary to <span class="citation" data-cites="Meng2017">(<a href="#ref-Meng2017" role="doc-biblioref">Meng L. and Spall J. C. 2017</a>)</span> who used an iterative method. We compute the empirical mean of the 10000 estimated matrices leading to:</p>
+<p>We simulate 10000 datasets according to this Gaussian mixture model, using the same setting as <span class="citation" data-cites="Meng2017">(<a href="#ref-Meng2017" role="doc-biblioref">Meng L. and Spall J. C. 2017</a>)</span>, <em>i.e.</em> <span class="math inline">n=750</span>, <span class="math inline">\pi=2/3</span>, <span class="math inline">\mu_1=3</span> and <span class="math inline">\mu_2=0</span>. For each dataset <span class="math inline">k=1,\ldots,10000</span>, we compute the parameter maximum likelihood estimate <span class="math inline">\hat{\theta}_k = (\hat{\pi}_k,\widehat{\mu_1}_k,\widehat{\mu_2}_k)</span> with an EM algorithm and then we derive <span class="math inline">I_{n,sco}(\hat{\theta}_k)</span> directly according to <a href="#eq-vnmis" class="quarto-xref">Equation&nbsp;5</a> (see R function provided in the Appendix section) contrary to <span class="citation" data-cites="Meng2017">(<a href="#ref-Meng2017" role="doc-biblioref">Meng L. and Spall J. C. 2017</a>)</span> who used an iterative method. We compute the empirical mean of the 10000 estimated matrices leading to:</p>
 <p><span class="math display">
 \frac1{10000} \sum _k I_{n,sco}(\hat{\theta}_k)= \begin{pmatrix}
 2687.873 &amp; -210.795 &amp; -251.634\\
@@ -2670,10 +2184,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   if (showAllCode) {
     showAllCode.addEventListener("click", toggleCodeHandler(true));
   }
-  function tippyHover(el, contentFn) {
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -2683,8 +2196,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -2697,6 +2219,66 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note);
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -2740,6 +2322,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -3664,6 +3247,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
+
 
 
 
