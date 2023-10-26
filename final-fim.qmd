@@ -181,7 +181,7 @@ $$
 $$
 where $(\gamma_k)$ is a sequence of positive step sizes satisfying $\sum \gamma_k=\infty$ and $\sum \gamma_k^2 <~\infty$.
   
-  - **Truncation step**: Let us denote $\bar{Z}=(\bar{Z_i})$, $\bar{s}=(\bar{s_i})$ and $s=(s_i)$. If $\bar{s}\in\mathcal{K}_{\kappa_{k-1}}$ and $\|\bar{s}-s_{k-1} \|\leq \varepsilon_{\zeta_{k-1}}$, then set $(Z^k,s^k)=(\bar{Z},\bar{s})$, $\kappa_{k}=\kappa_{k-1}$, $\nu_{k}=\nu_{k-1}+1$, $\zeta_{k}=\zeta_{k-1}+1$, else set $(Z^k,s^k)=(\tilde{Z},\tilde{s})\in \mathrm{K}\times \mathcal{K}_0$, $\kappa_{k}=\kappa_{k-1}+1$, $\nu_{k}=0$, $\zeta_{k}=\zeta_{k-1}+ \Psi(\nu_{k-1})$ where  $\Psi:\mathbb{N} \rightarrow \mathbb{Z}$ is a function such that $\Psi(k)>k$ for any $k$ and $(\tilde{Z},\tilde{s})$ chosen arbitrarily.
+  - **Truncation step**: Let us denote $\bar{Z}=(\bar{Z_i})$, $\bar{s}=(\bar{s_i})$ and $s=(s_i)$. If $\bar{s}\in\mathcal{K}_{\kappa_{k-1}}$ and $\|\bar{s}-s^{k-1} \|\leq \varepsilon_{\zeta_{k-1}}$, then set $(Z^k,s^k)=(\bar{Z},\bar{s})$, $\kappa_{k}=\kappa_{k-1}$, $\nu_{k}=\nu_{k-1}+1$, $\zeta_{k}=\zeta_{k-1}+1$, else set $(Z^k,s^k)=(\tilde{Z},\tilde{s})\in \mathrm{K}\times \mathcal{K}_0$, $\kappa_{k}=\kappa_{k-1}+1$, $\nu_{k}=0$, $\zeta_{k}=\zeta_{k-1}+ \Psi(\nu_{k-1})$ where  $\Psi:\mathbb{N} \rightarrow \mathbb{Z}$ is a function such that $\Psi(k)>k$ for any $k$ and $(\tilde{Z},\tilde{s})$ chosen arbitrarily.
 
   - **Maximisation step**: update  of the parameter estimator  according to:
 $$
@@ -196,7 +196,7 @@ where $\hat{\Delta}_i(s)  =  -\partial \psi_i(\hat{\theta}(s)) + \left<s_i,\part
 
 
 ::: {.remark}
-Note that the projection step which is done through the truncation procedure on random boundaries ensures the stability of the algorithm in particular for the theoretical analysis provided below. More details on this projection step are available in [@Andrieu2005].
+Note that the projection step which is done through the truncation procedure on random boundaries ensures the stability of the algorithm in particular for the theoretical analysis provided below. More details on this projection step are available in [@Andrieu2005]. However, the authors do not provide recommendations on the choice of $\tilde{Z}$ and $\tilde{s}$. In practice, one could use $(\tilde{Z},\tilde{s})=(Z^{k-1},s^{k-1})$ or $(\tilde{Z},\tilde{s})=(Z^{0},s^{0})$, as done in the numerical experiments in @sec-simul.
 :::
 
 ### Theoretical convergence property
@@ -218,7 +218,7 @@ $$
 \}.
 \end{split}
 $$
-In addition, there exist  $M_1\in(M_0,\infty]$ such that
+In addition, there exists  $M_1\in(M_0,\infty]$ such that
 $\{s\in\mathcal S, -l(\hat\theta(s)) \leq M_1
 \}$
 is a compact set. 
@@ -311,7 +311,7 @@ $y_i|z_i=k  \sim  \mathcal{P}(\lambda_k)$ with $P(z_i=k)  =  \alpha_k$ and $\sum
 The model parameters are $\theta=(\lambda_1,\ldots,\lambda_K,\alpha_1,\ldots,\alpha_{K-1})$. For the simulation study, we consider a mixture of $K=3$ components, and the following values for the parameters $\lambda_1=2$, $\lambda_2=5$, $\lambda_3=9$, $\alpha_1=0.3$ and $\alpha_2=0.5$.
 
 
-For each model, we generate $M=500$ datasets for different sample sizes $n \in \left\{20,100,500 \right\}$. As a first step, we assume that the true parameter values, denoted by $\theta^{\star}$, are known in order to investigate the asymptotic properties of both $I_{n,sco}$ and $I_{n,obs}$ without adding extra noise induced by the estimation of the parameters. Hence, for each value of $n$ and for each $1 \leq m \leq M$, we derive $I_{n,sco}^{(m)}(\theta^{\star})$ and $I_{n,obs}^{(m)}(\theta^{\star})$. The estimators $I_{n,sco}(\theta^{\star})$ and $I_{n,obs}(\theta^{\star})$ can be computed explicitly in both models by applying formula @eq-vnmis and Louis' formula [@Louis1982] (see R functions provided in the Appendix section). We then compute the empirical bias and the root mean squared deviation of each component $(\ell,\ell')$ of the estimated matrix as:
+For each model, we generate $M=500$ datasets for different sample sizes $n \in \left\{20,100,500 \right\}$. As a first step, we assume that the true parameter values, denoted by $\theta^{\star}$, are known in order to investigate the asymptotic properties of both $I_{n,sco}$ and $I_{n,obs}$ without adding extra noise induced by the estimation of the parameters. Hence, for each value of $n$ and for each $1 \leq m \leq M$, we derive $I_{n,sco}^{(m)}(\theta^{\star})$ and $I_{n,obs}^{(m)}(\theta^{\star})$. The estimators $I_{n,sco}(\theta^{\star})$ and $I_{n,obs}(\theta^{\star})$ can be computed explicitly in both models by applying @eq-vnmis and Louis' formula [@Louis1982] (see R functions provided in the Appendix section). We then compute the empirical bias and the root mean squared deviation of each component $(\ell,\ell')$ of the estimated matrix as:
 $$
 \frac{1}{M} \sum\limits_{m=1}^{M} I_{n,sco,\ell,\ell'}^{(m)}(\theta^\star) - I_{\ell,\ell'}(\theta^\star)  \; \; \;  \mathrm{and} \; \; \; \sqrt{\frac{1}{M} \sum\limits_{m=1}^{M} \left(I_{n,sco,\ell,\ell'}^{(m)}(\theta^\star) - I_{\ell,\ell'}(\theta^\star)\right)^2}.
 $$
@@ -661,7 +661,7 @@ In the cases where the latent variables can not be simulated from the conditiona
 
 ## Theoretical convergence properties
 
-The theoretical following results provided convergence guarantees for the FIM estimate obtained as a by-product of the MLE. Therefore they extend  those  of [@Delyon1999].   To that purpose,
+The theoretical following results provide convergence guarantees for the FIM estimate obtained as a by-product of the MLE. Therefore they extend  those  of [@Delyon1999].   To that purpose,
 in addition to the exponential family assumption for each individual likelihood, we also make the same type of regularity assumptions as those presented  in [@Delyon1999] at each individual level. These regularity assumptions on the model are detailed at the end of the appendix section.
 
 ::: {#thm-conv.algo}
